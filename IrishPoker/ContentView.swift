@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         ZStack {
-            Card(card: PlayingCard(value: .seven, suit: .hearts))
+            CardFront(card: PlayingCard(value: .seven, suit: .hearts), degree: .constant(0))
         }
     }
 }

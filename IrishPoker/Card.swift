@@ -89,11 +89,14 @@ struct CardFront: View {
     var iconSize: CGFloat { width * 0.1228 }
     var cornerRadius: CGFloat { width * 0.0513 }
     
+    @Binding var degree: Double
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .foregroundStyle(Color.white)
                 .frame(width: width, height: height)
+                .shadow(radius: 10)
             Group {
                 HStack {
                     VStack {
@@ -104,6 +107,7 @@ struct CardFront: View {
                             .font(.system(size: iconSize))
                         Spacer()
                     }
+                    .frame(height: height)
                     .padding(.leading)
                     
                     Spacer()
@@ -120,21 +124,22 @@ struct CardFront: View {
                             .font(.system(size: iconSize))
                         Spacer()
                     }
+                    .frame(height: height)
                     .padding(.leading)
                     .rotationEffect(.degrees(180))
                 }
+                .frame(width: width, height: height)
             }
-            .padding()
             .foregroundColor(card.color)
         }
-        .frame(width: width, height: height)
+        .rotation3DEffect(Angle(degrees: degree), axis: (x: 0.0, y: 1.0, z: 0.0) )
     }
 }
 
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        CardFront(card: PlayingCard(value: .two, suit: .spades))
+        CardFront(card: PlayingCard(value: .two, suit: .spades), degree: .constant(0))
     }
 }
 
@@ -260,19 +265,74 @@ struct CardBack: View {
     var height: CGFloat { width * 1.530}
     var cornerRadius: CGFloat { width * 0.0513 }
     var bodyWidth: CGFloat { width * 0.9000}
-    var bodyHeight: CGFloat { height * 0.9300 }
+    var bodyHeight: CGFloat { height * 0.8800 }
+    var bodyCornerRadius: CGFloat { width * 0.0213 }
+    
+    @Binding var degree: Double
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .foregroundStyle(Color.white)
                 .frame(width: width, height: height)
+                .shadow(radius: 10)
             RoundedRectangle(cornerRadius: cornerRadius)
                 .foregroundStyle(Color.red)
                 .frame(width: bodyWidth, height: bodyHeight)
             RoundedRectangle(cornerRadius: cornerRadius)
-                .foregroundStyle(Color.black.opacity(0.15))
+                .foregroundStyle(Color.black.opacity(0.5))
                 .frame(width: bodyWidth, height: bodyHeight)
             Image("card.back")
+                .resizable()
+//                .opacity(0.8)
+                .clipShape(RoundedRectangle(cornerRadius: bodyCornerRadius))
+                .frame(width: bodyWidth * 0.97, height: bodyHeight * 0.97)
+        }
+        .rotation3DEffect(Angle(degrees: degree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+    }
+}
+
+#Preview {
+    ZStack {
+        Color.gray.opacity(0.4).ignoresSafeArea()
+        CardBack(degree: .constant(0))
+    }
+}
+
+struct Card: View {
+    @State var backDegree = 0.0
+    @State var frontDegree = -90.0
+    @State var isFlipped = false
+    
+    var width: CGFloat = 330
+    var height: CGFloat { width * 1.530}
+    var cornerRadius: CGFloat { width * 0.0513 }
+    let durationAndDelay: CGFloat = 0.3
+    
+    func flipCard() {
+        isFlipped = !isFlipped
+        if isFlipped {
+            withAnimation(.linear(duration: durationAndDelay)) {
+                backDegree = 90.0
+            }
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                frontDegree = 0.0
+            }
+        } else {
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                backDegree = 0.0
+            }
+            withAnimation(.linear(duration: durationAndDelay)) {
+                frontDegree = -90.0
+            }
+        }
+    }
+    var body: some View {
+        ZStack {
+            CardFront(card: PlayingCard(value: .ace, suit: .hearts), degree: $frontDegree)
+            CardBack(degree: $backDegree)
+        }
+        .onTapGesture {
+            flipCard()
         }
     }
 }
@@ -280,6 +340,6 @@ struct CardBack: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        CardBack()
+        Card()
     }
 }
