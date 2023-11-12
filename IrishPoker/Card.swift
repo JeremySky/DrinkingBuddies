@@ -25,37 +25,37 @@ struct CardFront: View {
                 .frame(width: width, height: height)
                 .shadow(radius: 10)
             Group {
-                HStack {
-                    VStack {
-                        Text(card.value.string)
-                            .font(.system(size: fontSize))
-                            .fontWeight(.semibold)
-                        Image(systemName: card.suit.icon)
-                            .font(.system(size: iconSize))
+                ZStack {
+                    HStack {
+                        VStack {
+                            Text(card.value.string)
+                                .font(.system(size: fontSize))
+                                .fontWeight(.semibold)
+                            Image(systemName: card.suit.icon)
+                                .font(.system(size: iconSize))
+                            Spacer()
+                        }
+                        .frame(height: height)
+                        .padding(.leading)
+                        
                         Spacer()
+                        
+                        VStack {
+                            Text(card.value.string)
+                                .font(.system(size: fontSize))
+                                .fontWeight(.semibold)
+                            Image(systemName: card.suit.icon)
+                                .font(.system(size: iconSize))
+                            Spacer()
+                        }
+                        .frame(height: height)
+                        .padding(.leading)
+                        .rotationEffect(.degrees(180))
                     }
-                    .frame(height: height)
-                    .padding(.leading)
-                    
-                    Spacer()
+                    .frame(width: width, height: height)
                     
                     CardBody(card: card, width: width)
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Text(card.value.string)
-                            .font(.system(size: fontSize))
-                            .fontWeight(.semibold)
-                        Image(systemName: card.suit.icon)
-                            .font(.system(size: iconSize))
-                        Spacer()
-                    }
-                    .frame(height: height)
-                    .padding(.leading)
-                    .rotationEffect(.degrees(180))
                 }
-                .frame(width: width, height: height)
             }
             .foregroundColor(card.color)
         }
@@ -230,6 +230,8 @@ struct Card: View {
     @State var frontDegree = -90.0
     @State var isFlipped = false
     
+    let value: PlayingCard
+    
     var width: CGFloat = 330
     var height: CGFloat { width * 1.530}
     var cornerRadius: CGFloat { width * 0.0513 }
@@ -255,7 +257,7 @@ struct Card: View {
     }
     var body: some View {
         ZStack {
-            CardFront(card: PlayingCard(value: .ace, suit: .hearts), degree: $frontDegree)
+            CardFront(card: value, degree: $frontDegree)
             CardBack(degree: $backDegree)
         }
         .onTapGesture {
@@ -267,6 +269,6 @@ struct Card: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        Card()
+        Card(value: PlayingCard(value: .ten, suit: .diamonds))
     }
 }

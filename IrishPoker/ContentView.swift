@@ -11,7 +11,7 @@ struct ContentView: View {
     @State var deck = Deck()
     
     var body: some View {
-        Card()
+        Card(value: PlayingCard(value: .ten, suit: .hearts))
     }
 }
 
