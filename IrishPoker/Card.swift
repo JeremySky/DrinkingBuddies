@@ -80,14 +80,14 @@ enum CardSuit: String {
 }
 
 
-struct Card: View {
+struct CardFront: View {
     let card: PlayingCard
     
-    var width: Double =  330
-    var height: Double { width * 1.530}
-    var fontSize: Double { width * 0.1741}
-    var iconSize: Double { width * 0.1228 }
-    var cornerRadius: Double { width * 0.0513 }
+    var width: CGFloat =  330
+    var height: CGFloat { width * 1.530}
+    var fontSize: CGFloat { width * 0.1741}
+    var iconSize: CGFloat { width * 0.1228 }
+    var cornerRadius: CGFloat { width * 0.0513 }
     
     var body: some View {
         ZStack {
@@ -134,8 +134,7 @@ struct Card: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        Card(card: PlayingCard(value: .eight, suit: .spades))
-            .padding()
+        CardFront(card: PlayingCard(value: .two, suit: .spades))
     }
 }
 
@@ -144,14 +143,14 @@ struct Card: View {
 
 struct CardBody: View {
     let card: PlayingCard
-    var width: Double
-    var bodyWidth: Double { width * 0.5341 }
-    var bodyHeight: Double { width * 0.9087 }
-    var bodyIconSize: Double { width * 0.1182 }
-    var bodyBorderWidth: Double { width * 0.0077 }
-    var bodyCrownSize: Double { width * 0.3589 }
-    var bodyLargeIconSize: Double { width * 0.5128 }
-    var bodyLargeLetterSize: Double { width * 0.2564 }
+    var width: CGFloat
+    var bodyWidth: CGFloat { width * 0.5341 }
+    var bodyHeight: CGFloat { width * 0.9087 }
+    var bodyIconSize: CGFloat { width * 0.1182 }
+    var bodyBorderWidth: CGFloat { width * 0.0077 }
+    var bodyCrownSize: CGFloat { width * 0.2589 }
+    var bodyLargeIconSize: CGFloat { width * 0.5128 }
+    var bodyLargeLetterSize: CGFloat { width * 0.2564 }
     
     var body: some View {
         Group {
@@ -254,3 +253,33 @@ struct CardBody: View {
 //#Preview {
 //    CardBody(card: PlayingCard(value: .nine, suit: .hearts))
 //}
+
+
+struct CardBack: View {
+    var width: CGFloat = 330
+    var height: CGFloat { width * 1.530}
+    var cornerRadius: CGFloat { width * 0.0513 }
+    var bodyWidth: CGFloat { width * 0.9000}
+    var bodyHeight: CGFloat { height * 0.9300 }
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .foregroundStyle(Color.white)
+                .frame(width: width, height: height)
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .foregroundStyle(Color.red)
+                .frame(width: bodyWidth, height: bodyHeight)
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .foregroundStyle(Color.black.opacity(0.15))
+                .frame(width: bodyWidth, height: bodyHeight)
+            Image("card.back")
+        }
+    }
+}
+
+#Preview {
+    ZStack {
+        Color.gray.opacity(0.4).ignoresSafeArea()
+        CardBack()
+    }
+}
