@@ -10,11 +10,12 @@ import SwiftUI
 struct CardFront: View {
     let card: PlayingCard
     
-    var width: CGFloat =  330
-    var height: CGFloat { width * 1.530}
-    var fontSize: CGFloat { width * 0.1741}
-    var iconSize: CGFloat { width * 0.1228 }
-    var cornerRadius: CGFloat { width * 0.0513 }
+    var width: CGFloat = 320
+    var height: CGFloat = 490
+    var fontSize: CGFloat = 70
+    var iconSize: CGFloat = 43
+    var cornerRadius: CGFloat = 15
+    var padding: CGFloat = 16
     
     @Binding var degree: Double
     
@@ -36,7 +37,7 @@ struct CardFront: View {
                             Spacer()
                         }
                         .frame(height: height)
-                        .padding(.leading)
+                        .padding(.leading, padding)
                         
                         Spacer()
                         
@@ -49,7 +50,7 @@ struct CardFront: View {
                             Spacer()
                         }
                         .frame(height: height)
-                        .padding(.leading)
+                        .padding(.leading, padding)
                         .rotationEffect(.degrees(180))
                     }
                     .frame(width: width, height: height)
@@ -63,26 +64,21 @@ struct CardFront: View {
     }
 }
 
-#Preview {
-    ZStack {
-        Color.gray.opacity(0.4).ignoresSafeArea()
-        CardFront(card: PlayingCard(value: .two, suit: .spades), degree: .constant(0))
-    }
-}
 
 
 
 
 struct CardBody: View {
     let card: PlayingCard
-    var width: CGFloat
-    var bodyWidth: CGFloat { width * 0.5341 }
-    var bodyHeight: CGFloat { width * 0.9087 }
-    var bodyIconSize: CGFloat { width * 0.1182 }
-    var bodyBorderWidth: CGFloat { width * 0.0077 }
-    var bodyCrownSize: CGFloat { width * 0.2589 }
-    var bodyLargeIconSize: CGFloat { width * 0.5128 }
-    var bodyLargeLetterSize: CGFloat { width * 0.2564 }
+    var width: CGFloat = 320
+    var bodyWidth: CGFloat = 170
+    var bodyHeight: CGFloat = 290
+    var bodyIconSize: CGFloat = 37
+    var bodyBorderWidth: CGFloat = 2
+    var bodyCrownSize: CGFloat = 82
+    var bodyLargeIconSize: CGFloat = 164
+    var bodyLargeLetterSize: CGFloat = 82
+    var padding: CGFloat = 16
     
     var body: some View {
         Group {
@@ -175,26 +171,22 @@ struct CardBody: View {
             }
         }
         .foregroundColor(card.color)
-        .padding()
+        .padding(.all, padding)
         .frame(width: bodyWidth, height: bodyHeight)
         .border(Color.blue, width: bodyBorderWidth)
     }
 }
 
 
-//#Preview {
-//    CardBody(card: PlayingCard(value: .nine, suit: .hearts))
-//}
 
 
 struct CardBack: View {
-    var width: CGFloat = 330
-    var height: CGFloat { width * 1.530}
-    var cornerRadius: CGFloat { width * 0.0513 }
-    var bodyWidth: CGFloat { width * 0.9000}
-    var bodyHeight: CGFloat { height * 0.8800 }
-    var bodyCornerRadius: CGFloat { width * 0.0213 }
-    
+    var width: CGFloat = 320
+    var height: CGFloat = 490
+    var cornerRadius: CGFloat = 16
+    var bodyWidth: CGFloat = 288
+    var bodyHeight: CGFloat = 450
+    var bodyCornerRadius: CGFloat = 7
     @Binding var degree: Double
     var body: some View {
         ZStack {
@@ -218,23 +210,19 @@ struct CardBack: View {
     }
 }
 
-#Preview {
-    ZStack {
-        Color.gray.opacity(0.4).ignoresSafeArea()
-        CardBack(degree: .constant(0))
-    }
-}
 
 struct Card: View {
+    let value: PlayingCard
+    
+    
     @State var backDegree = 0.0
     @State var frontDegree = -90.0
     @State var isFlipped = false
     
-    let value: PlayingCard
     
-    var width: CGFloat = 330
-    var height: CGFloat { width * 1.530}
-    var cornerRadius: CGFloat { width * 0.0513 }
+    var width: CGFloat = 320
+    var height: CGFloat = 490
+    var cornerRadius: CGFloat = 16
     let durationAndDelay: CGFloat = 0.3
     
     func flipCard() {
@@ -255,13 +243,11 @@ struct Card: View {
             }
         }
     }
+    
     var body: some View {
         ZStack {
-            CardFront(card: value, degree: $frontDegree)
-            CardBack(degree: $backDegree)
-        }
-        .onTapGesture {
-            flipCard()
+            CardFront(card: value, width: width, degree: $frontDegree)
+            CardBack(width: width, degree: $backDegree)
         }
     }
 }
@@ -270,5 +256,23 @@ struct Card: View {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
         Card(value: PlayingCard(value: .ten, suit: .diamonds))
+    }
+}
+
+#Preview {
+    ZStack {
+        Color.gray.opacity(0.4).ignoresSafeArea()
+        CardFront(card: PlayingCard(value: .two, suit: .hearts), width: 330, degree: .constant(0))
+    }
+}
+
+//#Preview {
+//    CardBody(card: PlayingCard(value: .nine, suit: .hearts))
+//}
+
+#Preview {
+    ZStack {
+        Color.gray.opacity(0.4).ignoresSafeArea()
+        CardBack(width: 330, degree: .constant(0))
     }
 }
