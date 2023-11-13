@@ -11,7 +11,12 @@ import SwiftUI
 struct IrishPokerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PlayerHandView(hand: [
+                PlayingCard(value: .ace, suit: .hearts),
+                PlayingCard(value: .eight, suit: .clubs),
+                PlayingCard(value: .king, suit: .diamonds),
+                PlayingCard(value: .ten, suit: .spades)
+            ])
         }
     }
 }

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PlayerHandView: View {
-    @State var deck = Deck()
     var hand: [PlayingCard]
+    @State var question: Question?
     
     @State var cardSelection: CardSelection?
     @State var choiceSelection: ChoiceSelection?
@@ -49,7 +49,7 @@ struct PlayerHandView: View {
     //MARK: -- BODY
     var body: some View {
         VStack(spacing: 0) {
-                Text("Guess the color")
+            Text(question?.rawValue ?? "")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
@@ -59,83 +59,192 @@ struct PlayerHandView: View {
                 Card(value: hand[0], tappable: $card1) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .one ? 0 : -90, y: cardSelection == .one ? 0 : 420)
+                .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
+                .offset(x: cardSelection == .one ? 0 : -90, y: cardSelection == .one ? 0 : 420)
                 Card(value: hand[1], tappable: $card2) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .two ? 0 : -30, y: cardSelection == .two ? 0 : 420)
+                .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
+                .offset(x: cardSelection == .two ? 0 : -30, y: cardSelection == .two ? 0 : 420)
                 Card(value: hand[2], tappable: $card3) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .three ? 0 : 30, y: cardSelection == .three ? 0 : 420)
+                .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
+                .offset(x: cardSelection == .three ? 0 : 30, y: cardSelection == .three ? 0 : 420)
                 Card(value: hand[3], tappable: $card4) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .four ? 0.85 : 0.25, height: cardSelection == .four ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .four ? 0 : 90, y: cardSelection == .four ? 0 : 420)
+                .scaleEffect(CGSize(width: cardSelection == .four ? 0.85 : 0.25, height: cardSelection == .four ? 0.85 : 0.25))
+                .offset(x: cardSelection == .four ? 0 : 90, y: cardSelection == .four ? 0 : 420)
             }.zIndex(1)
             
             
             //MARK: -- BUTTONS
             HStack {
-                Button(action: {
-                    choiceSelection = choiceSelection == .one ? nil : .one
-                    makeCardSelectionTappable()
-                }) {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color.red)
-                        .frame(width: 80, height: 80)
-                        .shadow(
-                            color: choiceSelection == .one ? .yellow : .gray,
-                            radius: 10)
+                switch question {
+                case .one:
+                    Button(action: {
+                        choiceSelection = choiceSelection == .one ? nil : .one
+                        makeCardSelectionTappable()
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.red)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .one ? .yellow : .gray,
+                                    radius: 10)
+                            Text("Red")
+                                .foregroundStyle(Color.white)
+                                .font(.system(size: 27))
+                                .fontWeight(.bold)
+                        }
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                    
+                    Button(action: {
+                        choiceSelection = choiceSelection == .two ? nil : .two
+                        makeCardSelectionTappable()
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.black)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .two ? .yellow : .gray,
+                                    radius: 10)
+                            Text("Black")
+                                .foregroundStyle(Color.white)
+                                .font(.system(size: 27))
+                                .fontWeight(.bold)
+                        }
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                case .two:
+                    Button(action: {
+                        choiceSelection = choiceSelection == .one ? nil : .one
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.red)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                    
+                    Button(action: {
+                        choiceSelection = choiceSelection == .two ? nil : .two
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.black)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                case .three:
+                    Button(action: {
+                        choiceSelection = choiceSelection == .one ? nil : .one
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.red)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                    
+                    Button(action: {
+                        choiceSelection = choiceSelection == .two ? nil : .two
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.black)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                case .four:
+                    Button(action: {
+                        choiceSelection = choiceSelection == .one ? nil : .one
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.red)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                    
+                    Button(action: {
+                        choiceSelection = choiceSelection == .two ? nil : .two
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.black)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                    
+                    Button(action: {
+                        choiceSelection = choiceSelection == .three ? nil : .three
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.red)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .three ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                    
+                    
+                    Button(action: {
+                        choiceSelection = choiceSelection == .four ? nil : .four
+                        makeCardSelectionTappable()
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.black)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .four ? .yellow : .gray,
+                                radius: 10)
+                    }
+                    .padding(.horizontal, 5)
+                    .disabled(disableButtons)
+                case nil:
+                    EmptyView()
                 }
-                .padding(.horizontal, 5)
-                .disabled(disableButtons)
-                
-                Button(action: {
-                    choiceSelection = choiceSelection == .two ? nil : .two
-                    makeCardSelectionTappable()
-                }) {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color.black)
-                        .frame(width: 80, height: 80)
-                        .shadow(
-                            color: choiceSelection == .two ? .yellow : .gray,
-                            radius: 10)
-                }
-                .padding(.horizontal, 5)
-                .disabled(disableButtons)
-                
-                Button(action: {
-                    choiceSelection = choiceSelection == .three ? nil : .three
-                    makeCardSelectionTappable()
-                }) {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color.red)
-                        .frame(width: 80, height: 80)
-                        .shadow(
-                            color: choiceSelection == .three ? .yellow : .gray,
-                            radius: 10)
-                }
-                .padding(.horizontal, 5)
-                .disabled(disableButtons)
-                
-                Button(action: {
-                    choiceSelection = choiceSelection == .four ? nil : .four
-                    makeCardSelectionTappable()
-                }) {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color.black)
-                        .frame(width: 80, height: 80)
-                        .shadow(
-                            color: choiceSelection == .four ? .yellow : .gray,
-                            radius: 10)
-                }
-                .padding(.horizontal, 5)
-                .disabled(disableButtons)
             }
             Spacer()
         }
@@ -147,6 +256,12 @@ struct PlayerHandView: View {
     enum ChoiceSelection {
         case one, two, three, four
     }
+    enum Question: String, RawRepresentable {
+        case one = "Guess the Color"
+        case two = "Higher or Lower"
+        case three = "Inside or Outside"
+        case four = "Guess the Suit"
+    }
 }
 
 #Preview {
@@ -155,7 +270,7 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], cardSelection: .one)
+    ], question: .one ,cardSelection: .one)
 }
 #Preview {
     PlayerHandView(hand: [
@@ -163,7 +278,7 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], cardSelection: .two)
+    ], question: .two, cardSelection: .two)
 }
 #Preview {
     PlayerHandView(hand: [
@@ -171,7 +286,7 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], cardSelection: .three)
+    ], question: .three, cardSelection: .three)
 }
 #Preview {
     PlayerHandView(hand: [
@@ -179,5 +294,5 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], cardSelection: .four)
+    ], question: .four, cardSelection: .four)
 }

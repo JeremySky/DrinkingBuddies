@@ -134,7 +134,7 @@ struct CardBody: View {
     var bodyIconSize: CGFloat = 37
     var bodyBorderWidth: CGFloat = 3
     var bodyCrownSize: CGFloat = 82
-    var bodyLargeIconSize: CGFloat = 164
+    var bodyLargeIconSize: CGFloat = 140
     var bodyLargeLetterSize: CGFloat = 82
     var padding: CGFloat = 16
     
