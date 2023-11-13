@@ -45,7 +45,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.red)
                         .frame(width: 80, height: 80)
                         .shadow(
-                            color: selection == .one ? .yellow : .black,
+                            color: selection == .one ? .yellow : .gray,
                             radius: 10)
                 }
                 .padding(.horizontal, 5)
@@ -56,7 +56,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.black)
                         .frame(width: 80, height: 80)
                         .shadow(
-                            color: selection == .two ? .yellow : .black,
+                            color: selection == .two ? .yellow : .gray,
                             radius: 10)
                 }
                 .padding(.horizontal, 5)
@@ -67,7 +67,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.red)
                         .frame(width: 80, height: 80)
                         .shadow(
-                            color: selection == .three ? .yellow : .black,
+                            color: selection == .three ? .yellow : .gray,
                             radius: 10)
                 }
                 .padding(.horizontal, 5)
@@ -78,7 +78,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.black)
                         .frame(width: 80, height: 80)
                         .shadow(
-                            color: selection == .four ? .yellow : .black,
+                            color: selection == .four ? .yellow : .gray,
                             radius: 10)
                 }
                 .padding(.horizontal, 5)

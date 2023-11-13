@@ -7,6 +7,50 @@
 
 import SwiftUI
 
+//MARK: -- CARD
+struct Card: View {
+    let value: PlayingCard
+    
+    
+    @State var backDegree = 0.0
+    @State var frontDegree = -90.0
+    @State var isFlipped = false
+    
+    
+    var width: CGFloat = 320
+    var height: CGFloat = 490
+    var cornerRadius: CGFloat = 16
+    let durationAndDelay: CGFloat = 0.3
+    
+    func flipCard() {
+        isFlipped = !isFlipped
+        if isFlipped {
+            withAnimation(.linear(duration: durationAndDelay)) {
+                backDegree = 90.0
+            }
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                frontDegree = 0.0
+            }
+        } else {
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                backDegree = 0.0
+            }
+            withAnimation(.linear(duration: durationAndDelay)) {
+                frontDegree = -90.0
+            }
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            CardFront(card: value, width: width, degree: $frontDegree)
+            CardBack(width: width, degree: $backDegree)
+        }
+    }
+}
+
+
+//MARK: -- FRONT
 struct CardFront: View {
     let card: PlayingCard
     
@@ -65,9 +109,7 @@ struct CardFront: View {
 }
 
 
-
-
-
+//MARK: -- BODY
 struct CardBody: View {
     let card: PlayingCard
     var width: CGFloat = 320
@@ -178,8 +220,7 @@ struct CardBody: View {
 }
 
 
-
-
+//MARK: -- BACK
 struct CardBack: View {
     var width: CGFloat = 320
     var height: CGFloat = 490
@@ -211,47 +252,8 @@ struct CardBack: View {
 }
 
 
-struct Card: View {
-    let value: PlayingCard
-    
-    
-    @State var backDegree = 0.0
-    @State var frontDegree = -90.0
-    @State var isFlipped = false
-    
-    
-    var width: CGFloat = 320
-    var height: CGFloat = 490
-    var cornerRadius: CGFloat = 16
-    let durationAndDelay: CGFloat = 0.3
-    
-    func flipCard() {
-        isFlipped = !isFlipped
-        if isFlipped {
-            withAnimation(.linear(duration: durationAndDelay)) {
-                backDegree = 90.0
-            }
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
-                frontDegree = 0.0
-            }
-        } else {
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
-                backDegree = 0.0
-            }
-            withAnimation(.linear(duration: durationAndDelay)) {
-                frontDegree = -90.0
-            }
-        }
-    }
-    
-    var body: some View {
-        ZStack {
-            CardFront(card: value, width: width, degree: $frontDegree)
-            CardBack(width: width, degree: $backDegree)
-        }
-    }
-}
 
+//MARK: -- PREVIEWS
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
