@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct PlayerHandView: View {
     @State var deck = Deck()
-    @State var scaleSize: CGFloat = 0.25
+    var hand: [PlayingCard]
     
-    @State var cardSelection: CardSelection? = .four
+    @State var cardSelection: CardSelection?
     @State var choiceSelection: ChoiceSelection?
     
     
@@ -56,27 +56,27 @@ struct ContentView: View {
             
             //MARK: -- ALL CARDS
             ZStack {
-                Card(value: PlayingCard(value: .ten, suit: .hearts), tappable: $card1) {
+                Card(value: hand[0], tappable: $card1) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .one ? 0.9 : scaleSize, height: cardSelection == .one ? 0.9 : scaleSize))
+                    .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
                     .offset(x: cardSelection == .one ? 0 : -90, y: cardSelection == .one ? 0 : 420)
-                Card(value: PlayingCard(value: .ten, suit: .hearts), tappable: $card2) {
+                Card(value: hand[1], tappable: $card2) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .two ? 0.9 : scaleSize, height: cardSelection == .two ? 0.9 : scaleSize))
+                    .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
                     .offset(x: cardSelection == .two ? 0 : -30, y: cardSelection == .two ? 0 : 420)
-                Card(value: PlayingCard(value: .ten, suit: .hearts), tappable: $card3) {
+                Card(value: hand[2], tappable: $card3) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .three ? 0.9 : scaleSize, height: cardSelection == .three ? 0.9 : scaleSize))
+                    .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
                     .offset(x: cardSelection == .three ? 0 : 30, y: cardSelection == .three ? 0 : 420)
-                Card(value: PlayingCard(value: .ten, suit: .hearts), tappable: $card4) {
+                Card(value: hand[3], tappable: $card4) {
                     disableButtons = true
                 }
-                    .scaleEffect(CGSize(width: cardSelection == .four ? 0.9 : scaleSize, height: cardSelection == .four ? 0.9 : scaleSize))
+                    .scaleEffect(CGSize(width: cardSelection == .four ? 0.85 : 0.25, height: cardSelection == .four ? 0.85 : 0.25))
                     .offset(x: cardSelection == .four ? 0 : 90, y: cardSelection == .four ? 0 : 420)
-            }
+            }.zIndex(1)
             
             
             //MARK: -- BUTTONS
@@ -150,6 +150,34 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    PlayerHandView(hand: [
+        PlayingCard(value: .ace, suit: .hearts),
+        PlayingCard(value: .eight, suit: .clubs),
+        PlayingCard(value: .king, suit: .diamonds),
+        PlayingCard(value: .ten, suit: .spades)
+    ], cardSelection: .one)
 }
-
+#Preview {
+    PlayerHandView(hand: [
+        PlayingCard(value: .ace, suit: .hearts),
+        PlayingCard(value: .eight, suit: .clubs),
+        PlayingCard(value: .king, suit: .diamonds),
+        PlayingCard(value: .ten, suit: .spades)
+    ], cardSelection: .two)
+}
+#Preview {
+    PlayerHandView(hand: [
+        PlayingCard(value: .ace, suit: .hearts),
+        PlayingCard(value: .eight, suit: .clubs),
+        PlayingCard(value: .king, suit: .diamonds),
+        PlayingCard(value: .ten, suit: .spades)
+    ], cardSelection: .three)
+}
+#Preview {
+    PlayerHandView(hand: [
+        PlayingCard(value: .ace, suit: .hearts),
+        PlayingCard(value: .eight, suit: .clubs),
+        PlayingCard(value: .king, suit: .diamonds),
+        PlayingCard(value: .ten, suit: .spades)
+    ], cardSelection: .four)
+}
