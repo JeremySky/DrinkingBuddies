@@ -123,17 +123,27 @@ struct PlayerHandView: View {
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
+                    
+                    
                 case .two:
                     Button(action: {
                         choiceSelection = choiceSelection == .one ? nil : .one
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.red)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .one ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .one ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "arrowshape.up.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.all, 10)
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.black)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
@@ -143,27 +153,45 @@ struct PlayerHandView: View {
                         choiceSelection = choiceSelection == .two ? nil : .two
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.black)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .two ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .two ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "arrowshape.down.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.all, 10)
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.black)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
+                    
                     
                 case .three:
                     Button(action: {
                         choiceSelection = choiceSelection == .one ? nil : .one
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.red)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .one ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .one ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "arrow.up.right.and.arrow.down.left.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .fontWeight(.medium)
+                                .padding(.all, 10)
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.black)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
@@ -173,27 +201,45 @@ struct PlayerHandView: View {
                         choiceSelection = choiceSelection == .two ? nil : .two
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.black)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .two ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .two ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "arrow.down.left.and.arrow.up.right.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .fontWeight(.medium)
+                                .padding(.all, 10)
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.black)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
+                    
                     
                 case .four:
                     Button(action: {
                         choiceSelection = choiceSelection == .one ? nil : .one
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.red)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .one ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .one ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "suit.heart.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .padding()
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.red)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
@@ -203,12 +249,20 @@ struct PlayerHandView: View {
                         choiceSelection = choiceSelection == .two ? nil : .two
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.black)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .two ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .two ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "suit.club.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .padding()
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.black)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
@@ -218,12 +272,20 @@ struct PlayerHandView: View {
                         choiceSelection = choiceSelection == .three ? nil : .three
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.red)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .three ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .three ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "suit.diamond.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .padding()
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.red)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
@@ -233,12 +295,20 @@ struct PlayerHandView: View {
                         choiceSelection = choiceSelection == .four ? nil : .four
                         makeCardSelectionTappable()
                     }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color.black)
-                            .frame(width: 80, height: 80)
-                            .shadow(
-                                color: choiceSelection == .four ? .yellow : .gray,
-                                radius: 10)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 80, height: 80)
+                                .shadow(
+                                    color: choiceSelection == .four ? .yellow : .gray,
+                                    radius: 10)
+                            Image(systemName: "suit.spade.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .padding()
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.black)
+                        }
                     }
                     .padding(.horizontal, 5)
                     .disabled(disableButtons)
