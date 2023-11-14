@@ -46,6 +46,7 @@ struct PlayingCard: Hashable {
             true
         }
     }
+    var isFlipped: Bool = false
 }
 
 enum CardValue: Int, CaseIterable {
@@ -102,13 +103,13 @@ enum CardSuit: String, CaseIterable {
 
 extension PlayingCard {
     static var testHandArray = [
-        PlayingCard(value: .six, suit: .clubs),
-        PlayingCard(value: .eight, suit: .clubs),
+        PlayingCard(value: .six, suit: .clubs, isFlipped: true),
+        PlayingCard(value: .eight, suit: .clubs, isFlipped: true),
         PlayingCard(value: .seven, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
     ]
     
-    static var test1 = PlayingCard(value: .ten, suit: .spades)
+    static var test1 = PlayingCard(value: .ten, suit: .spades, isFlipped: true)
     static var test2 = PlayingCard(value: .ten, suit: .clubs)
     static var test3 = PlayingCard(value: .seven, suit: .diamonds)
     static var test4 = PlayingCard(value: .ten, suit: .spades)

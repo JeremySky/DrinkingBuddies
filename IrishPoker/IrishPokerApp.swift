@@ -12,7 +12,8 @@ struct IrishPokerApp: App {
     var body: some Scene {
         WindowGroup {
 //            GameView(player: Player.test1)
-            GiveTakeView()
+//            GiveTakeView()
+            WaitView()
         }
     }
 }

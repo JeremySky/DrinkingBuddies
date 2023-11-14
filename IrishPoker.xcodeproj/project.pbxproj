@@ -77,8 +77,8 @@
 				624261422B000389001C5410 /* Assets.xcassets */,
 				624261442B000389001C5410 /* Preview Content */,
 				6242614E2B0144F5001C5410 /* Deck.swift */,
-				62FECDAE2B02A08600F13854 /* Player.swift */,
 				6242614C2B0003A4001C5410 /* Card.swift */,
+				62FECDAE2B02A08600F13854 /* Player.swift */,
 			);
 			path = IrishPoker;
 			sourceTree = "<group>";

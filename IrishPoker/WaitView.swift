@@ -9,6 +9,21 @@ import SwiftUI
 
 struct WaitView: View {
     var players: [Player] = [Player.test1, Player.test2, Player.test3, Player.test4]
+    @State var selected: Selection?
+    var zIndexArr: [Double] {
+        switch selected {
+        case .one:
+            [2, 1, 1, 1]
+        case .two:
+            [1, 2, 1, 1]
+        case .three:
+            [1, 1, 2, 1]
+        case .four:
+            [1, 1, 1, 2]
+        case nil:
+            [2, 2, 2, 2]
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -24,18 +39,25 @@ struct WaitView: View {
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .padding()
+            .zIndex(3)
             
             
             //MARK: -- BODY
             VStack(spacing: 8) {
                 Spacer()
                     .frame(height: 70)
-                ForEach(players, id: \.self) { player in
+                ForEach(players.indices, id: \.self) { i in
+                    let player = players[i]
                     PlayerShowHandButton(player: player)
+                        .zIndex(zIndexArr[i])
                 }
             }
             .padding(.horizontal)
         }
+    }
+    
+    enum Selection {
+        case one, two, three, four
     }
 }
 
@@ -45,7 +67,7 @@ struct WaitView: View {
 //MARK: -- PlayerShowHandButton struct
 struct PlayerShowHandButton: View {
     let player: Player
-    @State var showHand: Bool = true
+    @State var showHand: Bool = false
     
     
     var body: some View {
@@ -85,14 +107,17 @@ struct PlayerShowHandButton: View {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(height: 70 + 80)
+                        .foregroundStyle(.white.opacity(0.9))
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(height: 70 + 80)
                         .foregroundStyle(player.color.opacity(0.65))
                         .shadow(radius: 10)
                     HStack {
                         Group {
-                            MiniCard(player: player)
-                            MiniCard(player: player)
-                            MiniCard(player: player)
-                            MiniCard(player: player)
+                            MiniCard(player: player, card: player.hand.one, isFlipped: player.hand.one.isFlipped)
+                            MiniCard(player: player, card: player.hand.two, isFlipped: player.hand.two.isFlipped)
+                            MiniCard(player: player, card: player.hand.three, isFlipped: player.hand.three.isFlipped)
+                            MiniCard(player: player, card: player.hand.four, isFlipped: player.hand.four.isFlipped)
                         }
                         .padding(.horizontal, 5)
                     }
@@ -108,21 +133,31 @@ struct PlayerShowHandButton: View {
 //MARK: -- MiniCard Struct
 struct MiniCard: View {
     let player: Player
+    let card: PlayingCard
+    var isFlipped: Bool
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .frame(width: 65, height: 70)
                 .foregroundStyle(.white)
                 .shadow(color: player.color == .black ? .white.opacity(0.5) : .black.opacity(0.75), radius: 5)
-            Image(systemName: player.hand.two.suit.icon)
-                .resizable()
-                .padding(.all, 5)
-                .frame(width: 63, height: 63)
-                .foregroundStyle(player.hand.one.color)
-            Text(player.hand.one.value.string)
-                .font(.title)
-                .bold()
-                .foregroundStyle(.white)
+            if isFlipped {
+                Image(systemName: card.suit.icon)
+                    .resizable()
+                    .padding(.all, 5)
+                    .frame(width: 63, height: 63)
+                    .foregroundStyle(card.color)
+                Text(card.value.string)
+                    .font(.title)
+                    .bold()
+                    .foregroundStyle(.white)
+            } else {
+                Image("card.back")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 7))
+            }
         }
     }
 }
