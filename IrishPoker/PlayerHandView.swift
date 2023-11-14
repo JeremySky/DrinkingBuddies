@@ -107,10 +107,13 @@ struct PlayerHandView: View {
             print("ERROR: [PlayerHandView] checkAnswer() case .nil")
             return
         }
-        print("SELECTED ANSWER: " + selectedAnswer)
-        print("CORRECT ANSWER: " + correctAnswer)
-        print("IS CORRECT: \(isCorrect)")
+        
+        //MARK: -- Use to troubleshoot
+//        print("SELECTED ANSWER: " + selectedAnswer)
+//        print("CORRECT ANSWER: " + correctAnswer)
+//        print("IS CORRECT: \(isCorrect)")
     }
+    
     
     
     //MARK: -- BODY
