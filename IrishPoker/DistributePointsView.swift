@@ -80,7 +80,9 @@ struct DistributePointsView: View {
                             .padding()
                         }
                         .onTapGesture {
-                            givePoint(to: &players[i])
+                            if points > 0 {
+                                givePoint(to: &players[i])
+                            }
                         }
                     }
                 }
