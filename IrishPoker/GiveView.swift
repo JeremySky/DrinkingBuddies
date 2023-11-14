@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DistributePointsView: View {
+struct GiveView: View {
     @State var points: Int
     var changePhaseAction: () -> Void
     
@@ -121,5 +121,5 @@ struct DistributePointsView: View {
 }
 
 #Preview {
-    DistributePointsView(points: 10) {}
+    GiveView(points: 10) {}
 }
