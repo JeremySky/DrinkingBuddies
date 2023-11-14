@@ -27,16 +27,12 @@ struct WaitView: View {
             
             
             //MARK: -- BODY
-            VStack(spacing: 0) {
-                
-                
-                ForEach(players.indices, id: \.self) { i in
-                    let player = players[i]
-                    
-                    //MARK: --PLAYERS BUTTON
+            VStack(spacing: 8) {
+                Spacer()
+                    .frame(height: 30)
+                ForEach(players, id: \.self) { player in
                     PlayerShowHandButton(player: player)
                 }
-                .padding(.bottom)
             }
             .padding(.horizontal)
         }
@@ -46,36 +42,37 @@ struct WaitView: View {
 
 
 
-
+//MARK: -- PlayerShowHandButton struct
 struct PlayerShowHandButton: View {
     let player: Player
-    @State var showHand: Bool = false
-    let extraSpace: CGFloat = 70
+    @State var showHand: Bool = true
+    
+    
     var body: some View {
+        //aligned at top for front and back RoundedRectangles
         ZStack(alignment: .top) {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .frame(height: extraSpace)
-                    .foregroundStyle(player.color)
-                HStack {
-                    ZStack {
-                        Circle()
-                            .frame(width: 50, height: 50)
-                            .foregroundStyle(Color.white)
-                        Image(systemName: player.icon.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 38, height: 38)
-                    }
-                    Spacer()
-                    Text(player.name)
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Color.white)
-                    Spacer()
+                    .frame(height: showHand ? 50 : 70)
+                    .foregroundStyle(/*showHand ? */player.color /*: player.color.opacity(0.9)*/)
+                ZStack {
+                    Circle()
+                        .stroke(player.color, lineWidth: 20)
+                        .fill(Color.white)
+                        .frame(width: 50, height: 50)
+                    Image(systemName: player.icon.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 38, height: 38)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
+                .offset(y: showHand ? -10 : 0)
+                Text(player.name)
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.white)
             }
             .zIndex(1)
             .onTapGesture {
@@ -87,26 +84,28 @@ struct PlayerShowHandButton: View {
             if showHand {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 10)
-                        .frame(height: extraSpace + 100)
-                        .foregroundStyle(player.color.opacity(0.7))
+                        .frame(height: 70 + 80)
+                        .foregroundStyle(player.color.opacity(0.65))
                         .shadow(radius: 10)
                     HStack {
-                        
-                        //MARK: -- MINI CARDS
-                        MiniCard(player: player)
+                        Group {
+                            MiniCard(player: player)
+                            MiniCard(player: player)
+                            MiniCard(player: player)
+                            MiniCard(player: player)
+                        }
+                        .padding(.horizontal, 5)
                     }
                     .padding(.bottom)
                     .padding(.horizontal)
                 }
             }
-            
-            
-            
-            
         }
     }
 }
 
+
+//MARK: -- MiniCard Struct
 struct MiniCard: View {
     let player: Player
     var body: some View {
@@ -114,7 +113,7 @@ struct MiniCard: View {
             RoundedRectangle(cornerRadius: 10)
                 .frame(width: 65, height: 70)
                 .foregroundStyle(.white)
-                .shadow(color: player.color == .black ? .white : .black, radius: 5)
+                .shadow(color: player.color == .black ? .white.opacity(0.5) : .black.opacity(0.75), radius: 5)
             Image(systemName: player.hand.two.suit.icon)
                 .resizable()
                 .padding(.all, 5)
