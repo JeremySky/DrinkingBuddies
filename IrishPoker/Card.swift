@@ -13,11 +13,17 @@ struct Card: View {
     
     let value: PlayingCard
     @Binding var tappable: Bool
-    var disableButtonsAction: Action
+    
     
     @State var backDegree = 0.0
     @State var frontDegree = -90.0
+//    @State var backDegree = 90.0
+//    @State var frontDegree = 0.0
     @State var isFlipped = false
+    
+    
+    var disableButtonsAction: Action
+    
     
     
     var width: CGFloat = 300

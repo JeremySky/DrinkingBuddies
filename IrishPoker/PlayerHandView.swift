@@ -11,7 +11,7 @@ struct PlayerHandView: View {
     var hand: [PlayingCard]
     @Binding var question: Question?
     @Binding var cardSelection: CardSelection?
-    var changePhaseAction: () -> Void
+    var changePhaseAction: (Bool) -> Void
     
     @State var choiceSelection: ChoiceSelection?
     
@@ -133,25 +133,25 @@ struct PlayerHandView: View {
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .one ? 0 : -90, y: cardSelection == .one ? 0 : 420)
+                    .offset(x: cardSelection == .one ? 0 : -120, y: cardSelection == .one ? 0 : 420)
                     Card(value: hand[1], tappable: $card2) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .two ? 0 : -30, y: cardSelection == .two ? 0 : 420)
+                    .offset(x: cardSelection == .two ? 0 : -40, y: cardSelection == .two ? 0 : 420)
                     Card(value: hand[2], tappable: $card3) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .three ? 0 : 30, y: cardSelection == .three ? 0 : 420)
+                    .offset(x: cardSelection == .three ? 0 : 40, y: cardSelection == .three ? 0 : 420)
                     Card(value: hand[3], tappable: $card4) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .four ? 0.85 : 0.25, height: cardSelection == .four ? 0.85 : 0.25))
-                    .offset(x: cardSelection == .four ? 0 : 90, y: cardSelection == .four ? 0 : 420)
+                    .offset(x: cardSelection == .four ? 0 : 120, y: cardSelection == .four ? 0 : 420)
                 }.zIndex(1)
                 
                 
@@ -417,7 +417,11 @@ struct PlayerHandView: View {
         .frame(height: 80)
         .padding()
         .onTapGesture {
-            changePhaseAction()
+            guard let isCorrect else {
+                print("ERROR: [PlayerHandView] isCorrect == nil")
+                return
+            }
+            changePhaseAction(isCorrect)
         }
     }
     
@@ -432,7 +436,7 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], question: .constant(.one) ,cardSelection: .constant(.one), changePhaseAction: {})
+    ], question: .constant(.one) ,cardSelection: .constant(.one), changePhaseAction: {_ in })
 }
 //#Preview {
 //    PlayerHandView(hand: [

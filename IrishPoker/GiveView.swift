@@ -20,21 +20,9 @@ struct GiveView: View {
         ]
     let currentUsersPlayerNum: PlayerNumber = .one
     
-    func givePoint(to player: inout Player) {
+    func givePoints(to player: inout Player) {
         player.points += 1
         points -= 1
-    }
-    func take() {
-        switch currentUsersPlayerNum {
-        case .one:
-            players[0].points += points
-        case .two:
-            players[1].points += points
-        case .three:
-            players[2].points += points
-        case .four:
-            players[3].points += points
-        }
     }
     
     
@@ -85,7 +73,7 @@ struct GiveView: View {
                             }
                             .onTapGesture {
                                 if points > 0 {
-                                    givePoint(to: &players[i])
+                                    givePoints(to: &players[i])
                                 }
                             }
                         }

@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct GameView: View {
+    let player: Player
     let hand = PlayingCard.testHandArray
     @State var gamePhase: GamePhase = .guessing
     
+    @State var playerGiveOrTake: GiveOrTake = .give
     var pointsToPass: Int {
-        var i = questionNumber.rawValue - 1
+        let i = questionNumber.rawValue - 1
         return hand[i].value.rawValue
     }
     
@@ -82,15 +84,26 @@ struct GameView: View {
         ZStack {
             switch gamePhase {
             case .guessing:
-                PlayerHandView(hand: hand, question: $question, cardSelection: $cardSelection) {
+                PlayerHandView(hand: hand, question: $question, cardSelection: $cardSelection) { result in
+                    playerGiveOrTake = result ? .give : .take
                     nextPhase()
                 }
             case .pointDistribute:
-                DistributePointsView(points: pointsToPass) {
-                    incrementQuestionNumber()
-                    nextQuestion()
-                    nextCard()
-                    nextPhase()
+                switch playerGiveOrTake {
+                case .give:
+                    GiveView(points: pointsToPass) {
+                        incrementQuestionNumber()
+                        nextQuestion()
+                        nextCard()
+                        nextPhase()
+                    }
+                case .take:
+                    TakeView(points: pointsToPass, player: player) {
+                        incrementQuestionNumber()
+                        nextQuestion()
+                        nextCard()
+                        nextPhase()
+                    }
                 }
             case .giveTake:
                 Text("GIVE TAKE")
@@ -106,7 +119,7 @@ struct GameView: View {
 }
 
 #Preview {
-    GameView()
+    GameView(player: Player.test1)
 }
 
 
@@ -122,6 +135,10 @@ enum QuestionNumber: Int {
     case two = 2
     case three = 3
     case four = 4
+}
+
+enum GiveOrTake {
+    case give, take
 }
 
 
