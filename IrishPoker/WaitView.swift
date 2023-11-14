@@ -114,10 +114,10 @@ struct PlayerShowHandButton: View {
                         .shadow(radius: 10)
                     HStack {
                         Group {
-                            MiniCard(player: player, card: player.hand.one, isFlipped: player.hand.one.isFlipped)
-                            MiniCard(player: player, card: player.hand.two, isFlipped: player.hand.two.isFlipped)
-                            MiniCard(player: player, card: player.hand.three, isFlipped: player.hand.three.isFlipped)
-                            MiniCard(player: player, card: player.hand.four, isFlipped: player.hand.four.isFlipped)
+                            MiniCard(player: player, card: player.hand.one, faceUp: player.hand.one.isFlipped)
+                            MiniCard(player: player, card: player.hand.two, faceUp: player.hand.two.isFlipped)
+                            MiniCard(player: player, card: player.hand.three, faceUp: player.hand.three.isFlipped)
+                            MiniCard(player: player, card: player.hand.four, faceUp: player.hand.four.isFlipped)
                         }
                         .padding(.horizontal, 5)
                     }
@@ -134,14 +134,74 @@ struct PlayerShowHandButton: View {
 struct MiniCard: View {
     let player: Player
     let card: PlayingCard
-    var isFlipped: Bool
+    @State var backDegree = 0.0
+    @State var frontDegree = -90.0
+    let durationAndDelay: CGFloat = 0.3
+    @State var isFlipped: Bool = false
+    
+    var faceUp: Bool
+    
+    
+    //MARK: -- FLIP FUNCTION
+    func flipCard() {
+        isFlipped = !isFlipped
+        if isFlipped {
+            withAnimation(.linear(duration: durationAndDelay)) {
+                backDegree = 90.0
+            }
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                frontDegree = 0.0
+            }
+        } else {
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                backDegree = 0.0
+            }
+            withAnimation(.linear(duration: durationAndDelay)) {
+                frontDegree = -90.0
+            }
+        }
+    }
+    
+    
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .frame(width: 65, height: 70)
-                .foregroundStyle(.white)
-                .shadow(color: player.color == .black ? .white.opacity(0.5) : .black.opacity(0.75), radius: 5)
-            if isFlipped {
+        if !faceUp {
+            ZStack {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 65, height: 70)
+                        .foregroundStyle(.white)
+                        .shadow(color: player.color == .black ? .white.opacity(0.5) : .black.opacity(0.75), radius: 5)
+                    Image(systemName: card.suit.icon)
+                        .resizable()
+                        .padding(.all, 5)
+                        .frame(width: 63, height: 63)
+                        .foregroundStyle(card.color)
+                    Text(card.value.string)
+                        .font(.title)
+                        .bold()
+                        .foregroundStyle(.white)
+                }
+                .rotation3DEffect(Angle(degrees: frontDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 65, height: 70)
+                        .foregroundStyle(.white)
+                        .shadow(color: player.color == .black ? .white.opacity(0.5) : .black.opacity(0.75), radius: 5)
+                    Image("card.back")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60, height: 60)
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                }
+                .rotation3DEffect(Angle(degrees: backDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+            }
+        } else {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(width: 65, height: 70)
+                    .foregroundStyle(.white)
+                    .shadow(color: player.color == .black ? .white.opacity(0.5) : .black.opacity(0.75), radius: 5)
                 Image(systemName: card.suit.icon)
                     .resizable()
                     .padding(.all, 5)
@@ -151,19 +211,10 @@ struct MiniCard: View {
                     .font(.title)
                     .bold()
                     .foregroundStyle(.white)
-            } else {
-                Image("card.back")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 7))
             }
         }
     }
 }
-
-
-
 
 
 

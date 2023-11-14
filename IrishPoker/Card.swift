@@ -17,6 +17,8 @@ struct Card: View {
     
     @State var backDegree = 0.0
     @State var frontDegree = -90.0
+    let durationAndDelay: CGFloat = 0.3
+    //Use isFlipped for flip animation & [WaitView]
     @State var isFlipped = false
     
     //Initiate with faceUp = true to keep card revealed
@@ -30,7 +32,6 @@ struct Card: View {
     var width: CGFloat = 300
     var height: CGFloat = 470
     var cornerRadius: CGFloat = 16
-    let durationAndDelay: CGFloat = 0.3
     
     //MARK: -- FLIP FUNCTION
     func flipCard() {
