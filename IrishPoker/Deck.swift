@@ -27,7 +27,7 @@ struct Deck {
 }
 
 
-struct PlayingCard: Identifiable {
+struct PlayingCard: Hashable {
     var id: String { "\(value.string).\(suit.rawValue)" }
     var value: CardValue
     var suit: CardSuit
@@ -107,4 +107,9 @@ extension PlayingCard {
         PlayingCard(value: .seven, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
     ]
+    
+    static var test1 = PlayingCard(value: .ten, suit: .spades)
+    static var test2 = PlayingCard(value: .ten, suit: .clubs)
+    static var test3 = PlayingCard(value: .seven, suit: .diamonds)
+    static var test4 = PlayingCard(value: .ten, suit: .spades)
 }

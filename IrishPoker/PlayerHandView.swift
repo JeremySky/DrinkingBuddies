@@ -21,10 +21,7 @@ struct PlayerHandView: View {
     
     
     //MARK: -- passed through Card object to make tappable
-    @State var card1 = false
-    @State var card2 = false
-    @State var card3 = false
-    @State var card4 = false
+    @State var tappable: (card1: Bool, card2: Bool, card3: Bool, card4: Bool) = (false, false, false, false)
     
     @State var disableButtons = false
     
@@ -39,13 +36,13 @@ struct PlayerHandView: View {
         guard let _ = choiceSelection else { return }
         switch cardSelection {
         case .one:
-            makeTappable(&card1)
+            makeTappable(&tappable.card1)
         case .two:
-            makeTappable(&card2)
+            makeTappable(&tappable.card2)
         case .three:
-            makeTappable(&card3)
+            makeTappable(&tappable.card3)
         case .four:
-            makeTappable(&card4)
+            makeTappable(&tappable.card4)
         case nil:
             return
         }
@@ -133,25 +130,25 @@ struct PlayerHandView: View {
                 
                 //MARK: -- ALL CARDS
                 ZStack {
-                    Card(value: hand[0], tappable: $card1, faceUp: faceUpPropertyArr[0]) {
+                    Card(value: hand[0], tappable: $tappable.card1, faceUp: faceUpPropertyArr[0]) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
                     .offset(x: cardSelection == .one ? 0 : -120, y: cardSelection == .one ? 0 : 420)
-                    Card(value: hand[1], tappable: $card2, faceUp: faceUpPropertyArr[1]) {
+                    Card(value: hand[1], tappable: $tappable.card2, faceUp: faceUpPropertyArr[1]) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
                     .offset(x: cardSelection == .two ? 0 : -40, y: cardSelection == .two ? 0 : 420)
-                    Card(value: hand[2], tappable: $card3, faceUp: faceUpPropertyArr[2]) {
+                    Card(value: hand[2], tappable: $tappable.card3, faceUp: faceUpPropertyArr[2]) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
                     .offset(x: cardSelection == .three ? 0 : 40, y: cardSelection == .three ? 0 : 420)
-                    Card(value: hand[3], tappable: $card4, faceUp: faceUpPropertyArr[3]) {
+                    Card(value: hand[3], tappable: $tappable.card4, faceUp: faceUpPropertyArr[3]) {
                         disableButtons = true
                         checkAnswer()
                     }

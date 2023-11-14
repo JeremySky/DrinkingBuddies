@@ -39,12 +39,12 @@ struct TakeView: View {
                             HStack {
                                 ZStack {
                                     Circle()
-                                        .frame(width: 50, height: 50)
+                                        .frame(width: 45, height: 45)
                                         .foregroundStyle(Color.white)
                                     Image(systemName: player.icon.rawValue)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 38, height: 38)
+                                        .frame(width: 35, height: 35)
                                 }
                                 Spacer()
                                 Text(player.name)

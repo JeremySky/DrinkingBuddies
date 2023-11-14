@@ -10,7 +10,7 @@ import SwiftUI
 struct GameView: View {
     let player: Player
     let hand = PlayingCard.testHandArray
-    @State var gamePhase: GamePhase = .guessing
+    @State var gamePhase: GamePhase = .guessingPhase
     
     @State var playerGiveOrTake: GiveOrTake = .give
     var pointsToPass: Int {
@@ -30,12 +30,12 @@ struct GameView: View {
     //manages all phase changes
     func nextPhase() {
         switch gamePhase {
-        case .guessing:
-            gamePhase = .pointDistribute
-        case .pointDistribute:
-            gamePhase = allHandsAreFlipped ? .giveTake : .guessing
-        case .giveTake:
-            gamePhase = .pointDistribute
+        case .guessingPhase:
+            gamePhase = .pointDistributePhase
+        case .pointDistributePhase:
+            gamePhase = allHandsAreFlipped ? .giveTakePhase : .guessingPhase
+        case .giveTakePhase:
+            gamePhase = .pointDistributePhase
         }
     }
     
@@ -89,12 +89,12 @@ struct GameView: View {
     var body: some View {
         ZStack {
             switch gamePhase {
-            case .guessing:
+            case .guessingPhase:
                 PlayerHandView(hand: hand, question: $question, cardSelection: $cardSelection, faceUpPropertyArr: questionNumber.faceUpPropertyArr) { result in
                     playerGiveOrTake = result ? .give : .take
                     nextPhase()
                 }
-            case .pointDistribute:
+            case .pointDistributePhase:
                 switch playerGiveOrTake {
                 case .give:
                     GiveView(points: pointsToPass) {
@@ -111,16 +111,16 @@ struct GameView: View {
                         nextPhase()
                     }
                 }
-            case .giveTake:
-                Text("GIVE TAKE")
+            case .giveTakePhase:
+                GiveTakeView()
             }
         }
     }
     
     enum GamePhase {
-        case guessing
-        case pointDistribute
-        case giveTake
+        case guessingPhase
+        case pointDistributePhase
+        case giveTakePhase
     }
 }
 

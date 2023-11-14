@@ -25,7 +25,7 @@ struct Card: View {
     var faceUp: Bool
     
     
-    var disableButtonsAction: Action
+    var onTapAction: Action? = nil
     
     
     
@@ -69,7 +69,9 @@ struct Card: View {
             if tappable {
                 flipCard()
                 tappable = false
-                disableButtonsAction()
+                if let onTapAction {
+                    onTapAction()
+                }
             }
         }
     }
@@ -290,7 +292,7 @@ struct CardBack: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        Card(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), faceUp: true, disableButtonsAction: {return})
+        Card(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), faceUp: true, onTapAction: {return})
     }
 }
 
