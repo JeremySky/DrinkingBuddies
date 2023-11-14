@@ -11,8 +11,8 @@ struct WaitView: View {
     var players: [Player] = [Player.test1, Player.test2, Player.test3, Player.test4]
     
     var body: some View {
-        //MARK: -- TITLE
-        VStack{
+        ZStack {
+            //MARK: -- TITLE
             HStack {
                 Image(systemName: "graduationcap")
                     .font(.largeTitle)
@@ -22,8 +22,8 @@ struct WaitView: View {
                     .fontWeight(.heavy)
                     .offset(x: -5)
             }
+            .frame(maxHeight: .infinity, alignment: .top)
             .padding()
-            Spacer()
             
             
             //MARK: -- BODY
@@ -93,21 +93,7 @@ struct PlayerShowHandButton: View {
                     HStack {
                         
                         //MARK: -- MINI CARDS
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 65, height: 70)
-                                .foregroundStyle(.white)
-                                .shadow(color: player.color == .black ? .white : .black, radius: 5)
-                            Image(systemName: player.hand.two.suit.icon)
-                                .resizable()
-                                .padding(.all, 5)
-                                .frame(width: 63, height: 63)
-                                .foregroundStyle(player.hand.one.color)
-                            Text(player.hand.one.value.string)
-                                .font(.title)
-                                .bold()
-                                .foregroundStyle(.white)
-                        }
+                        MiniCard(player: player)
                     }
                     .padding(.bottom)
                     .padding(.horizontal)
@@ -121,7 +107,26 @@ struct PlayerShowHandButton: View {
     }
 }
 
-
+struct MiniCard: View {
+    let player: Player
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .frame(width: 65, height: 70)
+                .foregroundStyle(.white)
+                .shadow(color: player.color == .black ? .white : .black, radius: 5)
+            Image(systemName: player.hand.two.suit.icon)
+                .resizable()
+                .padding(.all, 5)
+                .frame(width: 63, height: 63)
+                .foregroundStyle(player.hand.one.color)
+            Text(player.hand.one.value.string)
+                .font(.title)
+                .bold()
+                .foregroundStyle(.white)
+        }
+    }
+}
 
 
 
