@@ -98,3 +98,13 @@ enum CardSuit: String, CaseIterable {
         }
     }
 }
+
+
+extension PlayingCard {
+    static var testHandArray = [
+        PlayingCard(value: .six, suit: .clubs),
+        PlayingCard(value: .eight, suit: .clubs),
+        PlayingCard(value: .seven, suit: .diamonds),
+        PlayingCard(value: .ten, suit: .spades)
+    ]
+}
