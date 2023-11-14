@@ -29,7 +29,7 @@ struct WaitView: View {
             //MARK: -- BODY
             VStack(spacing: 8) {
                 Spacer()
-                    .frame(height: 30)
+                    .frame(height: 70)
                 ForEach(players, id: \.self) { player in
                     PlayerShowHandButton(player: player)
                 }
@@ -58,7 +58,7 @@ struct PlayerShowHandButton: View {
                     .foregroundStyle(/*showHand ? */player.color /*: player.color.opacity(0.9)*/)
                 ZStack {
                     Circle()
-                        .stroke(player.color, lineWidth: 20)
+                        .stroke(player.color, lineWidth: showHand ? 31 : 0)
                         .fill(Color.white)
                         .frame(width: 50, height: 50)
                     Image(systemName: player.icon.rawValue)
@@ -68,7 +68,7 @@ struct PlayerShowHandButton: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
-                .offset(y: showHand ? -10 : 0)
+                .offset(y: showHand ? -16 : 0)
                 Text(player.name)
                     .font(.largeTitle)
                     .fontWeight(.semibold)
