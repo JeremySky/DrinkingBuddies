@@ -49,6 +49,8 @@ struct GameView: View {
             questionNumber = .four
         case .four:
             allHandsAreFlipped = true
+        case .done:
+            return
         }
     }
     func nextQuestion() {
@@ -63,6 +65,8 @@ struct GameView: View {
         case .four:
             //WIP CHANGE PHASE
             question = .four
+        case .done:
+            return
         }
     }
     func nextCard() {
@@ -77,6 +81,8 @@ struct GameView: View {
         case .four:
             //WIP CHANGE PHASE
             cardSelection = .four
+        case .done:
+            return
         }
     }
     
@@ -84,7 +90,7 @@ struct GameView: View {
         ZStack {
             switch gamePhase {
             case .guessing:
-                PlayerHandView(hand: hand, question: $question, cardSelection: $cardSelection) { result in
+                PlayerHandView(hand: hand, question: $question, cardSelection: $cardSelection, faceUpPropertyArr: questionNumber.faceUpPropertyArr) { result in
                     playerGiveOrTake = result ? .give : .take
                     nextPhase()
                 }
@@ -135,6 +141,22 @@ enum QuestionNumber: Int {
     case two = 2
     case three = 3
     case four = 4
+    case done = 0
+    
+    var faceUpPropertyArr: [Bool] {
+        switch self {
+        case .one:
+            [false, false, false, false]
+        case .two:
+            [true, false, false, false]
+        case .three:
+            [true, true, false, false]
+        case .four:
+            [true, true, true, false]
+        case .done:
+            [true, true, true, true]
+        }
+    }
 }
 
 enum GiveOrTake {

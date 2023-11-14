@@ -11,6 +11,10 @@ struct PlayerHandView: View {
     var hand: [PlayingCard]
     @Binding var question: Question?
     @Binding var cardSelection: CardSelection?
+    
+    //MARK: -- use as pointer to persist Card's faceUp property
+    var faceUpPropertyArr: [Bool]
+    
     var changePhaseAction: (Bool) -> Void
     
     @State var choiceSelection: ChoiceSelection?
@@ -23,6 +27,7 @@ struct PlayerHandView: View {
     @State var card4 = false
     
     @State var disableButtons = false
+    
     
     
     //MARK: -- tappable helper function
@@ -128,25 +133,25 @@ struct PlayerHandView: View {
                 
                 //MARK: -- ALL CARDS
                 ZStack {
-                    Card(value: hand[0], tappable: $card1) {
+                    Card(value: hand[0], tappable: $card1, faceUp: faceUpPropertyArr[0]) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
                     .offset(x: cardSelection == .one ? 0 : -120, y: cardSelection == .one ? 0 : 420)
-                    Card(value: hand[1], tappable: $card2) {
+                    Card(value: hand[1], tappable: $card2, faceUp: faceUpPropertyArr[1]) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
                     .offset(x: cardSelection == .two ? 0 : -40, y: cardSelection == .two ? 0 : 420)
-                    Card(value: hand[2], tappable: $card3) {
+                    Card(value: hand[2], tappable: $card3, faceUp: faceUpPropertyArr[2]) {
                         disableButtons = true
                         checkAnswer()
                     }
                     .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
                     .offset(x: cardSelection == .three ? 0 : 40, y: cardSelection == .three ? 0 : 420)
-                    Card(value: hand[3], tappable: $card4) {
+                    Card(value: hand[3], tappable: $card4, faceUp: faceUpPropertyArr[3]) {
                         disableButtons = true
                         checkAnswer()
                     }
@@ -436,7 +441,7 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], question: .constant(.one) ,cardSelection: .constant(.one), changePhaseAction: {_ in })
+    ], question: .constant(.one) ,cardSelection: .constant(.one), faceUpPropertyArr: [false, true, false, true], changePhaseAction: {_ in })
 }
 //#Preview {
 //    PlayerHandView(hand: [

@@ -21,6 +21,9 @@ struct Card: View {
 //    @State var frontDegree = 0.0
     @State var isFlipped = false
     
+    //Initiate with faceUp = true to keep card revealed
+    var faceUp: Bool
+    
     
     var disableButtonsAction: Action
     
@@ -55,8 +58,12 @@ struct Card: View {
     //MARK: -- body
     var body: some View {
         ZStack {
-            CardFront(card: value, width: width, degree: $frontDegree)
-            CardBack(width: width, degree: $backDegree)
+            if !faceUp {
+                CardFront(card: value, degree: $frontDegree)
+                CardBack(width: width, degree: $backDegree)
+            } else {
+                CardFront(card: value, degree: .constant(0))
+            }
         }
         .onTapGesture {
             if tappable {
@@ -75,7 +82,7 @@ struct Card: View {
 struct CardFront: View {
     let card: PlayingCard
     
-    var width: CGFloat = 320
+    var width: CGFloat = 300
     var height: CGFloat = 470
     var fontSize: CGFloat = 50
     var iconSize: CGFloat = 45
@@ -283,7 +290,7 @@ struct CardBack: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        Card(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), disableButtonsAction: {return})
+        Card(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), faceUp: true, disableButtonsAction: {return})
     }
 }
 
