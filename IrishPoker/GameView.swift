@@ -8,18 +8,35 @@
 import SwiftUI
 
 struct GameView: View {
+    let hand = PlayingCard.testHandArray
     @State var gamePhase: GamePhase = .guessing
+    
+    var pointsToPass: Int {
+        var i = questionNumber.rawValue - 1
+        return hand[i].value.rawValue
+    }
+    
+    //Parameter to change from guessing phase to give/take phase
     @State var allHandsAreFlipped: Bool = false
+    
+    //Three different pointers because data will be updating at different times
+    @State var questionNumber: QuestionNumber = .one
     @State var question: Question? = .one
     @State var cardSelection: CardSelection? = .one
-    @State var questionNumber: QuestionNumber = .one
     
+    
+    //manages all phase changes
     func nextPhase() {
-        if !allHandsAreFlipped {
-            //MARK: -- Toggle between .guessing and .pointDistribute
-            gamePhase = gamePhase == .guessing ? .pointDistribute : .guessing
+        switch gamePhase {
+        case .guessing:
+            gamePhase = .pointDistribute
+        case .pointDistribute:
+            gamePhase = allHandsAreFlipped ? .giveTake : .guessing
+        case .giveTake:
+            gamePhase = .pointDistribute
         }
     }
+    
     func incrementQuestionNumber() {
         switch questionNumber {
         case .one:
@@ -29,9 +46,7 @@ struct GameView: View {
         case .three:
             questionNumber = .four
         case .four:
-            questionNumber = .done
-        case .done:
-            return
+            allHandsAreFlipped = true
         }
     }
     func nextQuestion() {
@@ -46,8 +61,6 @@ struct GameView: View {
         case .four:
             //WIP CHANGE PHASE
             question = .four
-        case .done:
-            question = nil
         }
     }
     func nextCard() {
@@ -62,8 +75,6 @@ struct GameView: View {
         case .four:
             //WIP CHANGE PHASE
             cardSelection = .four
-        case .done:
-            cardSelection = nil
         }
     }
     
@@ -71,16 +82,18 @@ struct GameView: View {
         ZStack {
             switch gamePhase {
             case .guessing:
-                PlayerHandView(hand: PlayingCard.testHandArray, question: $question, cardSelection: $cardSelection) {
+                PlayerHandView(hand: hand, question: $question, cardSelection: $cardSelection) {
                     nextPhase()
                 }
             case .pointDistribute:
-                DistributePointsView(points: 4) {
-                    nextPhase()
+                DistributePointsView(points: pointsToPass) {
                     incrementQuestionNumber()
                     nextQuestion()
                     nextCard()
+                    nextPhase()
                 }
+            case .giveTake:
+                Text("GIVE TAKE")
             }
         }
     }
@@ -88,6 +101,7 @@ struct GameView: View {
     enum GamePhase {
         case guessing
         case pointDistribute
+        case giveTake
     }
 }
 
@@ -103,8 +117,11 @@ enum Question: String, RawRepresentable {
     case four = "Guess the Suit"
 }
 
-enum QuestionNumber {
-    case one, two, three, four, done
+enum QuestionNumber: Int {
+    case one = 1
+    case two = 2
+    case three = 3
+    case four = 4
 }
 
 
