@@ -10,7 +10,7 @@ import SwiftUI
 struct PlayerHandView: View {
     var hand: [PlayingCard]
     @Binding var question: Question?
-    @State var cardSelection: CardSelection?
+    @Binding var cardSelection: CardSelection?
     var changePhaseAction: () -> Void
     
     @State var choiceSelection: ChoiceSelection?
@@ -421,9 +421,6 @@ struct PlayerHandView: View {
         }
     }
     
-    enum CardSelection {
-        case one, two, three, four
-    }
     enum ChoiceSelection {
         case one, two, three, four
     }
@@ -435,7 +432,7 @@ struct PlayerHandView: View {
         PlayingCard(value: .eight, suit: .clubs),
         PlayingCard(value: .king, suit: .diamonds),
         PlayingCard(value: .ten, suit: .spades)
-    ], question: .constant(.one) ,cardSelection: .one, changePhaseAction: {})
+    ], question: .constant(.one) ,cardSelection: .constant(.one), changePhaseAction: {})
 }
 //#Preview {
 //    PlayerHandView(hand: [
@@ -443,7 +440,7 @@ struct PlayerHandView: View {
 //        PlayingCard(value: .eight, suit: .clubs),
 //        PlayingCard(value: .king, suit: .diamonds),
 //        PlayingCard(value: .ten, suit: .spades)
-//    ], question: .constant(.two), cardSelection: .two, changePhaseAction: {})
+//    ], question: .constant(.two), cardSelection: .constant(.two), changePhaseAction: {})
 //}
 //#Preview {
 //    PlayerHandView(hand: [
@@ -451,7 +448,7 @@ struct PlayerHandView: View {
 //        PlayingCard(value: .eight, suit: .clubs),
 //        PlayingCard(value: .king, suit: .diamonds),
 //        PlayingCard(value: .ten, suit: .spades)
-//    ], question: .constant(.three), cardSelection: .three, changePhaseAction: {})
+//    ], question: .constant(.three), cardSelection: .constant(.three), changePhaseAction: {})
 //}
 //#Preview {
 //    PlayerHandView(hand: [
@@ -459,5 +456,5 @@ struct PlayerHandView: View {
 //        PlayingCard(value: .eight, suit: .clubs),
 //        PlayingCard(value: .king, suit: .diamonds),
 //        PlayingCard(value: .ten, suit: .spades)
-//    ], question: .constant(.four), cardSelection: .four, changePhaseAction: {})
+//    ], question: .constant(.four), cardSelection: .constant(.four), changePhaseAction: {})
 //}
