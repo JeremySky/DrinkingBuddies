@@ -23,96 +23,98 @@ struct PlayerView: View {
     
     //Three different pointers because data will be updating at different times
     @State var questionNumber: QuestionNumber = .one
-    @State var question: Question? = .one
-    @State var cardSelection: CardSelection? = .one
+    @State var question: Question = .one
+    @State var cardSelection: CardSelection = .one
     
     
-    //manages all phase changes
-    func nextPhase() {
-        switch gamePhase {
-        case .guessingPhase:
-            gamePhase = .pointDistributePhase
-        case .pointDistributePhase:
-            gamePhase = allHandsAreFlipped ? .giveTakePhase : .guessingPhase
-        case .giveTakePhase:
-            gamePhase = .pointDistributePhase
-        }
-    }
-    
-    func incrementQuestionNumber() {
-        switch questionNumber {
-        case .one:
-            questionNumber = .two
-        case .two:
-            questionNumber = .three
-        case .three:
-            questionNumber = .four
-        case .four:
-            allHandsAreFlipped = true
-        case .done:
-            return
-        }
-    }
-    func nextQuestion() {
-        switch questionNumber {
-        case .one:
-            //SHOULD NOT OCCUR
-            return
-        case .two:
-            question = .two
-        case .three:
-            question = .three
-        case .four:
-            //WIP CHANGE PHASE
-            question = .four
-        case .done:
-            return
-        }
-    }
-    func nextCard() {
-        switch questionNumber {
-        case .one:
-            //SHOULD NOT OCCUR
-            return
-        case .two:
-            cardSelection = .two
-        case .three:
-            cardSelection = .three
-        case .four:
-            //WIP CHANGE PHASE
-            cardSelection = .four
-        case .done:
-            return
-        }
-    }
+//    //manages all phase changes
+//    func nextPhase() {
+//        switch gamePhase {
+//        case .guessingPhase:
+//            gamePhase = .pointDistributePhase
+//        case .pointDistributePhase:
+//            gamePhase = allHandsAreFlipped ? .giveTakePhase : .guessingPhase
+//        case .giveTakePhase:
+//            gamePhase = .pointDistributePhase
+//        }
+//    }
+//    
+//    func incrementQuestionNumber() {
+//        switch questionNumber {
+//        case .one:
+//            questionNumber = .two
+//        case .two:
+//            questionNumber = .three
+//        case .three:
+//            questionNumber = .four
+//        case .four:
+//            allHandsAreFlipped = true
+//        case .done:
+//            return
+//        }
+//    }
+//    func nextQuestion() {
+//        switch questionNumber {
+//        case .one:
+//            //SHOULD NOT OCCUR
+//            return
+//        case .two:
+//            question = .two
+//        case .three:
+//            question = .three
+//        case .four:
+//            //WIP CHANGE PHASE
+//            question = .four
+//        case .done:
+//            return
+//        }
+//    }
+//    func nextCard() {
+//        switch questionNumber {
+//        case .one:
+//            //SHOULD NOT OCCUR
+//            return
+//        case .two:
+//            cardSelection = .two
+//        case .three:
+//            cardSelection = .three
+//        case .four:
+//            //WIP CHANGE PHASE
+//            cardSelection = .four
+//        case .done:
+//            return
+//        }
+//    }
     
     var body: some View {
         ZStack {
             switch gamePhase {
             case .guessingPhase:
-                PlayersTurnView(hand: hand, question: $question, cardSelection: $cardSelection, faceUpPropertyArr: questionNumber.faceUpPropertyArr) { result in
+                PlayersTurnView(player: player, hand: hand, question: $question, cardSelection: $cardSelection, faceUpPropertyArr: questionNumber.faceUpPropertyArr) { result in
                     playerGiveOrTake = result ? .give : .take
-                    nextPhase()
+//                    nextPhase()
                 }
             case .pointDistributePhase:
                 switch playerGiveOrTake {
                 case .give:
                     GiveView(points: pointsToPass) {
-                        incrementQuestionNumber()
-                        nextQuestion()
-                        nextCard()
-                        nextPhase()
+//                        incrementQuestionNumber()
+//                        nextQuestion()
+//                        nextCard()
+//                        nextPhase()
                     }
                 case .take:
                     TakeView(points: pointsToPass, player: player) {
-                        incrementQuestionNumber()
-                        nextQuestion()
-                        nextCard()
-                        nextPhase()
+//                        incrementQuestionNumber()
+//                        nextQuestion()
+//                        nextCard()
+//                        nextPhase()
                     }
                 }
             case .giveTakePhase:
                 GiveTakeView()
+            case .waitPhase:
+                WaitView()
             }
         }
     }
@@ -121,6 +123,7 @@ struct PlayerView: View {
         case guessingPhase
         case pointDistributePhase
         case giveTakePhase
+        case waitPhase
     }
 }
 

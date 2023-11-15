@@ -1,5 +1,5 @@
 //
-//  CardSubViews.swift
+//  BigCard.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/11/23.
@@ -7,96 +7,47 @@
 
 import SwiftUI
 
-//MARK: -- CARD
+
+//MARK: -- BIGCARD
 struct BigCard: View {
-    typealias Action = () -> Void
+    let card: Card
+    @Binding var isTappable: Bool
+    let startFaceUp: Bool
+    let onTapAction: (() -> Void)?
     
-    let value: PlayingCard
-    @Binding var tappable: Bool
-    
-    
-    @State var backDegree = 0.0
-    @State var frontDegree = -90.0
-    let durationAndDelay: CGFloat = 0.3
-    //Use isFlipped for flip animation & [WaitView]
-    @State var isFlipped = false
-    
-    //Initiate with faceUp = true to keep card revealed
-    var faceUp: Bool
-    
-    
-    var onTapAction: Action? = nil
-    
-    
-    
-    var width: CGFloat = 300
-    var height: CGFloat = 470
-    var cornerRadius: CGFloat = 16
-    
-    //MARK: -- FLIP FUNCTION
-    func flipCard() {
-        isFlipped = !isFlipped
-        if isFlipped {
-            withAnimation(.linear(duration: durationAndDelay)) {
-                backDegree = 90.0
-            }
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
-                frontDegree = 0.0
-            }
-        } else {
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
-                backDegree = 0.0
-            }
-            withAnimation(.linear(duration: durationAndDelay)) {
-                frontDegree = -90.0
-            }
-        }
+    init(card: Card, isTappable: Binding<Bool>, startFaceUp: Bool, onTapAction: (() -> Void)? = nil) {
+        self.card = card
+        _isTappable = isTappable
+        self.startFaceUp = startFaceUp
+        self.onTapAction = onTapAction
     }
     
+    let dimensions: (width: CGFloat, height: CGFloat, cornerRadius: CGFloat) = (260, 390, 13)
     
-    //MARK: -- body
     var body: some View {
-        ZStack {
-            if !faceUp {
-                CardFront(card: value, degree: $frontDegree)
-                CardBack(width: width, degree: $backDegree)
-            } else {
-                CardFront(card: value, degree: .constant(0))
-            }
-        }
-        .onTapGesture {
-            if tappable {
-                flipCard()
-                tappable = false
-                if let onTapAction {
-                    onTapAction()
-                }
-            }
+        CardViewHelper(startFaceUp: startFaceUp, isTappable: $isTappable, onTapAction: onTapAction) {
+            CardFront(card: card, dimensions: dimensions)
+        } backView: {
+            CardBack(dimensions: dimensions)
         }
     }
 }
 
 
 
-
-//MARK: -- FRONT
+//MARK: -- BIGCARD FRONT
 struct CardFront: View {
-    let card: PlayingCard
-    
-    var width: CGFloat = 300
-    var height: CGFloat = 470
+    let card: Card
+    let dimensions: (width: CGFloat, height: CGFloat, cornerRadius: CGFloat)
     var fontSize: CGFloat = 50
     var iconSize: CGFloat = 45
-    var cornerRadius: CGFloat = 15
-    var padding: CGFloat = 16
-    
-    @Binding var degree: Double
+    var padding: CGFloat = 3
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: cornerRadius)
+            RoundedRectangle(cornerRadius: dimensions.cornerRadius)
                 .foregroundStyle(Color.white)
-                .frame(width: width, height: height)
+                .frame(width: dimensions.width, height: dimensions.height)
                 .shadow(radius: 10)
             Group {
                 ZStack {
@@ -109,7 +60,7 @@ struct CardFront: View {
                                 .font(.system(size: iconSize))
                             Spacer()
                         }
-                        .frame(height: height)
+                        .frame(height: dimensions.height)
                         .padding(.leading, padding)
                         
                         Spacer()
@@ -122,35 +73,24 @@ struct CardFront: View {
                                 .font(.system(size: iconSize))
                             Spacer()
                         }
-                        .frame(height: height)
+                        .frame(height: dimensions.height)
                         .padding(.leading, padding)
                         .rotationEffect(.degrees(180))
                     }
-                    .frame(width: width, height: height)
+                    .frame(width: dimensions.width, height: dimensions.height)
                     
                     CardBody(card: card)
                 }
             }
             .foregroundColor(card.color)
         }
-        .rotation3DEffect(Angle(degrees: degree), axis: (x: 0.0, y: 1.0, z: 0.0) )
     }
 }
 
-
-
-
-//MARK: -- BODY
 struct CardBody: View {
-    let card: PlayingCard
-    var bodyWidth: CGFloat = 150
-    var bodyHeight: CGFloat = 290
-    var bodyIconSize: CGFloat = 37
-    var bodyBorderWidth: CGFloat = 3
-    var bodyCrownSize: CGFloat = 82
-    var bodyLargeIconSize: CGFloat = 140
-    var bodyLargeLetterSize: CGFloat = 82
-    var padding: CGFloat = 16
+    let card: Card
+    var dimensions: (width: CGFloat, height: CGFloat, borderWidth: CGFloat) = (150, 290, 3)
+    var imageSizes: (small: CGFloat, large: CGFloat, crown: CGFloat, largeLetter: CGFloat) = (37, 140, 82, 82)
     
     var body: some View {
         Group {
@@ -214,19 +154,19 @@ struct CardBody: View {
                         }
                     }
                 }
-                .font(.system(size: bodyIconSize))
+                .font(.system(size: imageSizes.small))
                 
                 
             case .jack, .queen, .king:
                 VStack {
                     Image(systemName: "crown.fill")
-                        .font(.system(size: bodyCrownSize))
+                        .font(.system(size: imageSizes.crown))
                     ZStack {
                         Image(systemName: card.suit.icon)
-                            .font(.system(size: bodyLargeIconSize))
+                            .font(.system(size: imageSizes.large))
                         Text(card.value.string)
                             .foregroundStyle(Color.white)
-                            .font(.system(size: bodyLargeLetterSize))
+                            .font(.system(size: imageSizes.largeLetter))
                             .fontWeight(.semibold)
                     }
                 }
@@ -234,81 +174,66 @@ struct CardBody: View {
             case .ace:
                 ZStack {
                     Image(systemName: card.suit.icon)
-                        .font(.system(size: bodyLargeIconSize))
+                        .font(.system(size: imageSizes.large))
                     Text(card.value.string)
                         .foregroundStyle(Color.white)
-                        .font(.system(size: bodyLargeLetterSize))
+                        .font(.system(size: imageSizes.largeLetter))
                         .fontWeight(.semibold)
                 }
             }
         }
         .foregroundColor(card.color)
-        .padding(.all, padding)
-        .frame(width: bodyWidth, height: bodyHeight)
-        .border(Color.blue.opacity(0.3), width: bodyBorderWidth)
+        .padding(.all, 16)
+        .frame(width: dimensions.width, height: dimensions.height)
+        .border(Color.blue.opacity(0.3), width: dimensions.borderWidth)
     }
 }
 
-
-
-
-//MARK: -- BACK
 struct CardBack: View {
-    var width: CGFloat = 320
-    var height: CGFloat = 470
-    var cornerRadius: CGFloat = 16
-    var bodyWidth: CGFloat = 275
-    var bodyHeight: CGFloat = 425
-    var bodyCornerRadius: CGFloat = 10
-    @Binding var degree: Double
+    let dimensions: (width: CGFloat, height: CGFloat, cornerRadius: CGFloat)
+    let innerDimensions: (width: CGFloat, height: CGFloat, cornerRadius: CGFloat) = (235, 365, 5)
+    
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: cornerRadius)
+            RoundedRectangle(cornerRadius: dimensions.cornerRadius)
                 .foregroundStyle(Color.white)
-                .frame(width: width, height: height)
+                .frame(width: dimensions.width, height: dimensions.height)
                 .shadow(radius: 10)
-            RoundedRectangle(cornerRadius: bodyCornerRadius)
+            RoundedRectangle(cornerRadius: innerDimensions.cornerRadius)
                 .foregroundStyle(Color.red)
-                .frame(width: bodyWidth, height: bodyHeight)
-            RoundedRectangle(cornerRadius: bodyCornerRadius)
+                .frame(width: innerDimensions.width, height: innerDimensions.height)
+            RoundedRectangle(cornerRadius: 5)
                 .foregroundStyle(Color.black.opacity(0.5))
-                .frame(width: bodyWidth, height: bodyHeight)
+                .frame(width: innerDimensions.width, height: innerDimensions.height)
             Image("card.back")
                 .resizable()
-//                .opacity(0.8)
-                .clipShape(RoundedRectangle(cornerRadius: bodyCornerRadius - 5))
-                .frame(width: bodyWidth * 0.95, height: bodyHeight * 0.96)
+                .clipShape(RoundedRectangle(cornerRadius: innerDimensions.cornerRadius - 3))
+                .frame(width: (innerDimensions.width - 15), height: (innerDimensions.height - 15))
         }
-        .rotation3DEffect(Angle(degrees: degree), axis: (x: 0.0, y: 1.0, z: 0.0) )
     }
 }
-
-
-
-
-
-//MARK: -- PREVIEWS
-#Preview {
-    ZStack {
-        Color.gray.opacity(0.4).ignoresSafeArea()
-        BigCard(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), faceUp: true, onTapAction: {return})
-    }
-}
-
-#Preview {
-    ZStack {
-        Color.gray.opacity(0.4).ignoresSafeArea()
-        CardFront(card: PlayingCard(value: .two, suit: .hearts), degree: .constant(0))
-    }
-}
-
+//
 //#Preview {
-//    CardBody(card: PlayingCard(value: .nine, suit: .hearts))
+//    return BigCard(card: Card(value: .ace, suit: .spades), isTappable: .constant(true), startFaceUp: true)
 //}
-
+//#Preview {
+//    return BigCard(card: Card(value: .two, suit: .spades), isTappable: .constant(true), startFaceUp: true)
+//}
+//#Preview {
+//    return BigCard(card: Card(value: .seven, suit: .spades), isTappable: .constant(true), startFaceUp: true)
+//}
+//#Preview {
+//    return BigCard(card: Card(value: .ten, suit: .spades), isTappable: .constant(true), startFaceUp: true)
+//}
 #Preview {
-    ZStack {
-        Color.gray.opacity(0.4).ignoresSafeArea()
-        CardBack(degree: .constant(0))
-    }
+    return BigCard(card: Card(value: .jack, suit: .spades), isTappable: .constant(true), startFaceUp: true)
 }
+//#Preview {
+//    return BigCard(card: Card(value: .queen, suit: .spades), isTappable: .constant(true), startFaceUp: true)
+//}
+//#Preview {
+//    return BigCard(card: Card(value: .king, suit: .spades), isTappable: .constant(true), startFaceUp: true)
+//}
+//#Preview {
+//    return BigCard(card: Card.test1, isTappable: .constant(true), startFaceUp: false)
+//}

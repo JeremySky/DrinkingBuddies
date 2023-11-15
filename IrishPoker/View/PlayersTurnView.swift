@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  PlayersTurnView.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/11/23.
@@ -8,45 +8,28 @@
 import SwiftUI
 
 struct PlayersTurnView: View {
+    let player: Player
     var hand: [Card]
-    @Binding var question: Question?
-    @Binding var cardSelection: CardSelection?
+    @Binding var question: Question
+    @Binding var cardSelection: CardSelection
     
     //MARK: -- use as pointer to persist Card's faceUp property
     var faceUpPropertyArr: [Bool]
     
     var changePhaseAction: (Bool) -> Void
     
-    @State var choiceSelection: ChoiceSelection?
+    @State var choiceSelection: ChoiceSelection? {
+        didSet {
+            tappable = self.choiceSelection == nil ? false : true
+        }
+    }
     
     
     //MARK: -- passed through Card object to make tappable
-    @State var tappable: (card1: Bool, card2: Bool, card3: Bool, card4: Bool) = (false, false, false, false)
+    @State var tappable: Bool = false
     
     @State var disableButtons = false
     
-    
-    
-    //MARK: -- tappable helper function
-    func makeTappable(_ card: inout Bool) {
-        card = true
-    }
-    
-    func makeCardSelectionTappable() {
-        guard let _ = choiceSelection else { return }
-        switch cardSelection {
-        case .one:
-            makeTappable(&tappable.card1)
-        case .two:
-            makeTappable(&tappable.card2)
-        case .three:
-            makeTappable(&tappable.card3)
-        case .four:
-            makeTappable(&tappable.card4)
-        case nil:
-            return
-        }
-    }
     
     //MARK: -- check answer
     @State var isCorrect: Bool?
@@ -106,9 +89,6 @@ struct PlayersTurnView: View {
             }
             correctAnswer = hand[3].suit.rawValue
             isCorrect = selectedAnswer == correctAnswer
-        case nil:
-            print("ERROR: [PlayerHandView] checkAnswer() case .nil")
-            return
         }
         
         //MARK: -- Use to troubleshoot
@@ -122,45 +102,53 @@ struct PlayersTurnView: View {
     //MARK: -- BODY
     var body: some View {
         ZStack {
+            
+            //MARK: -- HANDQUICKLOOK
             VStack {
-                Text(question?.rawValue ?? "")
+                Spacer()
+                PlayerShowHandButton(player: player, showHand: true)
+                    .padding(.horizontal)
+                    .disabled(true)
+                    .scaleEffect(CGSize(width: 0.8, height: 0.85))
+                    .frame(height: 100)
+            }
+            
+            
+            //MARK: -- MAIN
+            VStack {
+                
+                
+                //MARK: -- TITLE
+                Text(question.rawValue)
                     .font(.largeTitle)
                     .fontWeight(.heavy)
                 
                 
+                //MARK: -- CARD
+                switch cardSelection {
+                case .one:
+                    BigCard(card: hand[0], isTappable: $tappable, startFaceUp: false) {
+                        disableButtons = true
+                        checkAnswer()
+                    }
+                case .two:
+                    BigCard(card: hand[1], isTappable: $tappable, startFaceUp: false) {
+                        disableButtons = true
+                        checkAnswer()
+                    }
+                case .three:
+                    BigCard(card: hand[2], isTappable: $tappable, startFaceUp: false) {
+                        disableButtons = true
+                        checkAnswer()
+                    }
+                case .four:
+                    BigCard(card: hand[3], isTappable: $tappable, startFaceUp: false) {
+                        disableButtons = true
+                        checkAnswer()
+                    }
+                }
                 Spacer()
-                    .frame(height: 40)
-                
-                //MARK: -- ALL CARDS
-                ZStack {
-                    BigCard(card: hand[0], isTappable: $tappable.card1, startFaceUp: faceUpPropertyArr[0]) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                    .scaleEffect(CGSize(width: cardSelection == .one ? 1 : 0.25, height: cardSelection == .one ? 1 : 0.25))
-                    .offset(x: cardSelection == .one ? 0 : -120, y: cardSelection == .one ? 0 : 420)
-                    BigCard(card: hand[1], isTappable: $tappable.card2, startFaceUp: faceUpPropertyArr[1]) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                    .scaleEffect(CGSize(width: cardSelection == .two ? 1 : 0.25, height: cardSelection == .two ? 1 : 0.25))
-                    .offset(x: cardSelection == .two ? 0 : -40, y: cardSelection == .two ? 0 : 420)
-                    BigCard(card: hand[2], isTappable: $tappable.card3, startFaceUp: faceUpPropertyArr[2]) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                    .scaleEffect(CGSize(width: cardSelection == .three ? 1 : 0.25, height: cardSelection == .three ? 1 : 0.25))
-                    .offset(x: cardSelection == .three ? 0 : 40, y: cardSelection == .three ? 0 : 420)
-                    BigCard(card: hand[3], isTappable: $tappable.card4, startFaceUp: faceUpPropertyArr[3]) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                    .scaleEffect(CGSize(width: cardSelection == .four ? 1 : 0.25, height: cardSelection == .four ? 1 : 0.25))
-                    .offset(x: cardSelection == .four ? 0 : 120, y: cardSelection == .four ? 0 : 420)
-                }.zIndex(1)
-                
-                Spacer()
-                    .frame(height: 40)
+                    .frame(height: 30)
                 
                 //MARK: -- BUTTONS
                 HStack {
@@ -168,7 +156,6 @@ struct PlayersTurnView: View {
                     case .one:
                         Button(action: {
                             choiceSelection = choiceSelection == .one ? nil : .one
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -189,7 +176,6 @@ struct PlayersTurnView: View {
                         
                         Button(action: {
                             choiceSelection = choiceSelection == .two ? nil : .two
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -211,7 +197,6 @@ struct PlayersTurnView: View {
                     case .two:
                         Button(action: {
                             choiceSelection = choiceSelection == .one ? nil : .one
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -234,7 +219,6 @@ struct PlayersTurnView: View {
                         
                         Button(action: {
                             choiceSelection = choiceSelection == .two ? nil : .two
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -257,9 +241,7 @@ struct PlayersTurnView: View {
                         
                     case .three:
                         Button(action: {
-                            choiceSelection = choiceSelection == .one ? nil : .one
-                            makeCardSelectionTappable()
-                        }) {
+                            choiceSelection = choiceSelection == .one ? nil : .one                        }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .foregroundStyle(Color.white)
@@ -282,7 +264,6 @@ struct PlayersTurnView: View {
                         
                         Button(action: {
                             choiceSelection = choiceSelection == .two ? nil : .two
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -307,7 +288,6 @@ struct PlayersTurnView: View {
                     case .four:
                         Button(action: {
                             choiceSelection = choiceSelection == .one ? nil : .one
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -330,7 +310,6 @@ struct PlayersTurnView: View {
                         
                         Button(action: {
                             choiceSelection = choiceSelection == .two ? nil : .two
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -353,7 +332,6 @@ struct PlayersTurnView: View {
                         
                         Button(action: {
                             choiceSelection = choiceSelection == .three ? nil : .three
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -376,7 +354,6 @@ struct PlayersTurnView: View {
                         
                         Button(action: {
                             choiceSelection = choiceSelection == .four ? nil : .four
-                            makeCardSelectionTappable()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -401,35 +378,35 @@ struct PlayersTurnView: View {
                 }
                 Spacer()
             }
-        }
-        
-        
-        //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE
-        ZStack {
-            if isCorrect != nil {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 10)
-                HStack {
-                    Image(systemName: isCorrect! ? "checkmark" : "xmark")
-                        .foregroundStyle(isCorrect! ? .green : .red)
-                        .font(.system(size: 60))
-                        .fontWeight(.black)
-                    Text(isCorrect! ? "CORRECT" : "WRONG")
-                        .font(.system(size: 50))
-                        .fontWeight(.black)
-                        .offset(x: -12)
+            
+            
+            //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE
+            ZStack {
+                if isCorrect != nil {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.white)
+                        .shadow(radius: 10)
+                    HStack {
+                        Image(systemName: isCorrect! ? "checkmark" : "xmark")
+                            .foregroundStyle(isCorrect! ? .green : .red)
+                            .font(.system(size: 60))
+                            .fontWeight(.black)
+                        Text(isCorrect! ? "CORRECT" : "WRONG")
+                            .font(.system(size: 50))
+                            .fontWeight(.black)
+                            .offset(x: -12)
+                    }
                 }
             }
-        }
-        .frame(height: 80)
-        .padding()
-        .onTapGesture {
-            guard let isCorrect else {
-                print("ERROR: [PlayerHandView] isCorrect == nil")
-                return
+            .frame(height: 80)
+            .padding()
+            .onTapGesture {
+                guard let isCorrect else {
+                    print("ERROR: [PlayerHandView] isCorrect == nil")
+                    return
+                }
+                changePhaseAction(isCorrect)
             }
-            changePhaseAction(isCorrect)
         }
         
         
@@ -443,7 +420,7 @@ struct PlayersTurnView: View {
 }
 
 #Preview {
-    PlayersTurnView(hand: [
+    PlayersTurnView(player: Player.test1, hand: [
         Card(value: .ace, suit: .hearts),
         Card(value: .eight, suit: .clubs),
         Card(value: .king, suit: .diamonds),

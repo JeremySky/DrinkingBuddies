@@ -8,8 +8,16 @@
 import SwiftUI
 
 struct GameView: View {
+    var players: [Player] = [Player.test1, Player.test2, Player.test3, Player.test4]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView {
+            ForEach(players, id: \.self) { player in
+                PlayerView(player: player)
+                    .tabItem {
+                        Label(player.name, systemImage: player.icon.rawValue)
+                    }
+            }
+        }
     }
 }
 

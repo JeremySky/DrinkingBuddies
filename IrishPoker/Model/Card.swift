@@ -83,11 +83,29 @@ enum CardSuit: String, CaseIterable {
 
 
 extension Card {
-    static var testHandArray = [
-        Card(value: .six, suit: .clubs, isFlipped: true),
-        Card(value: .eight, suit: .clubs, isFlipped: true),
-        Card(value: .seven, suit: .diamonds),
+    static var testHandArray1 = [
+        Card(value: .six, suit: .clubs),
+        Card(value: .nine, suit: .hearts),
+        Card(value: .ace, suit: .diamonds),
         Card(value: .ten, suit: .spades)
+    ]
+    static var testHandArray2 = [
+        Card(value: .two, suit: .clubs),
+        Card(value: .eight, suit: .clubs),
+        Card(value: .seven, suit: .diamonds),
+        Card(value: .seven, suit: .hearts)
+    ]
+    static var testHandArray3 = [
+        Card(value: .nine, suit: .diamonds),
+        Card(value: .eight, suit: .clubs),
+        Card(value: .king, suit: .diamonds),
+        Card(value: .nine, suit: .spades)
+    ]
+    static var testHandArray4 = [
+        Card(value: .six, suit: .clubs),
+        Card(value: .nine, suit: .diamonds),
+        Card(value: .seven, suit: .diamonds),
+        Card(value: .queen, suit: .spades)
     ]
     
     static var test1 = Card(value: .ten, suit: .spades, isFlipped: true)
