@@ -1,5 +1,5 @@
 //
-//  Card.swift
+//  CardSubViews.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/11/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 //MARK: -- CARD
-struct Card: View {
+struct BigCard: View {
     typealias Action = () -> Void
     
     let value: PlayingCard
@@ -291,7 +291,7 @@ struct CardBack: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.4).ignoresSafeArea()
-        Card(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), faceUp: true, onTapAction: {return})
+        BigCard(value: PlayingCard(value: .ten, suit: .diamonds), tappable: .constant(true), faceUp: true, onTapAction: {return})
     }
 }
 
