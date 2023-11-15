@@ -99,17 +99,6 @@ struct PlayersTurnView: View {
     //MARK: -- BODY
     var body: some View {
         ZStack {
-            //MARK: -- HANDQUICKLOOK
-            ZStack {
-                //show all players with horizontal scrollview
-                PlayerShowHandButton(player: player, showHand: true)
-                    .padding(.horizontal)
-                    .disabled(true)
-                    .frame(maxHeight: .infinity, alignment: .bottom)
-            }
-            
-            
-            //MARK: -- MAIN
             //MARK: -- TITLE
             VStack {
                 Text(question.rawValue)
@@ -130,6 +119,13 @@ struct PlayersTurnView: View {
                     updateTappable()
                 }
                 Spacer()
+                
+                HStack {
+                    ForEach(player.hand, id: \.self) { card in
+                        SmallCard(card: card, playerColor: .clear, startFaceUp: false)
+                    }
+                }
+                .padding(.bottom)
             }
             
             

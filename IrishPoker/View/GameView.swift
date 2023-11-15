@@ -39,7 +39,7 @@ struct GameView: View {
     var body: some View {
         TabView {
             ForEach(vm.players, id: \.self) { player in
-                PlayerView(player: player, currentPlayer: $vm.currentPlayer, nextPlayer: $vm.nextPlayer, nextPlayerTurn: {
+                PlayerView(player: player, players: vm.players, currentPlayer: $vm.currentPlayer, nextPlayer: $vm.nextPlayer, nextPlayerTurn: {
                     vm.nextPlayersTurn()
                 })
                     .tabItem {

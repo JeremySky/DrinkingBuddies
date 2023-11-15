@@ -9,36 +9,52 @@ import SwiftUI
 
 struct WaitView: View {
     @Binding var currentPlayer: Player
-    var players: [Player] = [Player.test1, Player.test2, Player.test3, Player.test4]
+    var players: [Player]
     @State var selected: Selection?
     
     var body: some View {
-        ZStack {
+        VStack {
             ZStack(alignment: .top) {
                 //MARK: -- TITLE
                 HStack {
-                    Image(systemName: currentPlayer.icon.rawValue)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                    ZStack {
+                        Circle()
+                            .fill(.white)
+                        Image(systemName: currentPlayer.icon.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .fontWeight(.heavy)
+                            .foregroundStyle(currentPlayer.color)
+                            .padding()
+                        Image(systemName: currentPlayer.icon.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .fontWeight(.heavy)
+                            .foregroundStyle(.black.opacity(0.3))
+                            .padding()
+                    }
+                    .frame(width: 100, height: 100)
                     Text("\(currentPlayer.name)'s Turn")
                         .font(.largeTitle)
                         .fontWeight(.heavy)
-                        .offset(x: -5)
+                        .foregroundStyle(.white)
                 }
-                .frame(maxHeight: .infinity, alignment: .top)
-                .padding()
+                .padding(.bottom)
+                .frame(maxWidth: .infinity)
+                .background(currentPlayer.color)
             }
             
+            
             //MARK: -- BODY
-            VStack(spacing: 8) {
+            ScrollView {
                 Spacer()
-                    .frame(height: 70)
+                    .frame(height: 10)
                 ForEach(players.indices, id: \.self) { i in
                     let player = players[i]
-                    PlayerShowHandButton(player: player)
+                    PlayerShowHandButton(player: player, highlightPlayer: true)
+                        .padding(.horizontal)
                 }
             }
-            .padding(.horizontal)
         }
     }
     
@@ -54,12 +70,13 @@ struct WaitView: View {
 struct PlayerShowHandButton: View {
     let player: Player
     @State var showHand: Bool = false
+    var highlightPlayer: Bool
     
     
     var body: some View {
         //aligned at top for front and back RoundedRectangles
         ZStack(alignment: .top) {
-                        
+            
             //MARK: -- PLAYERS' HAND EXTENSION
             if showHand {
                 ZStack(alignment: .bottom) {
@@ -69,13 +86,12 @@ struct PlayerShowHandButton: View {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(height: 70 + 80)
                         .foregroundStyle(player.color.opacity(0.65))
-                        .shadow(radius: 10)
                     HStack {
                         Group {
-                            SmallCard(card: player.hand[0], playerColor: player.color, startFaceUp: true)
+                            SmallCard(card: player.hand[0], playerColor: player.color, startFaceUp: false)
                             SmallCard(card: player.hand[1], playerColor: player.color, startFaceUp: false)
-                            SmallCard(card: player.hand[2], playerColor: player.color, startFaceUp: true)
-                            SmallCard(card: player.hand[3], playerColor: player.color, startFaceUp: true)
+                            SmallCard(card: player.hand[2], playerColor: player.color, startFaceUp: false)
+                            SmallCard(card: player.hand[3], playerColor: player.color, startFaceUp: false)
                         }
                         .padding(.horizontal, 5)
                     }
@@ -88,7 +104,7 @@ struct PlayerShowHandButton: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .frame(height: showHand ? 50 : 70)
-                    .foregroundStyle(/*showHand ? */player.color /*: player.color.opacity(0.9)*/)
+                    .foregroundStyle(player.color)
                 ZStack {
                     Circle()
                         .stroke(player.color, lineWidth: showHand ? 31 : 0)
@@ -98,6 +114,12 @@ struct PlayerShowHandButton: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 38, height: 38)
+                        .foregroundStyle(player.color)
+                    Image(systemName: player.icon.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 38, height: 38)
+                        .foregroundStyle(.black.opacity(0.3))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
@@ -111,6 +133,7 @@ struct PlayerShowHandButton: View {
                 showHand.toggle()
             }
         }
+        .padding(.top, showHand ? 30 : 0)
     }
 }
 
@@ -122,5 +145,6 @@ struct PlayerShowHandButton: View {
 
 //MARK: -- PREVIEWS
 #Preview {
-    WaitView(currentPlayer: .constant(Player.test1))
+    let players = [Player.test1, Player.test2, Player.test3, Player.test4]
+    return WaitView(currentPlayer: .constant(Player.test1), players: players)
 }

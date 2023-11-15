@@ -45,6 +45,12 @@ struct TakeView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 35, height: 35)
+                                        .foregroundStyle(player.color)
+                                    Image(systemName: player.icon.rawValue)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 35, height: 35)
+                                        .foregroundStyle(.black.opacity(0.3))
                                 }
                                 Spacer()
                                 Text(player.name)

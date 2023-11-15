@@ -60,6 +60,12 @@ struct GiveView: View {
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 35, height: 35)
+                                            .foregroundStyle(players[i].color)
+                                        Image(systemName: players[i].icon.rawValue)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 35, height: 35)
+                                            .foregroundStyle(.black.opacity(0.3))
                                     }
                                     Spacer()
                                     Text(players[i].name)

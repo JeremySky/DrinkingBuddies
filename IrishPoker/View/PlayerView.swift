@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PlayerView: View {
     let player: Player
+    let players: [Player]
     var hand: [Card] { player.hand }
     @Binding var currentPlayer: Player
     @Binding var nextPlayer: Player
@@ -54,7 +55,7 @@ struct PlayerView: View {
                         }
                     }
                 case .wait:
-                    WaitView(currentPlayer: $currentPlayer)
+                    WaitView(currentPlayer: $currentPlayer, players: players)
                 case .end:
                     EmptyView()
                 }
@@ -78,54 +79,10 @@ struct PlayerView: View {
                         }
                     }
                 case .wait:
-                    WaitView(currentPlayer: $currentPlayer)
+                    WaitView(currentPlayer: $currentPlayer, players: players)
                 case .end:
                     Text("End of game")
                 }
-                
-                
-                
-                
-                //            switch guessingPhase {
-                //            case .guessing:
-                //                PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
-                //                    playerGiveOrTake = result ? .give : .take
-                //                    guessingPhase = .pointDistribution
-                //                }
-                //            case .pointDistribution:
-                //                switch playerGiveOrTake {
-                //                case .give:
-                //                    GiveView(points: pointsToPass) {
-                //                        guessingPhase = .wait
-                //                    }
-                //                case .take:
-                //                    TakeView(points: pointsToPass, player: player) {
-                //                        guessingPhase = .wait
-                //                    }
-                //                }
-                //            case .wait:
-                //                WaitView()
-                //            case .end:
-                //                EmptyView()
-                //            }
-                //
-                //            switch giveTakePhase {
-                //            case .guessing:
-                //                GiveTakeView()
-                //            case .pointDistribution:
-                //                switch playerGiveOrTake {
-                //                case .give:
-                //                    GiveView(points: pointsToPass) {
-                //                    }
-                //                case .take:
-                //                    TakeView(points: pointsToPass, player: player) {
-                //                    }
-                //                }
-                //            case .wait:
-                //                WaitView()
-                //            case .end:
-                //                EmptyView()
-                //            }
             }
         }
         .onAppear {
@@ -148,7 +105,8 @@ struct PlayerView: View {
 #Preview {
     @State var currentPlayer = Player.test1
     @State var nextPlayer = Player.test2
-    return PlayerView(player: Player.test1, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) { }
+    let players = [Player.test1, Player.test2, Player.test3, Player.test4]
+    return PlayerView(player: Player.test1, players: players, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) { }
 }
 
 
