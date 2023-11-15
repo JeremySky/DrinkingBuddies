@@ -12,7 +12,7 @@ struct IrishPokerApp: App {
     var body: some Scene {
         WindowGroup {
 //            PlayersTurnView(player: Player.test1, card: Card.test1, question: .one) { _ in }
-            GameView()
+            GameView(vm: GameViewModel(players: [Player.test1, Player.test2, Player.test3, Player.test4]))
         }
     }
 }

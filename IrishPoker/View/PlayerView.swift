@@ -10,21 +10,22 @@ import SwiftUI
 struct PlayerView: View {
     let player: Player
     var hand: [Card] { player.hand }
-    @Binding var question: Question
-    @Binding var gamePhase: GamePhase
-    @Binding var currentPlayer: Player?
-    @Binding var nextPlayer: Player?
+    @Binding var currentPlayer: Player
+    @Binding var nextPlayer: Player
+    var nextPlayerTurn: () -> Void
+    
+    @State var gamePhase: GamePhase = .guessing
+    @State var question: Question = .one
     @State var gameStage: GameStage = .wait
+    
     @State var playerGiveOrTake: GiveOrTake = .give
-    var nextPlayerTurn: () async -> Void
-    
-    
-    
     var pointsToPass: Int {
         let i = question.number - 1
         return hand[i].value.rawValue
     }
     
+    
+    @State var restrictGoingBack = false
     
     var body: some View {
         ZStack {
@@ -36,23 +37,19 @@ struct PlayerView: View {
                     PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
                         playerGiveOrTake = result ? .give : .take
                         gameStage = .pointDistribution
-                        currentPlayer = nextPlayer
+                        restrictGoingBack = true
                     }
                 case .pointDistribution:
                     switch playerGiveOrTake {
                     case .give:
                         GiveView(points: pointsToPass) {
                             gameStage = .wait
-                            Task {
-                                await nextPlayerTurn()
-                            }
+                            nextPlayerTurn()
                         }
                     case .take:
                         TakeView(points: pointsToPass, player: player) {
                             gameStage = .wait
-                            Task {
-                                await nextPlayerTurn()
-                            }
+                            nextPlayerTurn()
                         }
                     }
                 case .wait:
@@ -71,16 +68,12 @@ struct PlayerView: View {
                     case .give:
                         GiveView(points: pointsToPass) {
                             gameStage = .wait
-                            Task {
-                                await nextPlayerTurn()
-                            }
+                            nextPlayerTurn()
                         }
                     case .take:
                         TakeView(points: pointsToPass, player: player) {
                             gameStage = .wait
-                            Task {
-                                await nextPlayerTurn()
-                            }
+                            nextPlayerTurn()
                         }
                     }
                 case .wait:
@@ -135,8 +128,10 @@ struct PlayerView: View {
             }
         }
         .onAppear {
-            if currentPlayer == player {
-                gameStage = .guessing
+            if !restrictGoingBack {
+                if currentPlayer == player {
+                    gameStage = .guessing
+                }
             }
         }
     }
@@ -150,10 +145,9 @@ struct PlayerView: View {
 }
 
 #Preview {
-    @State var currentPlayer: Player? = Player.test1
-    @State var nextPlayer: Player? = Player.test2
-    @State var gamePhase = GamePhase.guessing
-    return PlayerView(player: Player.test1, question: .constant(Question.one), gamePhase: $gamePhase, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) { }
+    @State var currentPlayer = Player.test1
+    @State var nextPlayer = Player.test2
+    return PlayerView(player: Player.test1, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) { }
 }
 
 

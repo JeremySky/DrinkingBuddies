@@ -105,8 +105,8 @@
 				62FECDB02B03004400F13854 /* PlayerView.swift */,
 				624261402B000387001C5410 /* PlayersTurnView.swift */,
 				62FECDB62B034FF200F13854 /* WaitView.swift */,
-				62FECDB22B03143800F13854 /* TakeView.swift */,
 				62FECDAC2B029E2300F13854 /* GiveView.swift */,
+				62FECDB22B03143800F13854 /* TakeView.swift */,
 				62FECDB42B0344FB00F13854 /* GiveTakeView.swift */,
 			);
 			path = View;

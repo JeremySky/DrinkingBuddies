@@ -7,63 +7,70 @@
 
 import SwiftUI
 
-struct GameView: View {
-    let players = [Player.test1, Player.test2, Player.test3, Player.test4]
-    var playerQueue: PlayerQueue = PlayerQueue(players: [Player.test1, Player.test2, Player.test3, Player.test4])
-    @State var question: Question = .one
-    @State var gamePhase: GamePhase = .guessing
-    @State var currentPlayer: Player? = nil
-    @State var nextPlayer: Player? = nil
+
+@MainActor
+class GameViewModel: ObservableObject {
+    @Published var players: [Player]
+    @Published var queue: PlayerQueue
+    @Published var currentPlayer: Player
+    @Published var nextPlayer: Player
     
+    init(players: [Player]) {
+        let queue = players.shuffled()
+        self.players = queue
+        self.queue = PlayerQueue(queue: queue)
+        self.currentPlayer = queue[0]
+        self.nextPlayer = queue[1]
+    }
+    
+    func nextPlayersTurn() {
+        Task {
+            await queue.rotateQueue()
+            currentPlayer = await queue.peekCurrent()
+            nextPlayer = await queue.peekNext()
+        }
+    }
+}
+
+
+struct GameView: View {
+    @StateObject var vm: GameViewModel
     
     var body: some View {
         TabView {
-            ForEach(players, id: \.self) { player in
-                PlayerView(player: player, question: $question, gamePhase: $gamePhase, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) {
-                    Task {
-                        await playerQueue.rotateQueue()
-                    }
-                }
+            ForEach(vm.players, id: \.self) { player in
+                PlayerView(player: player, currentPlayer: $vm.currentPlayer, nextPlayer: $vm.nextPlayer, nextPlayerTurn: {
+                    vm.nextPlayersTurn()
+                })
                     .tabItem {
                         Label(player.name, systemImage: player.icon.rawValue)
-                    }
-                    .task {
-                        await currentPlayer = playerQueue.peekCurrent()
-                        await nextPlayer = playerQueue.peekNext()
                     }
             }
         }
     }
 }
 
-#Preview {
-    GameView()
-}
 
 
 actor PlayerQueue: ObservableObject {
-    private var queue: [Player]
+    var queue: [Player]
     
-    init(players: [Player]) {
-        self.queue = players.shuffled()
+    init(queue: [Player]) {
+        self.queue = queue
     }
     
     func peekCurrent() -> Player {
         queue[0]
     }
-    
     func peekNext() -> Player {
         queue[1]
     }
-    
     func dequeue() {
         queue.removeFirst()
     }
-    
     func enqueue(_ player: Player) {
         queue.append(player)
     }
-    
     func rotateQueue() {
         enqueue(queue[0])
         dequeue()
