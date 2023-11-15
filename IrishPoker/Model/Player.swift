@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Player {
+    let id = UUID()
     let name: String
     let icon: CharacterIcon
     let color: Color
@@ -31,7 +32,7 @@ enum CharacterIcon: String, RawRepresentable {
 }
 
 
-extension Player: Hashable {
+extension Player: Hashable, Equatable {
     
     static func == (lhs: Player, rhs: Player) -> Bool {
         return (

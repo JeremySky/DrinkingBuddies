@@ -17,7 +17,7 @@ struct PlayersTurnView: View {
     
     func updateTappable() {
         tappable = self.choiceSelection == nil ? false : true
-        print("[PlayersTurnView] \(String(describing: choiceSelection))")
+//        print("[PlayersTurnView] \(String(describing: choiceSelection))")
     }
     
     //passed through Card object to make tappable
@@ -133,7 +133,7 @@ struct PlayersTurnView: View {
             }
             
             
-            //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE
+            //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE BUTTON
             ZStack {
                 if isCorrect != nil {
                     RoundedRectangle(cornerRadius: 10)
@@ -207,7 +207,7 @@ struct AnswerButton: View {
             case .one:
                 Button(action: {
                     choiceSelection = choiceSelection == .one ? nil : .one
-                    print("[AnswerButton] \(String(describing: choiceSelection))")
+//                    print("[AnswerButton] \(String(describing: choiceSelection))")
                     tapAction()
                 }) {
                     ZStack {
@@ -229,7 +229,7 @@ struct AnswerButton: View {
                 
                 Button(action: {
                     choiceSelection = choiceSelection == .two ? nil : .two
-                    print("[AnswerButton] \(String(describing: choiceSelection))")
+//                    print("[AnswerButton] \(String(describing: choiceSelection))")
                     tapAction()
                 }) {
                     ZStack {

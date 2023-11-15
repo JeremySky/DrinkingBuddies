@@ -8,24 +8,28 @@
 import SwiftUI
 
 struct WaitView: View {
+    @Binding var currentPlayer: Player?
     var players: [Player] = [Player.test1, Player.test2, Player.test3, Player.test4]
     @State var selected: Selection?
     
     var body: some View {
         ZStack {
-            //MARK: -- TITLE
-            HStack {
-                Image(systemName: "graduationcap")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Text("Jeremy's Turn")
-                    .font(.largeTitle)
-                    .fontWeight(.heavy)
-                    .offset(x: -5)
+            ZStack(alignment: .top) {
+                //MARK: -- TITLE
+                if let player = currentPlayer {
+                    HStack {
+                        Image(systemName: player.icon.rawValue)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        Text("\(player.name)'s Turn")
+                            .font(.largeTitle)
+                            .fontWeight(.heavy)
+                            .offset(x: -5)
+                    }
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .padding()
+                }
             }
-            .frame(maxHeight: .infinity, alignment: .top)
-            .padding()
-            
             
             //MARK: -- BODY
             VStack(spacing: 8) {
@@ -120,5 +124,5 @@ struct PlayerShowHandButton: View {
 
 //MARK: -- PREVIEWS
 #Preview {
-    WaitView()
+    WaitView(currentPlayer: .constant(Player.test1))
 }

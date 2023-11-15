@@ -11,8 +11,15 @@ struct PlayerView: View {
     let player: Player
     var hand: [Card] { player.hand }
     @Binding var question: Question
-    @State var gamePhase: GamePhase = .guessingPhase
+    @Binding var gamePhase: GamePhase
+    @Binding var currentPlayer: Player?
+    @Binding var nextPlayer: Player?
+    @State var gameStage: GameStage = .wait
     @State var playerGiveOrTake: GiveOrTake = .give
+    var nextPlayerTurn: () async -> Void
+    
+    
+    
     var pointsToPass: Int {
         let i = question.number - 1
         return hand[i].value.rawValue
@@ -22,62 +29,134 @@ struct PlayerView: View {
     var body: some View {
         ZStack {
             switch gamePhase {
-            case .guessingPhase:
-                PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
-                    playerGiveOrTake = result ? .give : .take
-                    gamePhase = .pointDistributePhase
-                }
-            case .pointDistributePhase:
-                switch playerGiveOrTake {
-                case .give:
-                    GiveView(points: pointsToPass) {
-                        gamePhase = .waitPhase
+                //MARK: -- GUESSING PHASE
+            case .guessing:
+                switch gameStage {
+                case .guessing:
+                    PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
+                        playerGiveOrTake = result ? .give : .take
+                        gameStage = .pointDistribution
+                        currentPlayer = nextPlayer
                     }
-                case .take:
-                    TakeView(points: pointsToPass, player: player) {
-                        gamePhase = .waitPhase
+                case .pointDistribution:
+                    switch playerGiveOrTake {
+                    case .give:
+                        GiveView(points: pointsToPass) {
+                            gameStage = .wait
+                            Task {
+                                await nextPlayerTurn()
+                            }
+                        }
+                    case .take:
+                        TakeView(points: pointsToPass, player: player) {
+                            gameStage = .wait
+                            Task {
+                                await nextPlayerTurn()
+                            }
+                        }
                     }
+                case .wait:
+                    WaitView(currentPlayer: $currentPlayer)
+                case .end:
+                    EmptyView()
                 }
-            case .giveTakePhase:
-                GiveTakeView()
-            case .waitPhase:
-                WaitView()
+                
+                //MARK: -- GIVE OR TAKE PHASE
+            case .giveTake:
+                switch gameStage {
+                case .guessing:
+                    GiveTakeView()
+                case .pointDistribution:
+                    switch playerGiveOrTake {
+                    case .give:
+                        GiveView(points: pointsToPass) {
+                            gameStage = .wait
+                            Task {
+                                await nextPlayerTurn()
+                            }
+                        }
+                    case .take:
+                        TakeView(points: pointsToPass, player: player) {
+                            gameStage = .wait
+                            Task {
+                                await nextPlayerTurn()
+                            }
+                        }
+                    }
+                case .wait:
+                    WaitView(currentPlayer: $currentPlayer)
+                case .end:
+                    Text("End of game")
+                }
+                
+                
+                
+                
+                //            switch guessingPhase {
+                //            case .guessing:
+                //                PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
+                //                    playerGiveOrTake = result ? .give : .take
+                //                    guessingPhase = .pointDistribution
+                //                }
+                //            case .pointDistribution:
+                //                switch playerGiveOrTake {
+                //                case .give:
+                //                    GiveView(points: pointsToPass) {
+                //                        guessingPhase = .wait
+                //                    }
+                //                case .take:
+                //                    TakeView(points: pointsToPass, player: player) {
+                //                        guessingPhase = .wait
+                //                    }
+                //                }
+                //            case .wait:
+                //                WaitView()
+                //            case .end:
+                //                EmptyView()
+                //            }
+                //
+                //            switch giveTakePhase {
+                //            case .guessing:
+                //                GiveTakeView()
+                //            case .pointDistribution:
+                //                switch playerGiveOrTake {
+                //                case .give:
+                //                    GiveView(points: pointsToPass) {
+                //                    }
+                //                case .take:
+                //                    TakeView(points: pointsToPass, player: player) {
+                //                    }
+                //                }
+                //            case .wait:
+                //                WaitView()
+                //            case .end:
+                //                EmptyView()
+                //            }
+            }
+        }
+        .onAppear {
+            if currentPlayer == player {
+                gameStage = .guessing
             }
         }
     }
     
-    enum GamePhase {
-        case guessingPhase
-        case pointDistributePhase
-        case giveTakePhase
-        case waitPhase
+    enum GameStage {
+        case guessing
+        case pointDistribution
+        case wait
+        case end
     }
 }
 
 #Preview {
-    PlayerView(player: Player.test1, question: .constant(Question.one))
+    @State var currentPlayer: Player? = Player.test1
+    @State var nextPlayer: Player? = Player.test2
+    @State var gamePhase = GamePhase.guessing
+    return PlayerView(player: Player.test1, question: .constant(Question.one), gamePhase: $gamePhase, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) { }
 }
 
 
-enum Question: String, RawRepresentable {
-    case one = "Guess the Color"
-    case two = "Higher or Lower"
-    case three = "Inside or Outside"
-    case four = "Guess the Suit"
-    
-    var number: Int {
-        switch self {
-        case .one:
-            1
-        case .two:
-            2
-        case .three:
-            3
-        case .four:
-            4
-        }
-    }
-}
 
 enum GiveOrTake {
     case give, take
