@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PlayerHandView: View {
-    var hand: [PlayingCard]
+struct PlayersTurnView: View {
+    var hand: [Card]
     @Binding var question: Question?
     @Binding var cardSelection: CardSelection?
     
@@ -122,40 +122,45 @@ struct PlayerHandView: View {
     //MARK: -- BODY
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
+            VStack {
                 Text(question?.rawValue ?? "")
                     .font(.largeTitle)
                     .fontWeight(.heavy)
                 
                 
+                Spacer()
+                    .frame(height: 40)
+                
                 //MARK: -- ALL CARDS
                 ZStack {
-                    Card(value: hand[0], tappable: $tappable.card1, faceUp: faceUpPropertyArr[0]) {
+                    BigCard(card: hand[0], isTappable: $tappable.card1, startFaceUp: faceUpPropertyArr[0]) {
                         disableButtons = true
                         checkAnswer()
                     }
-                    .scaleEffect(CGSize(width: cardSelection == .one ? 0.85 : 0.25, height: cardSelection == .one ? 0.85 : 0.25))
+                    .scaleEffect(CGSize(width: cardSelection == .one ? 1 : 0.25, height: cardSelection == .one ? 1 : 0.25))
                     .offset(x: cardSelection == .one ? 0 : -120, y: cardSelection == .one ? 0 : 420)
-                    Card(value: hand[1], tappable: $tappable.card2, faceUp: faceUpPropertyArr[1]) {
+                    BigCard(card: hand[1], isTappable: $tappable.card2, startFaceUp: faceUpPropertyArr[1]) {
                         disableButtons = true
                         checkAnswer()
                     }
-                    .scaleEffect(CGSize(width: cardSelection == .two ? 0.85 : 0.25, height: cardSelection == .two ? 0.85 : 0.25))
+                    .scaleEffect(CGSize(width: cardSelection == .two ? 1 : 0.25, height: cardSelection == .two ? 1 : 0.25))
                     .offset(x: cardSelection == .two ? 0 : -40, y: cardSelection == .two ? 0 : 420)
-                    Card(value: hand[2], tappable: $tappable.card3, faceUp: faceUpPropertyArr[2]) {
+                    BigCard(card: hand[2], isTappable: $tappable.card3, startFaceUp: faceUpPropertyArr[2]) {
                         disableButtons = true
                         checkAnswer()
                     }
-                    .scaleEffect(CGSize(width: cardSelection == .three ? 0.85 : 0.25, height: cardSelection == .three ? 0.85 : 0.25))
+                    .scaleEffect(CGSize(width: cardSelection == .three ? 1 : 0.25, height: cardSelection == .three ? 1 : 0.25))
                     .offset(x: cardSelection == .three ? 0 : 40, y: cardSelection == .three ? 0 : 420)
-                    Card(value: hand[3], tappable: $tappable.card4, faceUp: faceUpPropertyArr[3]) {
+                    BigCard(card: hand[3], isTappable: $tappable.card4, startFaceUp: faceUpPropertyArr[3]) {
                         disableButtons = true
                         checkAnswer()
                     }
-                    .scaleEffect(CGSize(width: cardSelection == .four ? 0.85 : 0.25, height: cardSelection == .four ? 0.85 : 0.25))
+                    .scaleEffect(CGSize(width: cardSelection == .four ? 1 : 0.25, height: cardSelection == .four ? 1 : 0.25))
                     .offset(x: cardSelection == .four ? 0 : 120, y: cardSelection == .four ? 0 : 420)
                 }.zIndex(1)
                 
+                Spacer()
+                    .frame(height: 40)
                 
                 //MARK: -- BUTTONS
                 HStack {
@@ -398,6 +403,7 @@ struct PlayerHandView: View {
             }
         }
         
+        
         //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE
         ZStack {
             if isCorrect != nil {
@@ -425,19 +431,23 @@ struct PlayerHandView: View {
             }
             changePhaseAction(isCorrect)
         }
+        
+        
+        
+        
+        
     }
-    
     enum ChoiceSelection {
         case one, two, three, four
     }
 }
 
 #Preview {
-    PlayerHandView(hand: [
-        PlayingCard(value: .ace, suit: .hearts),
-        PlayingCard(value: .eight, suit: .clubs),
-        PlayingCard(value: .king, suit: .diamonds),
-        PlayingCard(value: .ten, suit: .spades)
+    PlayersTurnView(hand: [
+        Card(value: .ace, suit: .hearts),
+        Card(value: .eight, suit: .clubs),
+        Card(value: .king, suit: .diamonds),
+        Card(value: .ten, suit: .spades)
     ], question: .constant(.one) ,cardSelection: .constant(.one), faceUpPropertyArr: [false, true, false, true], changePhaseAction: {_ in })
 }
 //#Preview {
