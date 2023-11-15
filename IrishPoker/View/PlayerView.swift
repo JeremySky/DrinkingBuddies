@@ -24,7 +24,8 @@ struct PlayerView: View {
         return hand[i].value.rawValue
     }
     
-    
+    //use to prevent user going back to PlayerTurnView prematurely
+    //WIP be sure to reset to false during new round
     @State var restrictGoingBack = false
     
     var body: some View {
