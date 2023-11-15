@@ -11,10 +11,8 @@ import SwiftUI
 struct IrishPokerApp: App {
     var body: some Scene {
         WindowGroup {
-//            PlayerView()
-            PlayerView(player: Player.test1)
-//            GiveTakeView()
-//            WaitView()
+//            PlayersTurnView(player: Player.test1, card: Card.test1, question: .one) { _ in }
+            GameView()
         }
     }
 }

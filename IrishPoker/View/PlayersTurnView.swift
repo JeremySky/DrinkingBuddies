@@ -9,30 +9,27 @@ import SwiftUI
 
 struct PlayersTurnView: View {
     let player: Player
-    var hand: [Card]
-    @Binding var question: Question
-    @Binding var cardSelection: CardSelection
+    let card: Card
+    let question: Question
+    var nextPhaseAction: (Bool) -> Void
     
-    //MARK: -- use as pointer to persist Card's faceUp property
-    var faceUpPropertyArr: [Bool]
+    @State var choiceSelection: ChoiceSelection?
     
-    var changePhaseAction: (Bool) -> Void
-    
-    @State var choiceSelection: ChoiceSelection? {
-        didSet {
-            tappable = self.choiceSelection == nil ? false : true
-        }
+    func updateTappable() {
+        tappable = self.choiceSelection == nil ? false : true
+        print("[PlayersTurnView] \(String(describing: choiceSelection))")
     }
     
-    
-    //MARK: -- passed through Card object to make tappable
+    //passed through Card object to make tappable
     @State var tappable: Bool = false
-    
+    //disabled after flip
     @State var disableButtons = false
+    
     
     
     //MARK: -- check answer
     @State var isCorrect: Bool?
+    
     func checkAnswer() {
         var selectedAnswer: String
         var correctAnswer: String
@@ -40,11 +37,11 @@ struct PlayersTurnView: View {
         switch question {
         case .one:
             selectedAnswer = choiceSelection == .one ? "red" : "black"
-            correctAnswer = hand[0].color == .red ? "red" : "black"
+            correctAnswer = card.color == .red ? "red" : "black"
             isCorrect = selectedAnswer == correctAnswer
         case .two:
-            let currentCardValue = hand[1].value.rawValue
-            let previousCardValue = hand[0].value.rawValue
+            let currentCardValue = card.value.rawValue
+            let previousCardValue = card.value.rawValue
             selectedAnswer = choiceSelection == .one ? "higher" : "lower"
             if currentCardValue == previousCardValue {
                 correctAnswer = "same"
@@ -58,11 +55,11 @@ struct PlayersTurnView: View {
             }
             isCorrect = selectedAnswer == correctAnswer
         case .three:
-            let currentCardValue = hand[2].value.rawValue
-            let highNum = [hand[0].value.rawValue, hand[1].value.rawValue].max()!
-            let lowNum = [hand[0].value.rawValue, hand[1].value.rawValue].min()!
+            let currentCardValue = card.value.rawValue
+            let highNum = [card.value.rawValue, card.value.rawValue].max()!
+            let lowNum = [card.value.rawValue, card.value.rawValue].min()!
             selectedAnswer = choiceSelection == .one ? "inside" : "outside"
-            if hand[2].value.rawValue == hand[0].value.rawValue || hand[2].value.rawValue == hand[1].value.rawValue {
+            if card.value.rawValue == card.value.rawValue || card.value.rawValue == card.value.rawValue {
                 correctAnswer = "same"
             } else if currentCardValue > lowNum && currentCardValue < highNum {
                 correctAnswer = "inside"
@@ -87,14 +84,14 @@ struct PlayersTurnView: View {
                 print("ERROR: [PlayerHandView] checkAnswer() case .four")
                 return
             }
-            correctAnswer = hand[3].suit.rawValue
+            correctAnswer = card.suit.rawValue
             isCorrect = selectedAnswer == correctAnswer
         }
         
         //MARK: -- Use to troubleshoot
-//        print("SELECTED ANSWER: " + selectedAnswer)
-//        print("CORRECT ANSWER: " + correctAnswer)
-//        print("IS CORRECT: \(isCorrect)")
+        //        print("SELECTED ANSWER: " + selectedAnswer)
+        //        print("CORRECT ANSWER: " + correctAnswer)
+        //        print("IS CORRECT: \(isCorrect)")
     }
     
     
@@ -102,279 +99,35 @@ struct PlayersTurnView: View {
     //MARK: -- BODY
     var body: some View {
         ZStack {
-            
             //MARK: -- HANDQUICKLOOK
-            VStack {
-                Spacer()
+            ZStack {
+                //show all players with horizontal scrollview
                 PlayerShowHandButton(player: player, showHand: true)
                     .padding(.horizontal)
                     .disabled(true)
-                    .scaleEffect(CGSize(width: 0.8, height: 0.85))
-                    .frame(height: 100)
+                    .frame(maxHeight: .infinity, alignment: .bottom)
             }
             
             
             //MARK: -- MAIN
+            //MARK: -- TITLE
             VStack {
-                
-                
-                //MARK: -- TITLE
                 Text(question.rawValue)
                     .font(.largeTitle)
                     .fontWeight(.heavy)
                 
                 
                 //MARK: -- CARD
-                switch cardSelection {
-                case .one:
-                    BigCard(card: hand[0], isTappable: $tappable, startFaceUp: false) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                case .two:
-                    BigCard(card: hand[1], isTappable: $tappable, startFaceUp: false) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                case .three:
-                    BigCard(card: hand[2], isTappable: $tappable, startFaceUp: false) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
-                case .four:
-                    BigCard(card: hand[3], isTappable: $tappable, startFaceUp: false) {
-                        disableButtons = true
-                        checkAnswer()
-                    }
+                BigCard(card: card, isTappable: $tappable, startFaceUp: false) {
+                    disableButtons = true
+                    checkAnswer()
                 }
+                
                 Spacer()
                     .frame(height: 30)
                 
-                //MARK: -- BUTTONS
-                HStack {
-                    switch question {
-                    case .one:
-                        Button(action: {
-                            choiceSelection = choiceSelection == .one ? nil : .one
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.red)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .one ? .yellow : .gray,
-                                        radius: 10)
-                                Text("Red")
-                                    .foregroundStyle(Color.white)
-                                    .font(.system(size: 27))
-                                    .fontWeight(.bold)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                        Button(action: {
-                            choiceSelection = choiceSelection == .two ? nil : .two
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.black)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .two ? .yellow : .gray,
-                                        radius: 10)
-                                Text("Black")
-                                    .foregroundStyle(Color.white)
-                                    .font(.system(size: 27))
-                                    .fontWeight(.bold)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                    case .two:
-                        Button(action: {
-                            choiceSelection = choiceSelection == .one ? nil : .one
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .one ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: "arrowshape.up.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding(.all, 10)
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.black)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                        Button(action: {
-                            choiceSelection = choiceSelection == .two ? nil : .two
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .two ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: "arrowshape.down.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding(.all, 10)
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.black)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                    case .three:
-                        Button(action: {
-                            choiceSelection = choiceSelection == .one ? nil : .one                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .one ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: "arrow.up.right.and.arrow.down.left.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .fontWeight(.medium)
-                                    .padding(.all, 10)
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.black)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                        Button(action: {
-                            choiceSelection = choiceSelection == .two ? nil : .two
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .two ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: "arrow.down.left.and.arrow.up.right.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .fontWeight(.medium)
-                                    .padding(.all, 10)
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.black)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                    case .four:
-                        Button(action: {
-                            choiceSelection = choiceSelection == .one ? nil : .one
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .one ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: CardSuit.hearts.icon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.red)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                        Button(action: {
-                            choiceSelection = choiceSelection == .two ? nil : .two
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .two ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: CardSuit.clubs.icon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.black)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                        Button(action: {
-                            choiceSelection = choiceSelection == .three ? nil : .three
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .three ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: CardSuit.diamonds.icon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.red)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                        
-                        
-                        Button(action: {
-                            choiceSelection = choiceSelection == .four ? nil : .four
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 80, height: 80)
-                                    .shadow(
-                                        color: choiceSelection == .four ? .yellow : .gray,
-                                        radius: 10)
-                                Image(systemName: CardSuit.spades.icon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                                    .frame(width: 80, height: 80)
-                                    .foregroundStyle(Color.black)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .disabled(disableButtons)
-                    case nil:
-                        EmptyView()
-                    }
+                AnswerButton(question: question, choiceSelection: $choiceSelection, disable: $disableButtons) {
+                    updateTappable()
                 }
                 Spacer()
             }
@@ -405,28 +158,16 @@ struct PlayersTurnView: View {
                     print("ERROR: [PlayerHandView] isCorrect == nil")
                     return
                 }
-                changePhaseAction(isCorrect)
+                nextPhaseAction(isCorrect)
             }
         }
-        
-        
-        
-        
-        
-    }
-    enum ChoiceSelection {
-        case one, two, three, four
     }
 }
 
 #Preview {
-    PlayersTurnView(player: Player.test1, hand: [
-        Card(value: .ace, suit: .hearts),
-        Card(value: .eight, suit: .clubs),
-        Card(value: .king, suit: .diamonds),
-        Card(value: .ten, suit: .spades)
-    ], question: .constant(.one) ,cardSelection: .constant(.one), faceUpPropertyArr: [false, true, false, true], changePhaseAction: {_ in })
+    PlayersTurnView(player: Player.test1, card: Card(value: .ace, suit: .hearts), question: .one , nextPhaseAction: {_ in })
 }
+
 //#Preview {
 //    PlayerHandView(hand: [
 //        PlayingCard(value: .ace, suit: .hearts),
@@ -451,3 +192,249 @@ struct PlayersTurnView: View {
 //        PlayingCard(value: .ten, suit: .spades)
 //    ], question: .constant(.four), cardSelection: .constant(.four), changePhaseAction: {})
 //}
+
+
+struct AnswerButton: View {
+    let question: Question
+    @Binding var choiceSelection: ChoiceSelection?
+    @Binding var disable: Bool
+    let tapAction: () -> Void
+    
+    var body: some View {
+        //MARK: -- BUTTONS
+        HStack {
+            switch question {
+            case .one:
+                Button(action: {
+                    choiceSelection = choiceSelection == .one ? nil : .one
+                    print("[AnswerButton] \(String(describing: choiceSelection))")
+                    tapAction()
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.red)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                        Text("Red")
+                            .foregroundStyle(Color.white)
+                            .font(.system(size: 27))
+                            .fontWeight(.bold)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+                Button(action: {
+                    choiceSelection = choiceSelection == .two ? nil : .two
+                    print("[AnswerButton] \(String(describing: choiceSelection))")
+                    tapAction()
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.black)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                        Text("Black")
+                            .foregroundStyle(Color.white)
+                            .font(.system(size: 27))
+                            .fontWeight(.bold)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+            case .two:
+                Button(action: {
+                    choiceSelection = choiceSelection == .one ? nil : .one
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: "arrowshape.up.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.all, 10)
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+                Button(action: {
+                    choiceSelection = choiceSelection == .two ? nil : .two
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: "arrowshape.down.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.all, 10)
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+            case .three:
+                Button(action: {
+                    choiceSelection = choiceSelection == .one ? nil : .one
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: "arrow.up.right.and.arrow.down.left.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .fontWeight(.medium)
+                            .padding(.all, 10)
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+                Button(action: {
+                    choiceSelection = choiceSelection == .two ? nil : .two
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: "arrow.down.left.and.arrow.up.right.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .fontWeight(.medium)
+                            .padding(.all, 10)
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+            case .four:
+                Button(action: {
+                    choiceSelection = choiceSelection == .one ? nil : .one
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .one ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: CardSuit.hearts.icon)
+                            .resizable()
+                            .scaledToFit()
+                            .padding()
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.red)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+                Button(action: {
+                    choiceSelection = choiceSelection == .two ? nil : .two
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .two ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: CardSuit.clubs.icon)
+                            .resizable()
+                            .scaledToFit()
+                            .padding()
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+                Button(action: {
+                    choiceSelection = choiceSelection == .three ? nil : .three
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .three ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: CardSuit.diamonds.icon)
+                            .resizable()
+                            .scaledToFit()
+                            .padding()
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.red)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+                
+                
+                Button(action: {
+                    choiceSelection = choiceSelection == .four ? nil : .four
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color.white)
+                            .frame(width: 80, height: 80)
+                            .shadow(
+                                color: choiceSelection == .four ? .yellow : .gray,
+                                radius: 10)
+                        Image(systemName: CardSuit.spades.icon)
+                            .resizable()
+                            .scaledToFit()
+                            .padding()
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .disabled(disable)
+            }
+        }
+    }
+}
+
+
+
+enum ChoiceSelection {
+    case one, two, three, four
+}

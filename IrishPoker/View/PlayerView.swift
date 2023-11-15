@@ -9,106 +9,33 @@ import SwiftUI
 
 struct PlayerView: View {
     let player: Player
-    let hand = Card.testHandArray1
+    var hand: [Card] { player.hand }
+    @Binding var question: Question
     @State var gamePhase: GamePhase = .guessingPhase
-    
     @State var playerGiveOrTake: GiveOrTake = .give
     var pointsToPass: Int {
-        let i = questionNumber.rawValue - 1
+        let i = question.number - 1
         return hand[i].value.rawValue
     }
     
-    //Parameter to change from guessing phase to give/take phase
-    @State var allHandsAreFlipped: Bool = false
-    
-    //Three different pointers because data will be updating at different times
-    @State var questionNumber: QuestionNumber = .one
-    @State var question: Question = .one
-    @State var cardSelection: CardSelection = .one
-    
-    
-//    //manages all phase changes
-//    func nextPhase() {
-//        switch gamePhase {
-//        case .guessingPhase:
-//            gamePhase = .pointDistributePhase
-//        case .pointDistributePhase:
-//            gamePhase = allHandsAreFlipped ? .giveTakePhase : .guessingPhase
-//        case .giveTakePhase:
-//            gamePhase = .pointDistributePhase
-//        }
-//    }
-//    
-//    func incrementQuestionNumber() {
-//        switch questionNumber {
-//        case .one:
-//            questionNumber = .two
-//        case .two:
-//            questionNumber = .three
-//        case .three:
-//            questionNumber = .four
-//        case .four:
-//            allHandsAreFlipped = true
-//        case .done:
-//            return
-//        }
-//    }
-//    func nextQuestion() {
-//        switch questionNumber {
-//        case .one:
-//            //SHOULD NOT OCCUR
-//            return
-//        case .two:
-//            question = .two
-//        case .three:
-//            question = .three
-//        case .four:
-//            //WIP CHANGE PHASE
-//            question = .four
-//        case .done:
-//            return
-//        }
-//    }
-//    func nextCard() {
-//        switch questionNumber {
-//        case .one:
-//            //SHOULD NOT OCCUR
-//            return
-//        case .two:
-//            cardSelection = .two
-//        case .three:
-//            cardSelection = .three
-//        case .four:
-//            //WIP CHANGE PHASE
-//            cardSelection = .four
-//        case .done:
-//            return
-//        }
-//    }
     
     var body: some View {
         ZStack {
             switch gamePhase {
             case .guessingPhase:
-                PlayersTurnView(player: player, hand: hand, question: $question, cardSelection: $cardSelection, faceUpPropertyArr: questionNumber.faceUpPropertyArr) { result in
+                PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
                     playerGiveOrTake = result ? .give : .take
-//                    nextPhase()
+                    gamePhase = .pointDistributePhase
                 }
             case .pointDistributePhase:
                 switch playerGiveOrTake {
                 case .give:
                     GiveView(points: pointsToPass) {
-//                        incrementQuestionNumber()
-//                        nextQuestion()
-//                        nextCard()
-//                        nextPhase()
+                        gamePhase = .waitPhase
                     }
                 case .take:
                     TakeView(points: pointsToPass, player: player) {
-//                        incrementQuestionNumber()
-//                        nextQuestion()
-//                        nextCard()
-//                        nextPhase()
+                        gamePhase = .waitPhase
                     }
                 }
             case .giveTakePhase:
@@ -128,7 +55,7 @@ struct PlayerView: View {
 }
 
 #Preview {
-    PlayerView(player: Player.test1)
+    PlayerView(player: Player.test1, question: .constant(Question.one))
 }
 
 
@@ -137,27 +64,17 @@ enum Question: String, RawRepresentable {
     case two = "Higher or Lower"
     case three = "Inside or Outside"
     case four = "Guess the Suit"
-}
-
-enum QuestionNumber: Int {
-    case one = 1
-    case two = 2
-    case three = 3
-    case four = 4
-    case done = 0
     
-    var faceUpPropertyArr: [Bool] {
+    var number: Int {
         switch self {
         case .one:
-            [false, false, false, false]
+            1
         case .two:
-            [true, false, false, false]
+            2
         case .three:
-            [true, true, false, false]
+            3
         case .four:
-            [true, true, true, false]
-        case .done:
-            [true, true, true, true]
+            4
         }
     }
 }

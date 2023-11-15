@@ -10,20 +10,6 @@ import SwiftUI
 struct WaitView: View {
     var players: [Player] = [Player.test1, Player.test2, Player.test3, Player.test4]
     @State var selected: Selection?
-    var zIndexArr: [Double] {
-        switch selected {
-        case .one:
-            [2, 1, 1, 1]
-        case .two:
-            [1, 2, 1, 1]
-        case .three:
-            [1, 1, 2, 1]
-        case .four:
-            [1, 1, 1, 2]
-        case nil:
-            [2, 2, 2, 2]
-        }
-    }
     
     var body: some View {
         ZStack {

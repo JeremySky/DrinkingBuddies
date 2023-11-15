@@ -18,7 +18,6 @@ struct GiveView: View {
         Player.test3,
         Player.test4
         ]
-    let currentUsersPlayerNum: PlayerNumber = .one
     
     func givePoints(to player: inout Player) {
         player.points += 1
