@@ -8,16 +8,19 @@
 import SwiftUI
 
 struct PlayersTurnView: View {
-    let player: Player
+    //1. Purley for UI setup/changes
+    //NEW INSTANCE OF THE PASSED DOWN REFERENCE PLAYER
+    @State var player: Player
     let card: Card
     let question: Question
     var nextPhaseAction: (Bool) -> Void
     
+    //1. for updating card tappable property
+    //2. for checkAnswer process
     @State var choiceSelection: ChoiceSelection?
     
     func updateTappable() {
         tappable = self.choiceSelection == nil ? false : true
-//        print("[PlayersTurnView] \(String(describing: choiceSelection))")
     }
     
     //passed through Card object to make tappable
@@ -87,13 +90,7 @@ struct PlayersTurnView: View {
             correctAnswer = card.suit.rawValue
             isCorrect = selectedAnswer == correctAnswer
         }
-        
-        //MARK: -- Use to troubleshoot
-        //        print("SELECTED ANSWER: " + selectedAnswer)
-        //        print("CORRECT ANSWER: " + correctAnswer)
-        //        print("IS CORRECT: \(isCorrect)")
     }
-    
     
     
     //MARK: -- BODY
@@ -121,8 +118,9 @@ struct PlayersTurnView: View {
                 Spacer()
                 
                 HStack {
-                    ForEach(player.hand, id: \.self) { card in
-                        SmallCard(card: card, playerColor: .clear, startFaceUp: false)
+                    //MARK: -- MINI CARDS
+                    ForEach(0..<4) { i in
+                        SmallCard(card: player.hand[i], playerColor: .clear, startFaceUp: false)
                     }
                 }
                 .padding(.bottom)
@@ -159,10 +157,23 @@ struct PlayersTurnView: View {
         }
     }
 }
-
 #Preview {
-    PlayersTurnView(player: Player.test1, card: Card(value: .ace, suit: .hearts), question: .one , nextPhaseAction: {_ in })
+    return PlayersTurnView(player: Player.test1, card: Player.test1.hand[0], question: .one) { isCorrect in
+        if isCorrect {
+            print("Correct")
+        } else {
+            print("WRONG")
+        }
+    }
 }
+
+
+
+
+
+//#Preview {
+//    PlayersTurnView(player: Player.test1, card: Card(value: .ace, suit: .hearts), question: .one , nextPhaseAction: {_ in })
+//}
 
 //#Preview {
 //    PlayerHandView(hand: [

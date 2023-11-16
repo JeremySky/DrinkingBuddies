@@ -8,24 +8,34 @@
 import SwiftUI
 
 struct PlayerView: View {
-    let player: Player
-    let players: [Player]
-    var hand: [Card] { player.hand }
-    @Binding var currentPlayer: Player
-    @Binding var nextPlayer: Player
-    var nextPlayerTurn: () -> Void
+    //1. for passing down user's player data
+    //2. parameter for gameStage conditionals
+    //(if current player == player { gameStage == .guessing )
+    @Binding var player: Player
     
-    @State var gamePhase: GamePhase = .guessing
-    @State var question: Question = .one
-    @State var gameStage: GameStage = .wait
     
+    //1. for passing down points data to giveView or takeView
     @State var playerGiveOrTake: GiveOrTake = .give
+    var hand: [Card] { player.hand }
     var pointsToPass: Int {
         let i = question.number - 1
         return hand[i].value.rawValue
     }
     
-    //use to prevent user going back to PlayerTurnView prematurely
+    
+    //1. for updating player.hand data **
+    @Binding var players: [Player]
+    
+    
+    //1. for updating gameStage
+    @State var gamePhase: GamePhase = .guessing
+    @State var question: Question = .one
+    @State var gameStage: GameStage = .wait
+    @Binding var currentPlayer: Player
+    var nextPlayerTurn: () -> Void
+    
+    
+    //1. for preventing user from going back to PlayerTurnView prematurely
     //WIP be sure to reset to false during new round
     @State var restrictGoingBack = false
     
@@ -55,7 +65,7 @@ struct PlayerView: View {
                         }
                     }
                 case .wait:
-                    WaitView(currentPlayer: $currentPlayer, players: players)
+                    WaitView(currentPlayer: $currentPlayer, players: $players)
                 case .end:
                     EmptyView()
                 }
@@ -79,7 +89,7 @@ struct PlayerView: View {
                         }
                     }
                 case .wait:
-                    WaitView(currentPlayer: $currentPlayer, players: players)
+                    WaitView(currentPlayer: $currentPlayer, players: $players)
                 case .end:
                     Text("End of game")
                 }
@@ -93,29 +103,13 @@ struct PlayerView: View {
             }
         }
     }
-    
-    enum GameStage {
-        case guessing
-        case pointDistribution
-        case wait
-        case end
-    }
 }
+
 
 #Preview {
-    @State var currentPlayer = Player.test1
-    @State var nextPlayer = Player.test2
-    let players = [Player.test1, Player.test2, Player.test3, Player.test4]
-    return PlayerView(player: Player.test1, players: players, currentPlayer: $currentPlayer, nextPlayer: $nextPlayer) { }
-}
-
-
-
-enum GiveOrTake {
-    case give, take
-}
-
-
-enum CardSelection {
-    case one, two, three, four
+    @State var player = Player.test1
+    @State var players = Player.testArr
+    @State var currentP = Player.test1
+    @State var nextP = Player.test2
+    return PlayerView(player: $player, playerGiveOrTake: .give, players: $players, gamePhase: GamePhase.guessing, question: .one, gameStage: .wait, currentPlayer: $currentP, nextPlayerTurn: {}, restrictGoingBack: false)
 }

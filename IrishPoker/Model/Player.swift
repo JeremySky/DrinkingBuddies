@@ -60,4 +60,6 @@ extension Player {
     static var test2 = Player(name: "Sam", icon: .personFrame, color: .green, hand: Card.testHandArray2)
     static var test3 = Player(name: "Balto", icon: .idCard, color: .red, hand: Card.testHandArray3)
     static var test4 = Player(name: "Trevor", icon: .skateboard, color: .black, hand: Card.testHandArray4)
+    
+    static var testArr = [test1, test2, test3, test4]
 }

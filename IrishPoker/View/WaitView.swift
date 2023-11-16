@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WaitView: View {
     @Binding var currentPlayer: Player
-    var players: [Player]
+    @Binding var players: [Player]
     @State var selected: Selection?
     
     var body: some View {
@@ -50,8 +50,7 @@ struct WaitView: View {
                 Spacer()
                     .frame(height: 10)
                 ForEach(players.indices, id: \.self) { i in
-                    let player = players[i]
-                    PlayerShowHandButton(player: player, highlightPlayer: true)
+                    PlayerShowHandButton(player: $players[i], highlightPlayer: true)
                         .padding(.horizontal)
                 }
             }
@@ -68,7 +67,7 @@ struct WaitView: View {
 
 //MARK: -- PlayerShowHandButton struct
 struct PlayerShowHandButton: View {
-    let player: Player
+    @Binding var player: Player
     @State var showHand: Bool = false
     var highlightPlayer: Bool
     
@@ -145,6 +144,7 @@ struct PlayerShowHandButton: View {
 
 //MARK: -- PREVIEWS
 #Preview {
-    let players = [Player.test1, Player.test2, Player.test3, Player.test4]
-    return WaitView(currentPlayer: .constant(Player.test1), players: players)
+    @State var players = [Player.test1, Player.test2, Player.test3, Player.test4]
+    @State var currentPlayer = Player.test1
+    return WaitView(currentPlayer: $currentPlayer, players: $players)
 }

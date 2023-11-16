@@ -7,43 +7,60 @@
 
 import SwiftUI
 
-
+//MARK: -- VIEW MODEL
 @MainActor
+@dynamicMemberLookup
 class GameViewModel: ObservableObject {
-    @Published var players: [Player]
-    @Published var queue: PlayerQueue
+    @Published var game: Game
     @Published var currentPlayer: Player
-    @Published var nextPlayer: Player
     
     init(players: [Player]) {
-        let queue = players.shuffled()
-        self.players = queue
-        self.queue = PlayerQueue(queue: queue)
-        self.currentPlayer = queue[0]
-        self.nextPlayer = queue[1]
+        let shuffledPlayers = players.shuffled()
+        self.game = Game(players: shuffledPlayers, queue: PlayerQueue(players: shuffledPlayers))
+        self.currentPlayer = shuffledPlayers[0]
+    }
+    
+    subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
+        get { game[keyPath: keyPath] }
+        set { game[keyPath: keyPath] = newValue }
+    }
+    
+    func fetchPlayer(using name: String) -> Player? {
+        for player in game.players {
+            if player.name == name {
+                return player
+            }
+        }
+        return nil
+    }
+    
+    func updateCurrentPlayer() async {
+        let updatedCurrentPlayer = await fetchPlayer(using: game.queue.peekCurrent())
+        guard let updatedCurrentPlayer else { return }
+        currentPlayer = updatedCurrentPlayer
     }
     
     func nextPlayersTurn() {
         Task {
-            await queue.rotateQueue()
-            currentPlayer = await queue.peekCurrent()
-            nextPlayer = await queue.peekNext()
+            await game.shiftPlayers()
+            await updateCurrentPlayer()
         }
     }
 }
 
 
+//MARK: -- VIEW
 struct GameView: View {
     @StateObject var vm: GameViewModel
     
     var body: some View {
         TabView {
-            ForEach(vm.players, id: \.self) { player in
-                PlayerView(player: player, players: vm.players, currentPlayer: $vm.currentPlayer, nextPlayer: $vm.nextPlayer, nextPlayerTurn: {
+            ForEach($vm.game.players.indices, id: \.self) { i in
+                PlayerView(player: $vm.players[i], players: $vm.game.players, currentPlayer: $vm.currentPlayer, nextPlayerTurn: {
                     vm.nextPlayersTurn()
                 })
                     .tabItem {
-                        Label(player.name, systemImage: player.icon.rawValue)
+                        Label(vm.players[i].name, systemImage: vm.players[i].icon.rawValue)
                     }
             }
         }
@@ -51,53 +68,6 @@ struct GameView: View {
 }
 
 
-
-actor PlayerQueue: ObservableObject {
-    var queue: [Player]
-    
-    init(queue: [Player]) {
-        self.queue = queue
-    }
-    
-    func peekCurrent() -> Player {
-        queue[0]
-    }
-    func peekNext() -> Player {
-        queue[1]
-    }
-    func dequeue() {
-        queue.removeFirst()
-    }
-    func enqueue(_ player: Player) {
-        queue.append(player)
-    }
-    func rotateQueue() {
-        enqueue(queue[0])
-        dequeue()
-    }
-}
-
-enum GamePhase {
-    case guessing
-    case giveTake
-}
-
-enum Question: String, RawRepresentable {
-    case one = "Guess the Color"
-    case two = "Higher or Lower"
-    case three = "Inside or Outside"
-    case four = "Guess the Suit"
-    
-    var number: Int {
-        switch self {
-        case .one:
-            1
-        case .two:
-            2
-        case .three:
-            3
-        case .four:
-            4
-        }
-    }
+#Preview {
+    GameView(vm: GameViewModel(players: [Player.test1, Player.test2, Player.test3, Player.test4]))
 }
