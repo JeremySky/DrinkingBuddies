@@ -10,14 +10,12 @@ import SwiftUI
 //MARK: -- GENERIC CARD
 //use to apply all flip actions or init face up actions
 struct CardViewHelper<Front: View, Back: View>: View {
-    let startFaceUp: Bool
     @Binding var isTappable: Bool
     let onTapAction: (() -> Void)?
     let frontView: Front
     let backView: Back
     
-    init(startFaceUp: Bool, isTappable: Binding<Bool> = .constant(false), onTapAction: (() -> Void)? = nil, @ViewBuilder frontView: () -> Front, @ViewBuilder backView: () -> Back) {
-        self.startFaceUp = startFaceUp
+    init(isTappable: Binding<Bool> = .constant(false), onTapAction: (() -> Void)? = nil, @ViewBuilder frontView: () -> Front, @ViewBuilder backView: () -> Back) {
         _isTappable = isTappable
         self.onTapAction = onTapAction
         self.frontView = frontView()
@@ -51,33 +49,28 @@ struct CardViewHelper<Front: View, Back: View>: View {
     }
     
     var body: some View {
-        if !startFaceUp {
-            ZStack {
-                frontView
-                    .rotation3DEffect(Angle(degrees: frontDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
-                backView
-                    .rotation3DEffect(Angle(degrees: backDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
-            }
-            .onTapGesture {
-                if isTappable {
-                    flipCard()
-                    isTappable = false
-                    guard let onTapAction else { return }
-                    onTapAction()
-                }
-            }
-        } else {
+        ZStack {
             frontView
+                .rotation3DEffect(Angle(degrees: frontDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+            backView
+                .rotation3DEffect(Angle(degrees: backDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+        }
+        .onTapGesture {
+            if isTappable {
+                flipCard()
+                isTappable = false
+                guard let onTapAction else { return }
+                onTapAction()
+            }
         }
     }
 }
 
 #Preview {
-    CardViewHelper(startFaceUp: false, isTappable: .constant(true)) {
+    CardViewHelper(isTappable: .constant(true)) {
         RoundedRectangle(cornerRadius: 25.0)
     } backView: {
         RoundedRectangle(cornerRadius: 25.0)
             .foregroundColor(.green)
     }
-
 }

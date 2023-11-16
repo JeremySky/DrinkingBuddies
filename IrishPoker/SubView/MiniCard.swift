@@ -1,31 +1,11 @@
 //
-//  SmallCard.swift
+//  MiniCard.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/14/23.
 //
 
 import SwiftUI
-
-
-struct SmallCard: View {
-    let card: Card
-    let playerColor: Color
-    let startFaceUp: Bool
-    let hide: Bool
-    
-    var body: some View {
-        if hide {
-            MiniCardHide(color: playerColor)
-        } else {
-            CardViewHelper(startFaceUp: startFaceUp) {
-                MiniCardFront(card: card, playerColor: playerColor)
-            } backView: {
-                MiniCardBack(playerColor: playerColor)
-            }
-        }
-    }
-}
 
 struct MiniCardFront: View {
     let card: Card
@@ -68,9 +48,7 @@ struct MiniCardBack: View {
     }
 }
 
-struct MiniCardHide: View {
-    let color: Color
-    
+struct MiniCardHidden: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
             .strokeBorder(style: StrokeStyle(lineWidth: 5, dash: [10]))
@@ -79,12 +57,9 @@ struct MiniCardHide: View {
 }
 
 #Preview {
-    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: true, hide: false)
-}
-
-#Preview {
-    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: false, hide: false)
-}
-#Preview {
-    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: true, hide: true)
+    return VStack {
+        MiniCardFront(card: Card.test1, playerColor: .blue)
+        MiniCardBack(playerColor: .blue)
+        MiniCardHidden()
+    }
 }

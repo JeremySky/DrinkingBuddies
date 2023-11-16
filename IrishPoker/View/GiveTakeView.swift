@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct GiveTakeView: View {
-    let cards: [Card] = Card.testHandArray1
-    @State var tappable: (card1: Bool, card2: Bool) = (true, true)
+    @Binding var cards: (one: Card, two: Card)
+    @State var tappable = (one: true, two: true)
     var body: some View {
         ZStack {
             VStack {
@@ -21,10 +21,10 @@ struct GiveTakeView: View {
                         .font(.headline)
                 }
                 .multilineTextAlignment(.center)
-                BigCard(card: cards[0], isTappable: $tappable.card1, startFaceUp: false)
+                BigCard(card: $cards.one, tappable: $tappable.one) {}
                     .scaleEffect(0.55)
                     .frame(height: 280)
-                BigCard(card: cards[1], isTappable: $tappable.card2, startFaceUp: false)
+                BigCard(card: $cards.two, tappable: $tappable.two) {}
                     .scaleEffect(0.55)
                     .frame(height: 280)
             }
@@ -33,5 +33,6 @@ struct GiveTakeView: View {
 }
 
 #Preview {
-    GiveTakeView()
+    @State var cards = (one: Card.test1, two: Card.test2)
+    return GiveTakeView(cards: $cards)
 }

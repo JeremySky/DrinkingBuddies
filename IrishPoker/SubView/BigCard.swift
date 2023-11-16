@@ -10,25 +10,48 @@ import SwiftUI
 
 //MARK: -- BIGCARD
 struct BigCard: View {
-    let card: Card
-    @Binding var isTappable: Bool
-    let startFaceUp: Bool
-    let onTapAction: (() -> Void)?
+    @Binding var card: Card
+    @Binding var tappable: Bool
+    let onTapAction: () -> Void
     
-    init(card: Card, isTappable: Binding<Bool>, startFaceUp: Bool, onTapAction: (() -> Void)? = nil) {
-        self.card = card
-        _isTappable = isTappable
-        self.startFaceUp = startFaceUp
-        self.onTapAction = onTapAction
-    }
     
+    
+    //for keeping dimensions standardized
     let dimensions: (width: CGFloat, height: CGFloat, cornerRadius: CGFloat) = (260, 390, 13)
     
+    
+    //MARK: -- FLIP FUNCTION
+    //properties used for flip animation
+    let durationAndDelay: CGFloat = 0.3
+    @State var frontDegree: Double = -90.0
+    @State var backDegree: Double = 0.0
+    @State var isFlipped: Bool = false
+    func flipCard() {
+        isFlipped = !isFlipped
+        if isFlipped {
+            withAnimation(.linear(duration: durationAndDelay)) {
+                backDegree = 90.0
+            }
+            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+                frontDegree = 0.0
+            }
+        }
+    }
+    
+    
     var body: some View {
-        CardViewHelper(startFaceUp: startFaceUp, isTappable: $isTappable, onTapAction: onTapAction) {
+        ZStack {
             CardFront(card: card, dimensions: dimensions)
-        } backView: {
+                .rotation3DEffect(Angle(degrees: frontDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
             CardBack(dimensions: dimensions)
+                .rotation3DEffect(Angle(degrees: backDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+        }
+        .onTapGesture {
+            if tappable {
+                flipCard()
+                onTapAction()
+                card.isFlipped = true
+            }
         }
     }
 }
@@ -226,7 +249,7 @@ struct CardBack: View {
 //    return BigCard(card: Card(value: .ten, suit: .spades), isTappable: .constant(true), startFaceUp: true)
 //}
 #Preview {
-    return BigCard(card: Card(value: .jack, suit: .spades), isTappable: .constant(true), startFaceUp: true)
+    return BigCard(card: .constant(Card(value: .jack, suit: .spades)), tappable: .constant(true), onTapAction: { })
 }
 //#Preview {
 //    return BigCard(card: Card(value: .queen, suit: .spades), isTappable: .constant(true), startFaceUp: true)

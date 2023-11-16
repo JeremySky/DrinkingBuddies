@@ -46,7 +46,7 @@ struct PlayerView: View {
             case .guessing:
                 switch gameStage {
                 case .guessing:
-                    PlayersTurnView(player: player, card: hand[question.number], question: question) { result in
+                    PlayersTurnView(player: $player, question: question) { result in
                         playerGiveOrTake = result ? .give : .take
                         gameStage = .pointDistribution
                         restrictGoingBack = true
@@ -74,7 +74,7 @@ struct PlayerView: View {
             case .giveTake:
                 switch gameStage {
                 case .guessing:
-                    GiveTakeView()
+                    GiveTakeView(cards: .constant((one: Card.test1, two: Card.test2)))
                 case .pointDistribution:
                     switch playerGiveOrTake {
                     case .give:

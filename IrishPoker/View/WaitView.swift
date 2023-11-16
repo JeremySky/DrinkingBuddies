@@ -88,7 +88,7 @@ struct PlayerShowHandButton: View {
                     HStack {
                         Group {
                             ForEach(0..<4) { i in
-                                SmallCard(card: player.hand[i], playerColor: .clear, startFaceUp: false, hide: false)
+                                MiniCardBack(playerColor: player.color)
                             }
                         }
                         .padding(.horizontal, 5)

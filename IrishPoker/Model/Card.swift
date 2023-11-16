@@ -108,7 +108,7 @@ extension Card {
         Card(value: .queen, suit: .spades)
     ]
     
-    static var test1 = Card(value: .ten, suit: .spades, isFlipped: true)
+    static var test1 = Card(value: .ten, suit: .spades)
     static var test2 = Card(value: .ten, suit: .clubs)
     static var test3 = Card(value: .seven, suit: .diamonds)
     static var test4 = Card(value: .ten, suit: .spades)
