@@ -120,7 +120,7 @@ struct PlayersTurnView: View {
                 HStack {
                     //MARK: -- MINI CARDS
                     ForEach(0..<4) { i in
-                        SmallCard(card: player.hand[i], playerColor: .clear, startFaceUp: false)
+                        SmallCard(card: player.hand[i], playerColor: .clear, startFaceUp: ((question.number == (i + 1)) ? true : false), hide: ((question.number == (i + 1)) ? true : false))
                     }
                 }
                 .padding(.bottom)

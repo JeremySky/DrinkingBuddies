@@ -12,15 +12,18 @@ struct SmallCard: View {
     let card: Card
     let playerColor: Color
     let startFaceUp: Bool
+    let hide: Bool
     
     var body: some View {
-        CardViewHelper(startFaceUp: startFaceUp) {
-            MiniCardFront(card: card, playerColor: playerColor)
-        } backView: {
-            MiniCardBack(playerColor: playerColor)
+        if hide {
+            MiniCardHide(color: playerColor)
+        } else {
+            CardViewHelper(startFaceUp: startFaceUp) {
+                MiniCardFront(card: card, playerColor: playerColor)
+            } backView: {
+                MiniCardBack(playerColor: playerColor)
+            }
         }
-        
-        
     }
 }
 
@@ -65,10 +68,23 @@ struct MiniCardBack: View {
     }
 }
 
-#Preview {
-    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: true)
+struct MiniCardHide: View {
+    let color: Color
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .strokeBorder(style: StrokeStyle(lineWidth: 5, dash: [10]))
+            .frame(width: 65, height: 70)
+    }
 }
 
 #Preview {
-    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: false)
+    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: true, hide: false)
+}
+
+#Preview {
+    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: false, hide: false)
+}
+#Preview {
+    SmallCard(card: Card.test1, playerColor: Player.test1.color, startFaceUp: true, hide: true)
 }
