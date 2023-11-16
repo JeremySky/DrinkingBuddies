@@ -88,7 +88,11 @@ struct PlayerShowHandButton: View {
                     HStack {
                         Group {
                             ForEach(0..<4) { i in
-                                MiniCardBack(playerColor: player.color)
+                                if player.hand[i].isFlipped {
+                                    MiniCardFront(card: player.hand[i], playerColor: player.color)
+                                } else {
+                                    MiniCardBack(playerColor: .clear)
+                                }
                             }
                         }
                         .padding(.horizontal, 5)
