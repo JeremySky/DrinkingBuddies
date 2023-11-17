@@ -6,14 +6,25 @@
 //
 
 import SwiftUI
+import Combine
 
 struct TakeView: View {
     @Binding var player: Player
+    @State var countdown: Int
     @State var points: Int
     var takeAction: () -> Void
     
-    @State var startCountdown = false
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var timerSubscription: Cancellable? = nil
+    @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
+    
+    func cancelTimer() {
+        timerSubscription = nil
+    }
+    
+    func takeAgain() {
+        countdown = player.pointsToTake
+        points = player.pointsToTake
+    }
     
     var body: some View {
         ZStack {
@@ -41,7 +52,7 @@ struct TakeView: View {
                 .background(player.color)
                 
                 Spacer()
-                Text("\(points)")
+                Text("\(countdown)")
                     .font(.system(size: 200))
                     .fontWeight(.semibold)
                 Spacer()
@@ -64,11 +75,11 @@ struct TakeView: View {
                 .frame(height: 80)
                 .padding()
                 .onTapGesture {
-                    startCountdown = true
+                    timerSubscription = timer.connect()
                 }
             }
             
-            if points == 0 {
+            if countdown == 0 {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .foregroundStyle(.white)
@@ -87,14 +98,21 @@ struct TakeView: View {
                 .frame(height: 80)
                 .padding()
                 .onTapGesture {
-                    takeAction()
-                    player.pointsTake = 0
+                    player.pointsToTake -= points
+                    if player.pointsToTake == 0 {
+                        takeAction()
+                    } else {
+                        timer = Timer.publish(every: 1, on: .main, in: .common)
+                        takeAgain()
+                    }
                 }
             }
         }
         .onReceive(timer) { time in
-            if startCountdown && points > 0  {
-                points -= 1
+            if countdown > 0  {
+                countdown -= 1
+            } else {
+                timer.connect().cancel()
             }
         }
     }
@@ -102,5 +120,6 @@ struct TakeView: View {
 
 #Preview {
     @State var player = Player.take
-    return TakeView(player: $player, points: player.pointsTake) {}
+    @State var points = Player.take.pointsToTake
+    return TakeView(player: $player, countdown: points, points: points) {}
 }

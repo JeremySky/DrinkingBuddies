@@ -14,8 +14,8 @@ struct Player {
     let icon: CharacterIcon
     let color: Color
     var hand: [Card]
-    var pointsGive: Int = 0
-    var pointsTake: Int = 0
+    var pointsToGive: Int = 0
+    var pointsToTake: Int = 0
 }
 
 
@@ -41,8 +41,8 @@ extension Player: Hashable, Equatable {
             lhs.icon == rhs.icon &&
             lhs.color == rhs.color &&
             lhs.hand == rhs.hand &&
-            lhs.pointsGive == rhs.pointsGive &&
-            lhs.pointsTake == rhs.pointsTake
+            lhs.pointsToGive == rhs.pointsToGive &&
+            lhs.pointsToTake == rhs.pointsToTake
         )
     }
     
@@ -51,8 +51,8 @@ extension Player: Hashable, Equatable {
         hasher.combine(icon)
         hasher.combine(color)
         hasher.combine(hand)
-        hasher.combine(pointsGive)
-        hasher.combine(pointsTake)
+        hasher.combine(pointsToGive)
+        hasher.combine(pointsToTake)
     }
     
 }
@@ -66,7 +66,7 @@ extension Player {
     
     static var testArr = [test1, test2, test3, test4]
     
-    static var take = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsTake: 5)
+    static var take = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToTake: 5)
     
-    static var give = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsGive: 9)
+    static var give = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToGive: 9)
 }

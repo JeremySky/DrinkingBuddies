@@ -16,6 +16,7 @@ struct Game {
     var question: Question = .one
     var currentPlayer: Player
     
+    
     func getPlayer(using name: String) async -> Player {
         var returnPlayer: Player? = nil
         for player in players {

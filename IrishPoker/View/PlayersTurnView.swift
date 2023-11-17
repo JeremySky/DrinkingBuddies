@@ -13,7 +13,7 @@ struct PlayersTurnView: View {
     @Binding var player: Player
     let question: Question
     var card: Card { player.hand[question.number - 1] }
-    var nextPhaseAction: (Bool) -> Void
+    var nextPhaseAction: (Bool, Int) -> Void
     
     //1. for updating card tappable property
     //2. for checkAnswer process
@@ -31,7 +31,7 @@ struct PlayersTurnView: View {
     
     
     //MARK: -- check answer
-    @State var result: Bool?
+    @State var isCorrect: Bool?
     
     func checkAnswer() {
         var selectedAnswer: String
@@ -41,7 +41,7 @@ struct PlayersTurnView: View {
         case .one:
             selectedAnswer = choiceSelection == .one ? "red" : "black"
             correctAnswer = card.color == .red ? "red" : "black"
-            result = selectedAnswer == correctAnswer
+            isCorrect = selectedAnswer == correctAnswer
         case .two:
             let currentCardValue = card.value.rawValue
             let previousCardValue = card.value.rawValue
@@ -56,7 +56,7 @@ struct PlayersTurnView: View {
                 print("ERROR: [PlayerHandView] checkAnswer() case .two")
                 return
             }
-            result = selectedAnswer == correctAnswer
+            isCorrect = selectedAnswer == correctAnswer
         case .three:
             let currentCardValue = card.value.rawValue
             let highNum = [card.value.rawValue, card.value.rawValue].max()!
@@ -72,7 +72,7 @@ struct PlayersTurnView: View {
                 print("ERROR: [PlayerHandView] checkAnswer() case .three")
                 return
             }
-            result = selectedAnswer == correctAnswer
+            isCorrect = selectedAnswer == correctAnswer
         case .four:
             switch choiceSelection {
             case .one:
@@ -88,7 +88,7 @@ struct PlayersTurnView: View {
                 return
             }
             correctAnswer = card.suit.rawValue
-            result = selectedAnswer == correctAnswer
+            isCorrect = selectedAnswer == correctAnswer
         }
     }
     
@@ -141,16 +141,16 @@ struct PlayersTurnView: View {
             
             //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE BUTTON
             ZStack {
-                if result != nil {
+                if isCorrect != nil {
                     RoundedRectangle(cornerRadius: 10)
                         .foregroundStyle(.white)
                         .shadow(radius: 10)
                     HStack {
-                        Image(systemName: result! ? "checkmark" : "xmark")
-                            .foregroundStyle(result! ? .green : .red)
+                        Image(systemName: isCorrect! ? "checkmark" : "xmark")
+                            .foregroundStyle(isCorrect! ? .green : .red)
                             .font(.system(size: 60))
                             .fontWeight(.black)
-                        Text(result! ? "CORRECT" : "WRONG")
+                        Text(isCorrect! ? "CORRECT" : "WRONG")
                             .font(.system(size: 50))
                             .fontWeight(.black)
                             .offset(x: -12)
@@ -160,22 +160,22 @@ struct PlayersTurnView: View {
             .frame(height: 80)
             .padding()
             .onTapGesture {
-                guard let result else {
+                guard let isCorrect else {
                     print("ERROR: [PlayerHandView] isCorrect == nil")
                     return
                 }
-                nextPhaseAction(result)
+                nextPhaseAction(isCorrect, card.value.rawValue)
             }
         }
     }
 }
 
 #Preview {
-    PlayersTurnView(player: .constant(Player.test1), question: .one) { isCorrect in
+    PlayersTurnView(player: .constant(Player.test1), question: .one) { isCorrect, points in
         if isCorrect {
-            print("Correct")
+            print("Give: \(points)")
         } else {
-            print("WRONG")
+            print("Take: \(points)")
         }
     }
     .environmentObject(GameViewModel.preview)
@@ -197,7 +197,6 @@ struct AnswerButton: View {
             case .one:
                 Button(action: {
                     choiceSelection = choiceSelection == .one ? nil : .one
-                    //                    print("[AnswerButton] \(String(describing: choiceSelection))")
                     completionHandler()
                 }) {
                     ZStack {
@@ -219,7 +218,6 @@ struct AnswerButton: View {
                 
                 Button(action: {
                     choiceSelection = choiceSelection == .two ? nil : .two
-                    //                    print("[AnswerButton] \(String(describing: choiceSelection))")
                     completionHandler()
                 }) {
                     ZStack {

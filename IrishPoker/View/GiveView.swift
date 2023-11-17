@@ -14,8 +14,8 @@ struct GiveView: View {
     var giveAction: ([Player]) -> Void
     
     func givePoints(to player: inout Player) {
-        player.pointsTake += 1
-        self.player.pointsGive -= 1
+        player.pointsToTake += 1
+        self.player.pointsToGive -= 1
         points -= 1
     }
     var body: some View {
@@ -35,7 +35,7 @@ struct GiveView: View {
                                     .frame(width: 65, height: 65)
                                     .foregroundStyle(Color.white)
                                     .shadow(radius: 10)
-                                Text("\(players[i].pointsTake)")
+                                Text("\(players[i].pointsToTake)")
                                     .font(.largeTitle)
                                     .fontWeight(.semibold)
                             }
@@ -109,5 +109,5 @@ struct GiveView: View {
 #Preview {
     @State var player = Player.give
     @State var players = Player.testArr
-    return GiveView(player: $player, points: player.pointsGive, players: players, giveAction: {_ in })
+    return GiveView(player: $player, points: player.pointsToGive, players: players, giveAction: {_ in })
 }
