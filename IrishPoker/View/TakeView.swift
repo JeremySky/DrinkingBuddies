@@ -14,14 +14,18 @@ struct TakeView: View {
     @State var points: Int
     var takeAction: () -> Void
     
+    @State var countdownHasStarted: Bool = false
     @State var timerSubscription: Cancellable? = nil
     @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
     
-    func cancelTimer() {
-        timerSubscription = nil
+    func startCountdown() {
+        countdownHasStarted = true
+        timerSubscription = timer.connect()
     }
     
     func takeAgain() {
+        countdownHasStarted = false
+        timer = Timer.publish(every: 1, on: .main, in: .common)
         countdown = player.pointsToTake
         points = player.pointsToTake
     }
@@ -75,7 +79,9 @@ struct TakeView: View {
                 .frame(height: 80)
                 .padding()
                 .onTapGesture {
-                    timerSubscription = timer.connect()
+                    if !countdownHasStarted {
+                        startCountdown()
+                    }
                 }
             }
             
@@ -102,7 +108,6 @@ struct TakeView: View {
                     if player.pointsToTake == 0 {
                         takeAction()
                     } else {
-                        timer = Timer.publish(every: 1, on: .main, in: .common)
                         takeAgain()
                     }
                 }
