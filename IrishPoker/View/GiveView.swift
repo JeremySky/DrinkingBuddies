@@ -8,23 +8,16 @@
 import SwiftUI
 
 struct GiveView: View {
+    @Binding var player: Player
     @State var points: Int
-    var changePhaseAction: () -> Void
-    
-    
-    @State var players: [Player] = [
-        Player.test1,
-        Player.test2,
-        Player.test3,
-        Player.test4
-        ]
+    @State var players: [Player]
+    var giveAction: ([Player]) -> Void
     
     func givePoints(to player: inout Player) {
-        player.points += 1
+        player.pointsTake += 1
+        self.player.pointsGive -= 1
         points -= 1
     }
-    
-    
     var body: some View {
         ZStack {
             //MARK: -- GIVE
@@ -42,7 +35,7 @@ struct GiveView: View {
                                     .frame(width: 65, height: 65)
                                     .foregroundStyle(Color.white)
                                     .shadow(radius: 10)
-                                Text("\(players[i].points)")
+                                Text("\(players[i].pointsTake)")
                                     .font(.largeTitle)
                                     .fontWeight(.semibold)
                             }
@@ -106,7 +99,7 @@ struct GiveView: View {
                 .frame(height: 80)
                 .padding()
                 .onTapGesture {
-                    changePhaseAction()
+                    giveAction(players)
                 }
             }
         }
@@ -114,5 +107,7 @@ struct GiveView: View {
 }
 
 #Preview {
-    GiveView(points: 10) {}
+    @State var player = Player.give
+    @State var players = Player.testArr
+    return GiveView(player: $player, points: player.pointsGive, players: players, giveAction: {_ in })
 }

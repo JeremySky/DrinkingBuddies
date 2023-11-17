@@ -8,21 +8,32 @@
 import Foundation
 
 struct Game {
-    var id = UUID()
+    let id = UUID()
     var deck = Deck()
     var players: [Player]
     var queue: PlayerQueue
-    var phase = GamePhase.guessing
+    var phase: GamePhase = .guessing
+    var question: Question = .one
+    var currentPlayer: Player
     
-    func getCurrentPlayerName() async -> String {
-        await queue.peekCurrent()
+    func getPlayer(using name: String) async -> Player {
+        var returnPlayer: Player? = nil
+        for player in players {
+            if player.name == name {
+                returnPlayer = player
+            }
+        }
+        guard let returnPlayer else {
+            await resetQueue()
+            return await getPlayer(using: name)
+        }
+        return returnPlayer
     }
-    func getNextPlayerName() async -> String {
-        await queue.peekNext()
+    func nextPlayer() async {
+        await queue.dequeue()
     }
-    
-    func shiftPlayers() async {
-        await queue.rotateQueue()
+    func resetQueue() async {
+        await queue.reset()
     }
 }
 
@@ -57,7 +68,7 @@ enum GiveOrTake {
 }
 
 
-enum GameStage {
+enum PlayerStage {
     case guessing
     case pointDistribution
     case wait

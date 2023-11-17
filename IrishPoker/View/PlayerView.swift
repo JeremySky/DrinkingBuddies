@@ -8,97 +8,67 @@
 import SwiftUI
 
 struct PlayerView: View {
-    //1. for passing down user's player data
-    //2. parameter for gameStage conditionals
-    //(if current player == player { gameStage == .guessing )
+    @EnvironmentObject var game: GameViewModel
     @Binding var player: Player
     
-    
-    //1. for passing down points data to giveView or takeView
     @State var playerGiveOrTake: GiveOrTake = .give
-    var hand: [Card] { player.hand }
     var pointsToPass: Int {
-        let i = question.number - 1
-        return hand[i].value.rawValue
+        let i = game.question.number - 1
+        return player.hand[i].value.rawValue
     }
-    
-    
-    //1. for updating player.hand data **
-    @Binding var players: [Player]
-    
-    
-    //1. for updating gameStage
-    @State var gamePhase: GamePhase = .guessing
-    @State var question: Question = .one
-    @State var gameStage: GameStage = .wait
-    @Binding var currentPlayer: Player
-    var nextPlayerTurn: () -> Void
-    
-    
-    //1. for preventing user from going back to PlayerTurnView prematurely
-    //WIP be sure to reset to false during new round
+    @State var playerStage: PlayerStage = .wait
     @State var restrictGoingBack = false
     
     var body: some View {
         ZStack {
-            switch gamePhase {
-                //MARK: -- GUESSING PHASE
+            switch playerStage {
             case .guessing:
-                switch gameStage {
+                switch game.phase {
                 case .guessing:
-                    PlayersTurnView(player: $player, question: question) { result in
+                    PlayersTurnView(player: $player, question: game.question) { result in
                         playerGiveOrTake = result ? .give : .take
-                        gameStage = .pointDistribution
+                        if result {
+                            playerGiveOrTake = .give
+                            player.pointsGive = pointsToPass
+                        } else {
+                            playerGiveOrTake = .take
+                            player.pointsTake = pointsToPass
+                        }
+                        playerStage = .pointDistribution
                         restrictGoingBack = true
                     }
-                case .pointDistribution:
-                    switch playerGiveOrTake {
-                    case .give:
-                        GiveView(points: pointsToPass) {
-                            gameStage = .wait
-                            nextPlayerTurn()
-                        }
-                    case .take:
-                        TakeView(points: pointsToPass, player: player) {
-                            gameStage = .wait
-                            nextPlayerTurn()
-                        }
-                    }
-                case .wait:
-                    WaitView(currentPlayer: $currentPlayer, players: $players)
-                case .end:
-                    EmptyView()
-                }
-                
-                //MARK: -- GIVE OR TAKE PHASE
-            case .giveTake:
-                switch gameStage {
-                case .guessing:
+                case .giveTake:
                     GiveTakeView(cards: .constant((one: Card.test1, two: Card.test2)))
-                case .pointDistribution:
-                    switch playerGiveOrTake {
-                    case .give:
-                        GiveView(points: pointsToPass) {
-                            gameStage = .wait
-                            nextPlayerTurn()
-                        }
-                    case .take:
-                        TakeView(points: pointsToPass, player: player) {
-                            gameStage = .wait
-                            nextPlayerTurn()
-                        }
+                }
+            case .pointDistribution:
+                switch playerGiveOrTake {
+                case .give:
+                    GiveView(player: $player, points: pointsToPass, players: game.players){ playersWithUpdateTakePoints in
+                        playerStage = .wait
                     }
-                case .wait:
-                    WaitView(currentPlayer: $currentPlayer, players: $players)
-                case .end:
-                    Text("End of game")
+                case .take:
+                    TakeView(player: $player, points: player.pointsTake) {
+                        playerStage = .wait
+                        game.endPlayersTurn()
+                    }
+                }
+            case .wait:
+                WaitView()
+            case .end:
+                switch game.phase {
+                case .guessing:
+                    WaitView()
+//                    game.phase = .giveTake
+//                    playerStage = .wait
+                case .giveTake:
+                    Text("END OF GAME")
                 }
             }
         }
         .onAppear {
             if !restrictGoingBack {
-                if currentPlayer == player {
-                    gameStage = .guessing
+                if game.currentPlayer == player {
+                    playerStage = .guessing
                 }
             }
         }
@@ -108,8 +78,6 @@ struct PlayerView: View {
 
 #Preview {
     @State var player = Player.test1
-    @State var players = Player.testArr
-    @State var currentP = Player.test1
-    @State var nextP = Player.test2
-    return PlayerView(player: $player, playerGiveOrTake: .give, players: $players, gamePhase: GamePhase.guessing, question: .one, gameStage: .wait, currentPlayer: $currentP, nextPlayerTurn: {}, restrictGoingBack: false)
+    return PlayerView(player: $player)
+        .environmentObject(GameViewModel.preview)
 }

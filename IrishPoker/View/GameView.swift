@@ -12,12 +12,10 @@ import SwiftUI
 @dynamicMemberLookup
 class GameViewModel: ObservableObject {
     @Published var game: Game
-    @Published var currentPlayer: Player
     
     init(players: [Player]) {
         let shuffledPlayers = players.shuffled()
-        self.game = Game(players: shuffledPlayers, queue: PlayerQueue(players: shuffledPlayers))
-        self.currentPlayer = shuffledPlayers[0]
+        self.game = Game(players: shuffledPlayers, queue: PlayerQueue(players: shuffledPlayers), currentPlayer: shuffledPlayers[0])
     }
     
     subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
@@ -25,25 +23,11 @@ class GameViewModel: ObservableObject {
         set { game[keyPath: keyPath] = newValue }
     }
     
-    func fetchPlayer(using name: String) -> Player? {
-        for player in game.players {
-            if player.name == name {
-                return player
-            }
-        }
-        return nil
-    }
     
-    func updateCurrentPlayer() async {
-        let updatedCurrentPlayer = await fetchPlayer(using: game.queue.peekCurrent())
-        guard let updatedCurrentPlayer else { return }
-        currentPlayer = updatedCurrentPlayer
-    }
-    
-    func nextPlayersTurn() {
+    func endPlayersTurn() {
         Task {
-            await game.shiftPlayers()
-            await updateCurrentPlayer()
+            await game.nextPlayer()
+            await game.currentPlayer = game.getPlayer(using: await game.queue.peek())
         }
     }
 }
@@ -51,16 +35,15 @@ class GameViewModel: ObservableObject {
 
 //MARK: -- VIEW
 struct GameView: View {
-    @StateObject var vm: GameViewModel
+    @StateObject var game: GameViewModel
     
     var body: some View {
         TabView {
-            ForEach($vm.game.players.indices, id: \.self) { i in
-                PlayerView(player: $vm.players[i], players: $vm.game.players, currentPlayer: $vm.currentPlayer, nextPlayerTurn: {
-                    vm.nextPlayersTurn()
-                })
+            ForEach($game.players.indices, id: \.self) { i in
+                PlayerView(player: $game.players[i])
+                    .environmentObject(game)
                     .tabItem {
-                        Label(vm.players[i].name, systemImage: vm.players[i].icon.rawValue)
+                        Label(game.players[i].name, systemImage: game.players[i].icon.rawValue)
                     }
             }
         }
@@ -69,5 +52,13 @@ struct GameView: View {
 
 
 #Preview {
-    GameView(vm: GameViewModel(players: [Player.test1, Player.test2, Player.test3, Player.test4]))
+    GameView(game: GameViewModel.preview)
+}
+
+
+
+
+
+extension GameViewModel {
+    static var preview = GameViewModel(players: Player.testArr)
 }

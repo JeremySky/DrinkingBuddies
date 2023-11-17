@@ -12,7 +12,8 @@ import SwiftUI
 struct BigCard: View {
     @Binding var card: Card
     @Binding var tappable: Bool
-    let onTapAction: () -> Void
+    typealias TapAction = () -> Void
+    let completionHandler: TapAction
     
     
     
@@ -49,7 +50,7 @@ struct BigCard: View {
         .onTapGesture {
             if tappable {
                 flipCard()
-                onTapAction()
+                completionHandler()
                 card.isFlipped = true
             }
         }
@@ -249,7 +250,7 @@ struct CardBack: View {
 //    return BigCard(card: Card(value: .ten, suit: .spades), isTappable: .constant(true), startFaceUp: true)
 //}
 #Preview {
-    return BigCard(card: .constant(Card(value: .jack, suit: .spades)), tappable: .constant(true), onTapAction: { })
+    return BigCard(card: .constant(Card(value: .jack, suit: .spades)), tappable: .constant(true), completionHandler: { })
 }
 //#Preview {
 //    return BigCard(card: Card(value: .queen, suit: .spades), isTappable: .constant(true), startFaceUp: true)

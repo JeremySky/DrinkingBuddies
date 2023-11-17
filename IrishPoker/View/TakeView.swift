@@ -8,65 +8,67 @@
 import SwiftUI
 
 struct TakeView: View {
+    @Binding var player: Player
     @State var points: Int
-    let player: Player
-    var changePhaseAction: () -> Void
+    var takeAction: () -> Void
+    
+    @State var startCountdown = false
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack {
             VStack {
+                //MARK: -- TITLE
+                ZStack {
+                    Circle()
+                        .fill(.white)
+                    Image(systemName: player.icon.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .fontWeight(.heavy)
+                        .foregroundStyle(player.color)
+                        .padding()
+                    Image(systemName: player.icon.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .fontWeight(.heavy)
+                        .foregroundStyle(.black.opacity(0.3))
+                        .padding()
+                }
+                .frame(width: 100, height: 100)
+                .padding(.bottom)
+                .frame(maxWidth: .infinity)
+                .background(player.color)
+                
                 Spacer()
                 Text("\(points)")
                     .font(.system(size: 200))
                     .fontWeight(.semibold)
                 Spacer()
-                VStack {
+                
+                ZStack() {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.white)
+                        .shadow(radius: 10)
                     HStack {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 65, height: 65)
-                                .foregroundStyle(Color.white)
-                                .shadow(radius: 10)
-                            Text("\(player.points)")
-                                .font(.largeTitle)
-                                .fontWeight(.semibold)
-                        }
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 65)
-                                .foregroundStyle(player.color)
-                                .shadow(radius: 10)
-                            HStack {
-                                ZStack {
-                                    Circle()
-                                        .frame(width: 45, height: 45)
-                                        .foregroundStyle(Color.white)
-                                    Image(systemName: player.icon.rawValue)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 35, height: 35)
-                                        .foregroundStyle(player.color)
-                                    Image(systemName: player.icon.rawValue)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 35, height: 35)
-                                        .foregroundStyle(.black.opacity(0.3))
-                                }
-                                Spacer()
-                                Text(player.name)
-                                    .font(.largeTitle)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(Color.white)
-                                Spacer()
-                            }
-                            .padding()
-                        }
+                        Image(systemName: "flag.2.crossed.fill")
+                            .foregroundStyle(.black, .red)
+                            .font(.system(size: 40))
+                            .fontWeight(.black)
+                        Text("Start")
+                            .font(.system(size: 50))
+                            .fontWeight(.black)
+                            .padding(.trailing)
                     }
-                    .padding([.horizontal, .bottom])
+                }
+                .frame(height: 80)
+                .padding()
+                .onTapGesture {
+                    startCountdown = true
                 }
             }
             
-//            if points == 0 {
+            if points == 0 {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .foregroundStyle(.white)
@@ -85,13 +87,20 @@ struct TakeView: View {
                 .frame(height: 80)
                 .padding()
                 .onTapGesture {
-                    changePhaseAction()
+                    takeAction()
+                    player.pointsTake = 0
                 }
-//            }
+            }
+        }
+        .onReceive(timer) { time in
+            if startCountdown && points > 0  {
+                points -= 1
+            }
         }
     }
 }
 
 #Preview {
-    TakeView(points: 10, player: Player.test1) {}
+    @State var player = Player.take
+    return TakeView(player: $player, points: player.pointsTake) {}
 }

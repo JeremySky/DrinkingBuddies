@@ -8,26 +8,22 @@
 import Foundation
 
 actor PlayerQueue: ObservableObject {
-    var queue: [String]
+    private var players: [String]
+    private var queue: [String]
     
     init(players: [Player]) {
-        self.queue = players.map( {$0.name} )
+        let players = players.map( {$0.name} )
+        self.players = players
+        self.queue = players
     }
     
-    func peekCurrent() -> String {
+    func peek() -> String {
         queue[0]
-    }
-    func peekNext() -> String {
-        queue[1]
     }
     func dequeue() {
         queue.removeFirst()
     }
-    func enqueue(_ player: String) {
-        queue.append(player)
-    }
-    func rotateQueue() {
-        enqueue(queue[0])
-        dequeue()
+    func reset() {
+        queue = players
     }
 }

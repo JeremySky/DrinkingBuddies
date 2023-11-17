@@ -13,8 +13,9 @@ struct Player {
     let name: String
     let icon: CharacterIcon
     let color: Color
-    var points: Int = 0
     var hand: [Card]
+    var pointsGive: Int = 0
+    var pointsTake: Int = 0
 }
 
 
@@ -39,8 +40,9 @@ extension Player: Hashable, Equatable {
             lhs.name == rhs.name &&
             lhs.icon == rhs.icon &&
             lhs.color == rhs.color &&
-            lhs.points == rhs.points &&
-            lhs.hand == rhs.hand
+            lhs.hand == rhs.hand &&
+            lhs.pointsGive == rhs.pointsGive &&
+            lhs.pointsTake == rhs.pointsTake
         )
     }
     
@@ -48,8 +50,9 @@ extension Player: Hashable, Equatable {
         hasher.combine(name)
         hasher.combine(icon)
         hasher.combine(color)
-        hasher.combine(points)
         hasher.combine(hand)
+        hasher.combine(pointsGive)
+        hasher.combine(pointsTake)
     }
     
 }
@@ -62,4 +65,8 @@ extension Player {
     static var test4 = Player(name: "Trevor", icon: .skateboard, color: .black, hand: Card.testHandArray4)
     
     static var testArr = [test1, test2, test3, test4]
+    
+    static var take = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsTake: 5)
+    
+    static var give = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsGive: 9)
 }

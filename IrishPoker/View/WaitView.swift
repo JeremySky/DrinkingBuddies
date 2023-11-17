@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct WaitView: View {
-    @Binding var currentPlayer: Player
-    @Binding var players: [Player]
+    @EnvironmentObject var game: GameViewModel
     @State var selected: Selection?
     
     var body: some View {
@@ -20,13 +19,13 @@ struct WaitView: View {
                     ZStack {
                         Circle()
                             .fill(.white)
-                        Image(systemName: currentPlayer.icon.rawValue)
+                        Image(systemName: game.currentPlayer.icon.rawValue)
                             .resizable()
                             .scaledToFit()
                             .fontWeight(.heavy)
-                            .foregroundStyle(currentPlayer.color)
+                            .foregroundStyle(game.currentPlayer.color)
                             .padding()
-                        Image(systemName: currentPlayer.icon.rawValue)
+                        Image(systemName: game.currentPlayer.icon.rawValue)
                             .resizable()
                             .scaledToFit()
                             .fontWeight(.heavy)
@@ -34,14 +33,14 @@ struct WaitView: View {
                             .padding()
                     }
                     .frame(width: 100, height: 100)
-                    Text("\(currentPlayer.name)'s Turn")
+                    Text("\(game.currentPlayer.name)'s Turn")
                         .font(.largeTitle)
                         .fontWeight(.heavy)
                         .foregroundStyle(.white)
                 }
                 .padding(.bottom)
                 .frame(maxWidth: .infinity)
-                .background(currentPlayer.color)
+                .background(game.currentPlayer.color)
             }
             
             
@@ -49,8 +48,8 @@ struct WaitView: View {
             ScrollView {
                 Spacer()
                     .frame(height: 10)
-                ForEach(players.indices, id: \.self) { i in
-                    PlayerShowHandButton(player: $players[i], highlightPlayer: true)
+                ForEach($game.players.indices, id: \.self) { i in
+                    PlayerOverview(player: $game.players[i], highlightPlayer: true)
                         .padding(.horizontal)
                 }
             }
@@ -66,9 +65,9 @@ struct WaitView: View {
 
 
 //MARK: -- PlayerShowHandButton struct
-struct PlayerShowHandButton: View {
+struct PlayerOverview: View {
     @Binding var player: Player
-    @State var showHand: Bool = false
+    @State var showHand: Bool = true
     var highlightPlayer: Bool
     
     
@@ -149,5 +148,6 @@ struct PlayerShowHandButton: View {
 #Preview {
     @State var players = [Player.test1, Player.test2, Player.test3, Player.test4]
     @State var currentPlayer = Player.test1
-    return WaitView(currentPlayer: $currentPlayer, players: $players)
+    return WaitView()
+        .environmentObject(GameViewModel.preview)
 }

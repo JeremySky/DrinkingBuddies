@@ -15,7 +15,6 @@
 		6242614F2B0144F5001C5410 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242614E2B0144F5001C5410 /* Deck.swift */; };
 		627C61722B0429B500DE56A4 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627C61712B0429B500DE56A4 /* Card.swift */; };
 		627C61742B042A7500DE56A4 /* MiniCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627C61732B042A7500DE56A4 /* MiniCard.swift */; };
-		627C61762B042DCB00DE56A4 /* CardViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627C61752B042DCA00DE56A4 /* CardViewHelper.swift */; };
 		627C61782B048F1A00DE56A4 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627C61772B048F1A00DE56A4 /* GameView.swift */; };
 		627C617F2B05877D00DE56A4 /* PlayerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627C617E2B05877D00DE56A4 /* PlayerQueue.swift */; };
 		627C61812B05878F00DE56A4 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627C61802B05878F00DE56A4 /* Game.swift */; };
@@ -37,7 +36,6 @@
 		6242614E2B0144F5001C5410 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		627C61712B0429B500DE56A4 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		627C61732B042A7500DE56A4 /* MiniCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniCard.swift; sourceTree = "<group>"; };
-		627C61752B042DCA00DE56A4 /* CardViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewHelper.swift; sourceTree = "<group>"; };
 		627C61772B048F1A00DE56A4 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		627C617E2B05877D00DE56A4 /* PlayerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerQueue.swift; sourceTree = "<group>"; };
 		627C61802B05878F00DE56A4 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 			children = (
 				6242614C2B0003A4001C5410 /* BigCard.swift */,
 				627C61732B042A7500DE56A4 /* MiniCard.swift */,
-				627C61752B042DCA00DE56A4 /* CardViewHelper.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -217,7 +214,6 @@
 				6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */,
 				62FECDB12B03004400F13854 /* PlayerView.swift in Sources */,
 				627C617F2B05877D00DE56A4 /* PlayerQueue.swift in Sources */,
-				627C61762B042DCB00DE56A4 /* CardViewHelper.swift in Sources */,
 				627C61722B0429B500DE56A4 /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

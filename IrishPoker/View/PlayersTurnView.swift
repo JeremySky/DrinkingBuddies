@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlayersTurnView: View {
-    //1. Purley for UI setup/changes
+    //1. Purely for UI setup/changes
     //NEW INSTANCE OF THE PASSED DOWN REFERENCE PLAYER
     @Binding var player: Player
     let question: Question
@@ -28,7 +28,6 @@ struct PlayersTurnView: View {
     //disabled after flip
     @State var cardIsFlippable = false
     @State var disableButtons = false
-    
     
     
     //MARK: -- check answer
@@ -92,6 +91,7 @@ struct PlayersTurnView: View {
             result = selectedAnswer == correctAnswer
         }
     }
+    
     
     
     //MARK: -- BODY
@@ -169,55 +169,26 @@ struct PlayersTurnView: View {
         }
     }
 }
+
 #Preview {
-    return PlayersTurnView(player: .constant(Player.test1), question: .one) { isCorrect in
+    PlayersTurnView(player: .constant(Player.test1), question: .one) { isCorrect in
         if isCorrect {
             print("Correct")
         } else {
             print("WRONG")
         }
     }
+    .environmentObject(GameViewModel.preview)
 }
 
-
-
-
-
-//#Preview {
-//    PlayersTurnView(player: Player.test1, card: Card(value: .ace, suit: .hearts), question: .one , nextPhaseAction: {_ in })
-//}
-
-//#Preview {
-//    PlayerHandView(hand: [
-//        PlayingCard(value: .ace, suit: .hearts),
-//        PlayingCard(value: .eight, suit: .clubs),
-//        PlayingCard(value: .king, suit: .diamonds),
-//        PlayingCard(value: .ten, suit: .spades)
-//    ], question: .constant(.two), cardSelection: .constant(.two), changePhaseAction: {})
-//}
-//#Preview {
-//    PlayerHandView(hand: [
-//        PlayingCard(value: .ace, suit: .hearts),
-//        PlayingCard(value: .eight, suit: .clubs),
-//        PlayingCard(value: .king, suit: .diamonds),
-//        PlayingCard(value: .ten, suit: .spades)
-//    ], question: .constant(.three), cardSelection: .constant(.three), changePhaseAction: {})
-//}
-//#Preview {
-//    PlayerHandView(hand: [
-//        PlayingCard(value: .ace, suit: .hearts),
-//        PlayingCard(value: .eight, suit: .clubs),
-//        PlayingCard(value: .king, suit: .diamonds),
-//        PlayingCard(value: .ten, suit: .spades)
-//    ], question: .constant(.four), cardSelection: .constant(.four), changePhaseAction: {})
-//}
 
 
 struct AnswerButton: View {
     let question: Question
     @Binding var choiceSelection: ChoiceSelection?
     @Binding var disable: Bool
-    let tapAction: () -> Void
+    typealias TapAction = () -> Void
+    let completionHandler: TapAction
     
     var body: some View {
         //MARK: -- BUTTONS
@@ -227,7 +198,7 @@ struct AnswerButton: View {
                 Button(action: {
                     choiceSelection = choiceSelection == .one ? nil : .one
                     //                    print("[AnswerButton] \(String(describing: choiceSelection))")
-                    tapAction()
+                    completionHandler()
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -249,7 +220,7 @@ struct AnswerButton: View {
                 Button(action: {
                     choiceSelection = choiceSelection == .two ? nil : .two
                     //                    print("[AnswerButton] \(String(describing: choiceSelection))")
-                    tapAction()
+                    completionHandler()
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
