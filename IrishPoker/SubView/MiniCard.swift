@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MiniCardFront: View {
     let card: Card
-    let playerColor: Color
+    var playerColor: Color? = nil
     var body: some View {
         ZStack {
             ZStack {
@@ -32,7 +32,7 @@ struct MiniCardFront: View {
 }
 
 struct MiniCardBack: View {
-    let playerColor: Color
+    var playerColor: Color?
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)

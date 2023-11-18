@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		622373AF2B084C94006990DD /* AnswerButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622373AE2B084C94006990DD /* AnswerButtons.swift */; };
 		6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242613E2B000387001C5410 /* IrishPokerApp.swift */; };
 		624261412B000387001C5410 /* PlayersTurnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624261402B000387001C5410 /* PlayersTurnView.swift */; };
 		624261432B000389001C5410 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 624261422B000389001C5410 /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		622373AE2B084C94006990DD /* AnswerButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerButtons.swift; sourceTree = "<group>"; };
 		6242613B2B000387001C5410 /* IrishPoker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IrishPoker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6242613E2B000387001C5410 /* IrishPokerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrishPokerApp.swift; sourceTree = "<group>"; };
 		624261402B000387001C5410 /* PlayersTurnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersTurnView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			children = (
 				6242614C2B0003A4001C5410 /* BigCard.swift */,
 				627C61732B042A7500DE56A4 /* MiniCard.swift */,
+				622373AE2B084C94006990DD /* AnswerButtons.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				627C61742B042A7500DE56A4 /* MiniCard.swift in Sources */,
 				627C61782B048F1A00DE56A4 /* GameView.swift in Sources */,
 				62FECDAF2B02A08600F13854 /* Player.swift in Sources */,
+				622373AF2B084C94006990DD /* AnswerButtons.swift in Sources */,
 				62FECDB52B0344FB00F13854 /* GiveTakeView.swift in Sources */,
 				62FECDB72B034FF200F13854 /* WaitView.swift in Sources */,
 				6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */,

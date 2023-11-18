@@ -12,6 +12,7 @@ struct GiveView: View {
     @State var points: Int
     @State var players: [Player]
     var giveAction: ([Player]) -> Void
+    @State var disableButtons: Bool = false
     
     func givePoints(to player: inout Player) {
         player.pointsToTake += 1
@@ -39,67 +40,75 @@ struct GiveView: View {
                                     .font(.largeTitle)
                                     .fontWeight(.semibold)
                             }
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(height: 65)
-                                    .foregroundStyle(players[i].color)
-                                    .shadow(radius: 10)
-                                HStack {
-                                    ZStack {
-                                        Circle()
-                                            .frame(width: 45, height: 45)
-                                            .foregroundStyle(Color.white)
-                                        Image(systemName: players[i].icon.rawValue)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35, height: 35)
-                                            .foregroundStyle(players[i].color)
-                                        Image(systemName: players[i].icon.rawValue)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35, height: 35)
-                                            .foregroundStyle(.black.opacity(0.3))
-                                    }
-                                    Spacer()
-                                    Text(players[i].name)
-                                        .font(.largeTitle)
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(Color.white)
-                                    Spacer()
-                                }
-                                .padding()
-                            }
-                            .onTapGesture {
+                            
+                            Button {
                                 if points > 0 {
                                     givePoints(to: &players[i])
                                 }
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(height: 65)
+                                        .foregroundStyle(players[i].color)
+                                        .shadow(radius: 10)
+                                    HStack {
+                                        ZStack {
+                                            Circle()
+                                                .frame(width: 45, height: 45)
+                                                .foregroundStyle(Color.white)
+                                            Image(systemName: players[i].icon.rawValue)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35, height: 35)
+                                                .foregroundStyle(players[i].color)
+                                            Image(systemName: players[i].icon.rawValue)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35, height: 35)
+                                                .foregroundStyle(.black.opacity(0.3))
+                                        }
+                                        Spacer()
+                                        Text(players[i].name)
+                                            .font(.largeTitle)
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(Color.white)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                }
                             }
+                            .disabled(disableButtons)
                         }
                     }
+                    .padding([.horizontal, .bottom])
                 }
-                .padding([.horizontal, .bottom])
             }
             
             if points == 0 {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.white)
-                        .shadow(radius: 10)
-                    HStack {
-                        Image(systemName: "arrow.right")
-                            .foregroundStyle(.blue)
-                            .font(.system(size: 60))
-                            .fontWeight(.black)
-                        Text("NEXT")
-                            .font(.system(size: 50))
-                            .fontWeight(.black)
-                            .offset(x: -12)
-                    }
-                }
-                .frame(height: 80)
-                .padding()
-                .onTapGesture {
+                Button {
                     giveAction(players)
+                } label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.white)
+                            .shadow(radius: 10)
+                        HStack {
+                            Image(systemName: "arrow.right")
+                                .foregroundStyle(.blue)
+                                .font(.system(size: 60))
+                                .fontWeight(.black)
+                            Text("NEXT")
+                                .font(.system(size: 50))
+                                .fontWeight(.black)
+                                .offset(x: -12)
+                        }
+                    }
+                    .frame(height: 80)
+                    .foregroundStyle(Color.primary)
+                    .padding()
+                    .onAppear {
+                        disableButtons = true
+                    }
                 }
             }
         }

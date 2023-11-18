@@ -6,41 +6,20 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Game {
     let id = UUID()
     var deck = Deck()
     var players: [Player]
-    var queue: PlayerQueue
     var phase: GamePhase = .guessing
     var question: Question = .one
-    var currentPlayer: Player
-    
-    
-    func getPlayer(using name: String) async -> Player {
-        var returnPlayer: Player? = nil
-        for player in players {
-            if player.name == name {
-                returnPlayer = player
-            }
-        }
-        guard let returnPlayer else {
-            await resetQueue()
-            return await getPlayer(using: name)
-        }
-        return returnPlayer
-    }
-    func nextPlayer() async {
-        await queue.dequeue()
-    }
-    func resetQueue() async {
-        await queue.reset()
-    }
 }
 
 enum GamePhase {
     case guessing
     case giveTake
+    case end
 }
 
 enum Question: String, RawRepresentable {
@@ -61,17 +40,17 @@ enum Question: String, RawRepresentable {
             4
         }
     }
-}
-
-
-enum GiveOrTake {
-    case give, take
-}
-
-
-enum PlayerStage {
-    case guessing
-    case pointDistribution
-    case wait
-    case end
+    
+    var answers: [String] {
+        switch self {
+        case .one:
+            ["Red", "Black"]
+        case .two:
+            ["arrowshape.up.circle", "arrowshape.down.circle", "equal.circle"]
+        case .three:
+            ["arrow.up.right.and.arrow.down.left.circle", "arrow.down.left.and.arrow.up.right.circle", "equal.circle"]
+        case .four:
+            [CardSuit.hearts.icon, CardSuit.clubs.icon, CardSuit.diamonds.icon, CardSuit.spades.icon]
+        }
+    }
 }

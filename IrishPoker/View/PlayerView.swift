@@ -11,76 +11,57 @@ struct PlayerView: View {
     @EnvironmentObject var game: GameViewModel
     @Binding var player: Player
     
-    @State var playerStage: PlayerStage = .wait
-    @State var playerGiveOrTake: GiveOrTake = .give
-    @State var pointsToPass: Int = 0
-    @State var restrictGoingBack = false
-    
-    func playerGives(_ points: Int) {
-        pointsToPass = points
-        playerGiveOrTake = .give
-        playerStage = .pointDistribution
-    }
-    
-    func playerTakes(_ points: Int) {
-        pointsToPass = points
-        playerGiveOrTake = .take
-        playerStage = .pointDistribution
-    }
-    
     var body: some View {
         ZStack {
-            switch playerStage {
-            case .guessing:
-                switch game.phase {
-                case .guessing:
-                    PlayersTurnView(player: $player, question: game.question) { isCorrect, points in
-                        isCorrect ? playerGives(points) : playerTakes(points)
-                        playerStage = .pointDistribution
-                        restrictGoingBack = true
-                        game.endPlayersTurn()
+            switch player.stage {
+            case .guess:
+                PlayersTurnView(player: $player, question: $game.question) { isCorrect, points in
+                    if isCorrect {
+                        player.pointsToGive = points
+                        player.stage = .give
+                    } else {
+                        game.updateCurrentPlayer()
+                        game.updateQuestion()
+                        player.pointsToTake = points
+                        player.stage = .take
                     }
-                case .giveTake:
-                    GiveTakeView(cards: .constant((one: Card.test1, two: Card.test2)))
                 }
-            case .pointDistribution:
-                switch playerGiveOrTake {
-                case .give:
-                    GiveView(player: $player, points: pointsToPass, players: game.players){ updatedPlayers in
-                        game.players = updatedPlayers
-                        if player.pointsToTake == 0 {
-                            playerStage = .wait
-                        } else {
-                            playerTakes(player.pointsToTake)
-                        }
+            case .give:
+                GiveView(player: $player, points: player.pointsToGive, players: game.players) { updatedPlayers in
+                    game.players = updatedPlayers
+                    game.updateCurrentPlayer()
+                    game.updateQuestion()
+                    if player.pointsToTake > 0 {
+                        player.stage = .take
+                    } else {
+                        player.stage = .wait
                     }
-                case .take:
-                    TakeView(player: $player, countdown: pointsToPass, points: pointsToPass) {
-                        restrictGoingBack = false
-                        playerStage = .wait
+                }
+            case .take:
+                TakeView(player: $player, countdown: player.pointsToTake, points: player.pointsToTake) {
+                    if player == game.currentPlayer {
+                        player.stage = .guess
+                    } else {
+                        player.stage = .wait
                     }
                 }
             case .wait:
-                WaitView()
-                    .onAppear {
-                        if !restrictGoingBack {
-                            if game.currentPlayer == player {
-                                playerStage = .guessing
-                            }
-                        }
-                    }
+                WaitView(player: $player)
+                    .environmentObject(game)
             case .end:
                 switch game.phase {
                 case .guessing:
-                    WaitView()
+                    Text("END GUESSING PHASE")
                 case .giveTake:
-                    Text("END OF GAME")
+                    Text("END GIVE TAKE PHASE")
+                case .end:
+                    Text("END GAME")
                 }
             }
         }
         .onAppear {
             if player.pointsToTake > 0 {
-                playerTakes(player.pointsToTake)
+                player.stage = .take
             }
         }
     }
@@ -89,6 +70,7 @@ struct PlayerView: View {
 
 #Preview {
     @State var player = Player.test1
+    @State var playerStage = PlayerStage.wait
     return PlayerView(player: $player)
         .environmentObject(GameViewModel.preview)
 }

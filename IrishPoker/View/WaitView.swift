@@ -9,39 +9,38 @@ import SwiftUI
 
 struct WaitView: View {
     @EnvironmentObject var game: GameViewModel
+    @Binding var player: Player
     @State var selected: Selection?
     
     var body: some View {
         VStack {
-            ZStack(alignment: .top) {
-                //MARK: -- TITLE
-                HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.white)
-                        Image(systemName: game.currentPlayer.icon.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .fontWeight(.heavy)
-                            .foregroundStyle(game.currentPlayer.color)
-                            .padding()
-                        Image(systemName: game.currentPlayer.icon.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .fontWeight(.heavy)
-                            .foregroundStyle(.black.opacity(0.3))
-                            .padding()
-                    }
-                    .frame(width: 100, height: 100)
-                    Text("\(game.currentPlayer.name)'s Turn")
-                        .font(.largeTitle)
+            //MARK: -- TITLE
+            HStack {
+                ZStack {
+                    Circle()
+                        .fill(.white)
+                    Image(systemName: game.currentPlayer.icon.rawValue)
+                        .resizable()
+                        .scaledToFit()
                         .fontWeight(.heavy)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(game.currentPlayer.color)
+                        .padding()
+                    Image(systemName: game.currentPlayer.icon.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .fontWeight(.heavy)
+                        .foregroundStyle(.black.opacity(0.3))
+                        .padding()
                 }
-                .padding(.bottom)
-                .frame(maxWidth: .infinity)
-                .background(game.currentPlayer.color)
+                .frame(width: 100, height: 100)
+                Text("\(game.currentPlayer.name)'s Turn")
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
+                    .foregroundStyle(.white)
             }
+            .padding(.bottom)
+            .frame(maxWidth: .infinity)
+            .background(game.currentPlayer.color)
             
             
             //MARK: -- BODY
@@ -54,8 +53,12 @@ struct WaitView: View {
                 }
             }
         }
+        .onAppear {
+            if player.id == game.currentPlayer.id {
+                player.stage = .guess
+            }
+        }
     }
-    
     enum Selection {
         case one, two, three, four
     }
@@ -146,8 +149,7 @@ struct PlayerOverview: View {
 
 //MARK: -- PREVIEWS
 #Preview {
-    @State var players = [Player.test1, Player.test2, Player.test3, Player.test4]
-    @State var currentPlayer = Player.test1
-    return WaitView()
+    @State var player = Player.test1
+    return WaitView(player: $player)
         .environmentObject(GameViewModel.preview)
 }

@@ -12,10 +12,15 @@ import SwiftUI
 @dynamicMemberLookup
 class GameViewModel: ObservableObject {
     @Published var game: Game
+    @Published var currentPlayer: Player
+    @Published var waitingRoom: [Player]
     
     init(players: [Player]) {
-        let shuffledPlayers = players.shuffled()
-        self.game = Game(players: shuffledPlayers, queue: PlayerQueue(players: shuffledPlayers), currentPlayer: shuffledPlayers[0])
+        var shuffledPlayers = players.shuffled()
+        shuffledPlayers[0].stage = .guess
+        self.game = Game(players: shuffledPlayers)
+        self.currentPlayer = shuffledPlayers[0]
+        self.waitingRoom = shuffledPlayers
     }
     
     subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
@@ -24,11 +29,25 @@ class GameViewModel: ObservableObject {
     }
     
     
-    func endPlayersTurn() {
-        Task {
-            await game.nextPlayer()
-            await game.currentPlayer = game.getPlayer(using: await game.queue.peek())
+    func updateQuestion() {
+        if waitingRoom[0].id == game.players[0].id {
+            switch game.question {
+            case .one:
+                game.question = .two
+            case .two:
+                game.question = .three
+            case .three:
+                game.question = .four
+            case .four:
+                game.phase = .giveTake
+            }
         }
+    }
+    
+    func updateCurrentPlayer() {
+        waitingRoom.append(currentPlayer)
+        waitingRoom.removeFirst()
+        currentPlayer = waitingRoom[0]
     }
 }
 

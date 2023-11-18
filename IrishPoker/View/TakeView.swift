@@ -9,23 +9,28 @@ import SwiftUI
 import Combine
 
 struct TakeView: View {
+    @EnvironmentObject var game: GameViewModel
     @Binding var player: Player
     @State var countdown: Int
     @State var points: Int
-    var takeAction: () -> Void
+    var endTakeAction: () -> Void
     
     @State var countdownHasStarted: Bool = false
     @State var timerSubscription: Cancellable? = nil
-    @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
+    @State private var timer = Timer.publish(every: 0.3, on: .main, in: .common)
+    
+    @State var disableButton = false
     
     func startCountdown() {
+        disableButton = true
         countdownHasStarted = true
         timerSubscription = timer.connect()
     }
     
     func takeAgain() {
+        disableButton = false
         countdownHasStarted = false
-        timer = Timer.publish(every: 1, on: .main, in: .common)
+        timer = Timer.publish(every: 0.3, on: .main, in: .common)
         countdown = player.pointsToTake
         points = player.pointsToTake
     }
@@ -61,55 +66,60 @@ struct TakeView: View {
                     .fontWeight(.semibold)
                 Spacer()
                 
-                ZStack() {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.white)
-                        .shadow(radius: 10)
-                    HStack {
-                        Image(systemName: "flag.2.crossed.fill")
-                            .foregroundStyle(.black, .red)
-                            .font(.system(size: 40))
-                            .fontWeight(.black)
-                        Text("Start")
-                            .font(.system(size: 50))
-                            .fontWeight(.black)
-                            .padding(.trailing)
-                    }
-                }
-                .frame(height: 80)
-                .padding()
-                .onTapGesture {
+                Button {
                     if !countdownHasStarted {
                         startCountdown()
                     }
+                } label: {
+                    ZStack() {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.white)
+                            .shadow(radius: 10)
+                        HStack {
+                            Image(systemName: "flag.2.crossed.fill")
+                                .foregroundStyle(.black, .red)
+                                .font(.system(size: 40))
+                                .fontWeight(.black)
+                            Text("Start")
+                                .font(.system(size: 50))
+                                .fontWeight(.black)
+                                .padding(.trailing)
+                        }
+                    }
+                    .frame(height: 80)
+                    .foregroundStyle(Color.primary)
+                    .padding()
                 }
+                .disabled(disableButton)
             }
             
             if countdown == 0 {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.white)
-                        .shadow(radius: 10)
-                    HStack {
-                        Image(systemName: "arrow.right")
-                            .foregroundStyle(.blue)
-                            .font(.system(size: 60))
-                            .fontWeight(.black)
-                        Text("NEXT")
-                            .font(.system(size: 50))
-                            .fontWeight(.black)
-                            .offset(x: -12)
-                    }
-                }
-                .frame(height: 80)
-                .padding()
-                .onTapGesture {
+                Button {
                     player.pointsToTake -= points
                     if player.pointsToTake == 0 {
-                        takeAction()
+                        endTakeAction()
                     } else {
                         takeAgain()
                     }
+                } label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.white)
+                            .shadow(radius: 10)
+                        HStack {
+                            Image(systemName: "arrow.right")
+                                .foregroundStyle(.blue)
+                                .font(.system(size: 60))
+                                .fontWeight(.black)
+                            Text("NEXT")
+                                .font(.system(size: 50))
+                                .fontWeight(.black)
+                                .offset(x: -12)
+                        }
+                    }
+                    .frame(height: 80)
+                    .foregroundStyle(Color.primary)
+                    .padding()
                 }
             }
         }
@@ -127,4 +137,5 @@ struct TakeView: View {
     @State var player = Player.take
     @State var points = Player.take.pointsToTake
     return TakeView(player: $player, countdown: points, points: points) {}
+        .environmentObject(GameViewModel.preview)
 }

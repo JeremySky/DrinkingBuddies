@@ -12,8 +12,7 @@ import SwiftUI
 struct BigCard: View {
     @Binding var card: Card
     @Binding var tappable: Bool
-    typealias TapAction = () -> Void
-    let completionHandler: TapAction
+    let flipCardAction: () -> Void
     
     
     
@@ -26,16 +25,13 @@ struct BigCard: View {
     let durationAndDelay: CGFloat = 0.3
     @State var frontDegree: Double = -90.0
     @State var backDegree: Double = 0.0
-    @State var isFlipped: Bool = false
+    @State var cardWasAnimated: Bool = false
     func flipCard() {
-        isFlipped = !isFlipped
-        if isFlipped {
-            withAnimation(.linear(duration: durationAndDelay)) {
-                backDegree = 90.0
-            }
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
-                frontDegree = 0.0
-            }
+        withAnimation(.linear(duration: durationAndDelay)) {
+            backDegree = 90.0
+        }
+        withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+            frontDegree = 0.0
         }
     }
     
@@ -49,9 +45,12 @@ struct BigCard: View {
         }
         .onTapGesture {
             if tappable {
-                flipCard()
-                completionHandler()
-                card.isFlipped = true
+                tappable = false
+                if !card.isFlipped {
+                    card.isFlipped = true
+                    flipCard()
+                    flipCardAction()
+                }
             }
         }
     }
@@ -250,7 +249,7 @@ struct CardBack: View {
 //    return BigCard(card: Card(value: .ten, suit: .spades), isTappable: .constant(true), startFaceUp: true)
 //}
 #Preview {
-    return BigCard(card: .constant(Card(value: .jack, suit: .spades)), tappable: .constant(true), completionHandler: { })
+    return BigCard(card: .constant(Card(value: .jack, suit: .spades)), tappable: .constant(true), flipCardAction: { })
 }
 //#Preview {
 //    return BigCard(card: Card(value: .queen, suit: .spades), isTappable: .constant(true), startFaceUp: true)

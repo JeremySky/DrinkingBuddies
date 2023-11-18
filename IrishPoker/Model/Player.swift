@@ -14,6 +14,8 @@ struct Player {
     let icon: CharacterIcon
     let color: Color
     var hand: [Card]
+    
+    var stage: PlayerStage = .wait
     var pointsToGive: Int = 0
     var pointsToTake: Int = 0
 }
@@ -55,6 +57,15 @@ extension Player: Hashable, Equatable {
         hasher.combine(pointsToTake)
     }
     
+}
+
+
+enum PlayerStage {
+    case guess
+    case give
+    case take
+    case wait
+    case end
 }
 
 

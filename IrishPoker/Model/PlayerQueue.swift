@@ -17,13 +17,17 @@ actor PlayerQueue: ObservableObject {
         self.queue = players
     }
     
+    func rotate() {
+        enqueue(player: peek())
+        dequeue()
+    }
     func peek() -> String {
         queue[0]
     }
-    func dequeue() {
+    private func dequeue() {
         queue.removeFirst()
     }
-    func reset() {
-        queue = players
+    private func enqueue(player: String) {
+        queue.append(player)
     }
 }

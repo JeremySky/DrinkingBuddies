@@ -28,6 +28,10 @@ struct Card: Hashable {
         }
     }
     var isFlipped: Bool = false
+    
+    mutating func flip() {
+        isFlipped = true
+    }
 }
 
 enum CardValue: Int, CaseIterable {
@@ -85,8 +89,8 @@ enum CardSuit: String, CaseIterable {
 extension Card {
     static var testHandArray1 = [
         Card(value: .six, suit: .clubs),
-        Card(value: .nine, suit: .hearts),
-        Card(value: .ace, suit: .diamonds),
+        Card(value: .six, suit: .hearts),
+        Card(value: .nine, suit: .diamonds),
         Card(value: .ten, suit: .spades)
     ]
     static var testHandArray2 = [
@@ -99,13 +103,13 @@ extension Card {
         Card(value: .nine, suit: .diamonds),
         Card(value: .eight, suit: .clubs),
         Card(value: .king, suit: .diamonds),
-        Card(value: .nine, suit: .spades)
+        Card(value: .nine, suit: .clubs)
     ]
     static var testHandArray4 = [
         Card(value: .six, suit: .clubs),
         Card(value: .nine, suit: .diamonds),
         Card(value: .seven, suit: .diamonds),
-        Card(value: .queen, suit: .spades)
+        Card(value: .queen, suit: .diamonds)
     ]
     
     static var test1 = Card(value: .ten, suit: .spades)
