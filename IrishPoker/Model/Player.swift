@@ -10,18 +10,34 @@ import SwiftUI
 
 struct Player {
     let id = UUID()
-    let name: String
-    let icon: CharacterIcon
-    let color: Color
+    var name: String
+    var icon: Icon
+    var color: Color
     var hand: [Card]
+    
     
     var stage: PlayerStage = .wait
     var pointsToGive: Int = 0
     var pointsToTake: Int = 0
+    
+    
+    init(name: String, icon: Icon, color: Color, hand: [Card], stage: PlayerStage = .wait, pointsToGive: Int = 0, pointsToTake: Int = 0) {
+        self.name = name
+        self.icon = icon
+        self.color = color
+        self.hand = hand
+        self.stage = stage
+        self.pointsToGive = pointsToGive
+        self.pointsToTake = pointsToTake
+    }
+    
+    init() {
+        self.init(name: "", icon: .clipboard, color: .red, hand: [])
+    }
 }
 
 
-enum CharacterIcon: String, RawRepresentable {
+enum Icon: String, RawRepresentable, CaseIterable {
     case clipboard = "pencil.and.list.clipboard"
     case book = "text.book.closed"
     case gradCap = "graduationcap"
@@ -77,7 +93,7 @@ extension Player {
     
     static var testArr = [test1, test2, test3, test4]
     
-    static var take = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToTake: 5)
+    static var take = Player(name: "Peter", icon: Icon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToTake: 5)
     
-    static var give = Player(name: "Peter", icon: CharacterIcon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToGive: 9)
+    static var give = Player(name: "Peter", icon: Icon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToGive: 9)
 }

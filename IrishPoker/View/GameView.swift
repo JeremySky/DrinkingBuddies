@@ -18,6 +18,7 @@ class GameViewModel: ObservableObject {
     init(players: [Player]) {
         var shuffledPlayers = players.shuffled()
         shuffledPlayers[0].stage = .guess
+        
         self.game = Game(players: shuffledPlayers)
         self.currentPlayer = shuffledPlayers[0]
         self.waitingRoom = shuffledPlayers

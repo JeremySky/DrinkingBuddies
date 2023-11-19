@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+
 struct Deck {
     var pile = [Card]()
     
@@ -23,5 +24,14 @@ struct Deck {
     
     mutating func shuffle() {
         pile.shuffle()
+    }
+}
+
+extension Deck {
+    static func newDeck() -> Deck {
+        var deck = Deck()
+        deck.createNewPile()
+        deck.shuffle()
+        return deck
     }
 }

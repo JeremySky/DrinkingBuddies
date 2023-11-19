@@ -7,24 +7,37 @@
 
 import SwiftUI
 
+extension Color {
+    static var selection: [Color] = [.red, .pink, .orange, .yellow, .green, .mint, .teal, .cyan, .blue, .purple, .indigo, .brown, .gray, .black]
+}
+
 struct CustomColorPicker: View {
     @Binding var selectedColor: Color
-    let colors: [Color] = [.red, .pink, .orange, .yellow, .green, .mint, .teal, .cyan, .blue, .purple, .indigo, .brown, .gray, .black]
-    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(colors, id: \.self) { color in
-                    Circle()
-                        .foregroundColor(color)
-                        .frame(width: 100, height: 100)
+                Spacer()
+                    .frame(width: 10)
+                ForEach(Color.selection, id: \.self) { color in
+                    Button {
+                        selectedColor = color
+                    } label: {
+                        Circle()
+                            .foregroundStyle(color)
+                            .frame(width: selectedColor == color ? 65 : 50, height: 90)
+                            .shadow(color: selectedColor == color ? .yellow : .clear, radius: 10)
+                    }
                 }
+                Spacer()
+                    .frame(width: 10)
             }
         }
     }
 }
 
 #Preview {
-    @State var selectedColor: Color = .black
-    return CustomColorPicker(selectedColor: $selectedColor)
+    @State var selectedColor: Color = .red
+    return VStack {
+        CustomColorPicker(selectedColor: $selectedColor)
+    }
 }

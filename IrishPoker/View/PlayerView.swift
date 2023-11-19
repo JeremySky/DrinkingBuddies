@@ -15,16 +15,20 @@ struct PlayerView: View {
         ZStack {
             switch player.stage {
             case .guess:
-                PlayersTurnView(player: $player, question: $game.question) { isCorrect, points in
-                    if isCorrect {
-                        player.pointsToGive = points
-                        player.stage = .give
-                    } else {
-                        game.updateCurrentPlayer()
-                        game.updateQuestion()
-                        player.pointsToTake = points
-                        player.stage = .take
+                if game.phase == .guessing {
+                    PlayersTurnView(player: $player, question: $game.question) { isCorrect, points in
+                        if isCorrect {
+                            player.pointsToGive = points
+                            player.stage = .give
+                        } else {
+                            game.updateCurrentPlayer()
+                            game.updateQuestion()
+                            player.pointsToTake = points
+                            player.stage = .take
+                        }
                     }
+                } else if game.phase == .giveTake {
+                    GiveTakeView(card1: $game.deck.pile[0], card2: $game.deck.pile[1])
                 }
             case .give:
                 GiveView(player: $player, points: player.pointsToGive, players: game.players) { updatedPlayers in
