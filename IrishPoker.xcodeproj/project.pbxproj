@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		622373AF2B084C94006990DD /* AnswerButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622373AE2B084C94006990DD /* AnswerButtons.swift */; };
-		622373B12B09897F006990DD /* CreatePlayerForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622373B02B09897F006990DD /* CreatePlayerForm.swift */; };
+		622373B12B09897F006990DD /* ModifyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622373B02B09897F006990DD /* ModifyPlayer.swift */; };
 		622373B32B098A53006990DD /* CustomColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622373B22B098A53006990DD /* CustomColorPicker.swift */; };
 		6236A02A2B09ADDB002542E7 /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0292B09ADDB002542E7 /* IconPicker.swift */; };
 		6236A02C2B09AE37002542E7 /* PlayerIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A02B2B09AE37002542E7 /* PlayerIcon.swift */; };
@@ -40,7 +40,7 @@
 
 /* Begin PBXFileReference section */
 		622373AE2B084C94006990DD /* AnswerButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerButtons.swift; sourceTree = "<group>"; };
-		622373B02B09897F006990DD /* CreatePlayerForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlayerForm.swift; sourceTree = "<group>"; };
+		622373B02B09897F006990DD /* ModifyPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyPlayer.swift; sourceTree = "<group>"; };
 		622373B22B098A53006990DD /* CustomColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorPicker.swift; sourceTree = "<group>"; };
 		6236A0292B09ADDB002542E7 /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
 		6236A02B2B09AE37002542E7 /* PlayerIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerIcon.swift; sourceTree = "<group>"; };
@@ -124,16 +124,16 @@
 			children = (
 				6236A0372B0C3D55002542E7 /* MainView.swift */,
 				6236A0312B0C0D32002542E7 /* SetupView.swift */,
-				622373B02B09897F006990DD /* CreatePlayerForm.swift */,
+				622373B02B09897F006990DD /* ModifyPlayer.swift */,
+				6236A03D2B0C4293002542E7 /* WaitingRoomView.swift */,
 				627C61772B048F1A00DE56A4 /* GameView.swift */,
+				6236A03B2B0C41A7002542E7 /* LocalGameView.swift */,
 				62FECDB02B03004400F13854 /* PlayerView.swift */,
 				624261402B000387001C5410 /* PlayersTurnView.swift */,
 				62FECDB62B034FF200F13854 /* WaitView.swift */,
 				62FECDAC2B029E2300F13854 /* GiveView.swift */,
 				62FECDB22B03143800F13854 /* TakeView.swift */,
 				62FECDB42B0344FB00F13854 /* GiveTakeView.swift */,
-				6236A03B2B0C41A7002542E7 /* LocalGameView.swift */,
-				6236A03D2B0C4293002542E7 /* WaitingRoomView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -253,7 +253,7 @@
 				62FECDAF2B02A08600F13854 /* Player.swift in Sources */,
 				6236A02E2B09B2EA002542E7 /* PlayerHeader.swift in Sources */,
 				622373AF2B084C94006990DD /* AnswerButtons.swift in Sources */,
-				622373B12B09897F006990DD /* CreatePlayerForm.swift in Sources */,
+				622373B12B09897F006990DD /* ModifyPlayer.swift in Sources */,
 				62FECDB52B0344FB00F13854 /* GiveTakeView.swift in Sources */,
 				62FECDB72B034FF200F13854 /* WaitView.swift in Sources */,
 				6236A03C2B0C41A7002542E7 /* LocalGameView.swift in Sources */,

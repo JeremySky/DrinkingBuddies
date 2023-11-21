@@ -87,29 +87,54 @@ enum CardSuit: String, CaseIterable {
 
 
 extension Card {
+//    static var testHandArray1 = [
+//        Card(value: .two, suit: .clubs),
+//        Card(value: .three, suit: .hearts),
+//        Card(value: .four, suit: .diamonds),
+//        Card(value: .five, suit: .spades)
+//    ]
+//    static var testHandArray2 = [
+//        Card(value: .five, suit: .clubs),
+//        Card(value: .six, suit: .clubs),
+//        Card(value: .seven, suit: .diamonds),
+//        Card(value: .eight, suit: .hearts)
+//    ]
+//    static var testHandArray3 = [
+//        Card(value: .eight, suit: .diamonds),
+//        Card(value: .nine, suit: .clubs),
+//        Card(value: .ten, suit: .diamonds),
+//        Card(value: .king, suit: .clubs)
+//    ]
+//    static var testHandArray4 = [
+//        Card(value: .king, suit: .clubs),
+//        Card(value: .queen, suit: .diamonds),
+//        Card(value: .jack, suit: .diamonds),
+//        Card(value: .ace, suit: .diamonds)
+//    ]
+    
     static var testHandArray1 = [
-        Card(value: .six, suit: .clubs),
-        Card(value: .six, suit: .hearts),
-        Card(value: .nine, suit: .diamonds),
-        Card(value: .ten, suit: .spades)
+        Card(value: .two, suit: .clubs, isFlipped: true),
+        Card(value: .three, suit: .hearts, isFlipped: true),
+        Card(value: .four, suit: .diamonds, isFlipped: true),
+        Card(value: .five, suit: .spades, isFlipped: true)
     ]
     static var testHandArray2 = [
-        Card(value: .two, suit: .clubs),
-        Card(value: .eight, suit: .clubs),
-        Card(value: .seven, suit: .diamonds),
-        Card(value: .seven, suit: .hearts)
+        Card(value: .five, suit: .clubs, isFlipped: true),
+        Card(value: .six, suit: .clubs, isFlipped: true),
+        Card(value: .seven, suit: .diamonds, isFlipped: true),
+        Card(value: .eight, suit: .hearts, isFlipped: true)
     ]
     static var testHandArray3 = [
-        Card(value: .nine, suit: .diamonds),
-        Card(value: .eight, suit: .clubs),
-        Card(value: .king, suit: .diamonds),
-        Card(value: .nine, suit: .clubs)
+        Card(value: .eight, suit: .diamonds, isFlipped: true),
+        Card(value: .nine, suit: .clubs, isFlipped: true),
+        Card(value: .ten, suit: .diamonds, isFlipped: true),
+        Card(value: .king, suit: .clubs, isFlipped: true)
     ]
     static var testHandArray4 = [
-        Card(value: .six, suit: .clubs),
-        Card(value: .nine, suit: .diamonds),
-        Card(value: .seven, suit: .diamonds),
-        Card(value: .queen, suit: .diamonds)
+        Card(value: .king, suit: .clubs, isFlipped: true),
+        Card(value: .queen, suit: .diamonds, isFlipped: true),
+        Card(value: .jack, suit: .diamonds, isFlipped: true),
+        Card(value: .ace, suit: .diamonds, isFlipped: true)
     ]
     
     static var test1 = Card(value: .ten, suit: .spades)

@@ -7,21 +7,44 @@
 
 import SwiftUI
 
+@MainActor
+class SetupViewModel: ObservableObject {
+    @Published var player: Player = Player()
+    @Published var players: [Player] = []
+    @Published var gameViewSelection: GameViewSelection = .local
+    @Published var deck: Deck = Deck.newDeck()
+    
+    init(player: Player = Player(), players: [Player] = [], gameViewSelection: GameViewSelection = .local, deck: Deck = Deck.newDeck()) {
+        self.player = player
+        self.players = players
+        self.gameViewSelection = gameViewSelection
+        self.deck = deck
+    }
+    
+    func deal() {
+        for i in players.indices {
+            while players[i].hand.count < 4 {
+                players[i].hand.append(deck.pile[0])
+                deck.pile.removeFirst()
+            }
+        }
+    }
+}
+
 struct MainView: View {
+    @State var settings: SetupViewModel
     @State var selection: AppViewSelection = .setup
-    @State var players: [Player]?
-    @State var gameViewSelection: GameViewSelection = .local
+    
     var body: some View {
         switch selection {
         case .setup:
-            SetupView(selection: .welcome, gameViewSelection: $gameViewSelection) { players in
-                self.players = players
+            SetupView() {
+                settings.deal()
                 selection = .game
             }
+            .environmentObject(settings)
         case .game:
-            if let players {
-                GameView(game: GameViewModel(players: players), selection: gameViewSelection)
-            }
+            GameView(game: GameViewModel(players: settings.players), selection: settings.gameViewSelection)
         }
     }
     
@@ -32,5 +55,12 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    MainView(settings: SetupViewModel())
+}
+
+//for user defaults
+struct User: Codable {
+    let name: String
+    let icon: IconSelection
+    let color: ColorSelection
 }

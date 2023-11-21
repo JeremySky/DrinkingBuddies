@@ -50,6 +50,30 @@ class GameViewModel: ObservableObject {
         waitingRoom.removeFirst()
         currentPlayer = waitingRoom[0]
     }
+    
+    func checkForGive(_ card: Card) {
+        for playerIndex in game.players.indices {
+            for cardIndex in game.players[playerIndex].hand.indices {
+                if game.players[playerIndex].hand[cardIndex].value == card.value {
+                    game.players[playerIndex].pointsToGive += card.value.rawValue
+                }
+            }
+        }
+    }
+    func checkForTake(_ card: Card) {
+        for playerIndex in game.players.indices {
+            for cardIndex in game.players[playerIndex].hand.indices {
+                if game.players[playerIndex].hand[cardIndex].value == card.value {
+                    game.players[playerIndex].pointsToTake += card.value.rawValue
+                }
+            }
+        }
+    }
+    
+    func dequeuePairOfCards() {
+        game.deck.pile.removeFirst()
+        game.deck.pile.removeFirst()
+    }
 }
 
 

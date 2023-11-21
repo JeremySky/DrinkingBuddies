@@ -1,5 +1,5 @@
 //
-//  CreatePlayerForm.swift
+//  ModifyPlayer.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/18/23.

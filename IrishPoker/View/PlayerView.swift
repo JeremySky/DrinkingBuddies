@@ -28,17 +28,23 @@ struct PlayerView: View {
                         }
                     }
                 } else if game.phase == .giveTake {
-                    GiveTakeView(card1: $game.deck.pile[0], card2: $game.deck.pile[1])
+                    GiveTakeView(player: $player)
                 }
             case .give:
-                GiveView(player: $player, points: player.pointsToGive, players: game.players) { updatedPlayers in
-                    game.players = updatedPlayers
-                    game.updateCurrentPlayer()
-                    game.updateQuestion()
+                GiveView(player: $player, points: player.pointsToGive, temporaryPlayers: game.players.map({$0.copyAndRemovePointsToTake()})) { temporaryPlayersWithPointsToAdd in
+                    addPointsToPlayers(from: temporaryPlayersWithPointsToAdd)
+                    if game.phase == .guessing {
+                        game.updateCurrentPlayer()
+                        game.updateQuestion()
+                    }
                     if player.pointsToTake > 0 {
                         player.stage = .take
                     } else {
                         player.stage = .wait
+                        if game.phase == .giveTake && player == game.currentPlayer {
+                            game.dequeuePairOfCards()
+                            game.updateCurrentPlayer()
+                        }
                     }
                 }
             case .take:
@@ -46,6 +52,10 @@ struct PlayerView: View {
                     if player == game.currentPlayer {
                         player.stage = .guess
                     } else {
+                        if game.phase == .giveTake && player == game.currentPlayer {
+                            game.dequeuePairOfCards()
+                            game.updateCurrentPlayer()
+                        }
                         player.stage = .wait
                     }
                 }
@@ -64,8 +74,30 @@ struct PlayerView: View {
             }
         }
         .onAppear {
-            if player.pointsToTake > 0 {
-                player.stage = .take
+            if game.phase == .guessing {
+                if player.pointsToTake > 0 {
+                   player.stage = .take
+               }
+            } else if game.phase == .giveTake {
+                if player != game.currentPlayer {
+                    if player.pointsToGive > 0 {
+                        player.stage = .give
+                    } else if player.pointsToTake > 0 {
+                        player.stage = .take
+                    }
+                }
+            }
+        }
+    }
+    
+    func addPointsToPlayers(from players: [Player]) {
+        for temporaryPlayer in players {
+            if temporaryPlayer.pointsToTake > 0 {
+                for i in game.players.indices {
+                    if temporaryPlayer.id == game.players[i].id {
+                        game.players[i].pointsToTake += temporaryPlayer.pointsToTake
+                    }
+                }
             }
         }
     }

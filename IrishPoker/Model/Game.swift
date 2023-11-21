@@ -12,7 +12,7 @@ struct Game {
     let id = UUID()
     var deck: Deck = Deck.newDeck()
     var players: [Player]
-    var phase: GamePhase = .guessing
+    var phase: GamePhase = .giveTake
     var question: Question = .one
 }
 

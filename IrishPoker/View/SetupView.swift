@@ -7,40 +7,20 @@
 
 import SwiftUI
 
-struct User: Codable {
-    let name: String
-    let icon: IconSelection
-    let color: ColorSelection
-}
 
 struct SetupView: View {
-    @State var selection: SetUp
-    @State var player: Player = Player()
-    @Binding var gameViewSelection: GameViewSelection
-    var startGameAction: ([Player]) -> Void
+    @EnvironmentObject var settings: SetupViewModel
+    @State var selection: SetUpSelection = .player
+    var startGameAction: () -> Void
     
-    @AppStorage("user")
-    private var userData: Data = Data()
     
+    @AppStorage("user") private var userData: Data = Data()
     var body: some View {
         ZStack {
             switch selection {
-            case .welcome:
-                ZStack {
-                    WelcomeCard {
-                        delay(1.3) {
-                            guard let user = try? JSONDecoder().decode(User.self, from: userData) else {
-                                selection = .player
-                                return
-                            }
-                            player = Player(name: user.name, icon: user.icon, color: user.color.value, hand: [])
-                            selection = .main
-                        }
-                    }
-                }
             case .main:
                 VStack {
-                    PlayerHeader(player: $player)
+                    PlayerHeader(player: $settings.player)
                         .onTapGesture {
                             selection = .player
                         }
@@ -49,18 +29,19 @@ struct SetupView: View {
                         .fontWeight(.heavy)
                     Spacer()
                     Button("Host", action: {
+                        settings.players = [settings.player]
                         selection = .host
                     })
                     .buttonStyle(.primary)
-                    .background(player.color)
+                    .background(settings.player.color)
                     .cornerRadius(10)
                     .padding(.horizontal)
                     Button("Join", action: {})
-                        .foregroundColor(player.color)
+                        .foregroundColor(settings.player.color)
                         .padding()
                 }
             case .player:
-                CreatePlayerForm(player: $player, players: .constant([])) { name, icon, colorSelection in
+                ModifyPlayer(player: $settings.player, players: $settings.players) { name, icon, colorSelection in
                     let user = User(name: name, icon: icon, color: colorSelection)
                     guard let userData = try? JSONEncoder().encode(user) else {
                         return
@@ -69,8 +50,8 @@ struct SetupView: View {
                     selection = .main
                 }
             case .host:
-                WaitingRoomView(host: $player, player: $player, players: [player], gameViewSelection: $gameViewSelection) { players in
-                    startGameAction(players)
+                WaitingRoomView(host: $settings.player) {
+                    startGameAction()
                 }
             }
         }
@@ -79,24 +60,21 @@ struct SetupView: View {
                 selection = .player
                 return
             }
-            player = Player(name: user.name, icon: user.icon, color: user.color.value, hand: [])
+            settings.player = Player(name: user.name, icon: user.icon, color: user.color.value)
             selection = .main
         }
     }
-    func delay(_ delay:Double, closure:@escaping ()->()) {
-        let when = DispatchTime.now() + delay
-        DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
-    }
-    
-    enum SetUp {
-        case welcome
-        case main
-        case player
-        case host
-    }
+}
+
+enum SetUpSelection {
+    case main
+    case player
+    case host
 }
 
 #Preview {
     @State var gameViewSelection: GameViewSelection = .local
-    return SetupView(selection: .welcome, gameViewSelection: $gameViewSelection) { _ in }
+    @State var players: [Player] = []
+    return SetupView() {}
+        .environmentObject(SetupViewModel())
 }

@@ -19,11 +19,15 @@ struct PlayerHeader: View {
             
             ZStack {
                 if isForm {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.white.opacity(0.2))
+                        .frame(height: 70)
+                        .padding(.trailing, 5)
                     TextField("", text: $player.name)
                         .placeholder(when: player.name.isEmpty) {
-                            Text("Name").foregroundColor(.white)
+                            Text("Name").foregroundStyle(.white.opacity(0.8))
                         }
-                        .padding(.horizontal, isForm ? 8 : 0)
+                        .padding(.horizontal, 16)
                         .onReceive(Just(player.name), perform: { _ in
                             limitText(textLimit)
                         })
@@ -46,15 +50,19 @@ struct PlayerHeader: View {
     func limitText(_ upper: Int) {
         if player.name.count > upper {
             player.name = String(player.name.prefix(upper))
-            }
         }
+    }
 }
 
 #Preview {
     @State var player = Player.test1
-    return PlayerHeader(player: $player)
+    return VStack {
+        PlayerHeader(player: $player, isForm: true)
+        Spacer()
+    }
 }
 
+//For modifying TextField's default text's color
 extension View {
     func placeholder<Content: View>(
         when shouldShow: Bool,
