@@ -117,3 +117,5 @@ extension Card {
     static var test3 = Card(value: .seven, suit: .diamonds)
     static var test4 = Card(value: .ten, suit: .spades)
 }
+
+

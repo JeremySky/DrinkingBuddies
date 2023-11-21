@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlayerIcon: View {
-    var icon: Icon
+    var icon: IconSelection
     var color: Color
     var weight: Font.Weight
     var selected: Bool = false
@@ -88,8 +88,21 @@ struct PlayerIcon: View {
     return ZStack {
         Color.brown
         VStack {
-            PlayerIcon(icon: Icon.backpack, color: Color.red, weight: .heavy, selected: false)
-            PlayerIcon(icon: Icon.clipboard, color: Color.red, weight: .semibold, selected: true)
+            PlayerIcon(icon: IconSelection.backpack, color: Color.red, weight: .heavy, selected: false)
+            PlayerIcon(icon: IconSelection.clipboard, color: Color.red, weight: .semibold, selected: true)
         }
     }
+}
+
+enum IconSelection: String, RawRepresentable, CaseIterable, Codable {
+    case clipboard = "pencil.and.list.clipboard"
+    case book = "text.book.closed"
+    case gradCap = "graduationcap"
+    case backpack = "backpack"
+    case paperclip = "paperclip"
+    case personFrame = "person.crop.artframe"
+    case photoFrame = "photo.artframe"
+    case idCard = "person.text.rectangle"
+    case dumbbell = "dumbbell.fill"
+    case skateboard = "skateboard"
 }

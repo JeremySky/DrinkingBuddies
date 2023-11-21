@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct LocalGameView: View {
+    @EnvironmentObject var game: GameViewModel
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView {
+            ForEach($game.players.indices, id: \.self) { i in
+                PlayerView(player: $game.players[i])
+                    .environmentObject(game)
+                    .tabItem {
+                        Label(game.players[i].name, systemImage: game.players[i].icon.rawValue)
+                    }
+            }
+        }
     }
 }
 
 #Preview {
     LocalGameView()
+        .environmentObject(GameViewModel.preview)
 }

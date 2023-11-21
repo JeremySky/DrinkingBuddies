@@ -66,61 +66,25 @@ struct TakeView: View {
                     .fontWeight(.semibold)
                 Spacer()
                 
-                Button {
+                Button("Start") {
                     if !countdownHasStarted {
                         startCountdown()
                     }
-                } label: {
-                    ZStack() {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.white)
-                            .shadow(radius: 10)
-                        HStack {
-                            Image(systemName: "flag.2.crossed.fill")
-                                .foregroundStyle(.black, .red)
-                                .font(.system(size: 40))
-                                .fontWeight(.black)
-                            Text("Start")
-                                .font(.system(size: 50))
-                                .fontWeight(.black)
-                                .padding(.trailing)
-                        }
-                    }
-                    .frame(height: 80)
-                    .foregroundStyle(Color.primary)
-                    .padding()
                 }
+                .buttonStyle(.start)
                 .disabled(disableButton)
             }
             
             if countdown == 0 {
-                Button {
+                Button("Next") {
                     player.pointsToTake -= points
                     if player.pointsToTake == 0 {
                         endTakeAction()
                     } else {
                         takeAgain()
                     }
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.white)
-                            .shadow(radius: 10)
-                        HStack {
-                            Image(systemName: "arrow.right")
-                                .foregroundStyle(.blue)
-                                .font(.system(size: 60))
-                                .fontWeight(.black)
-                            Text("NEXT")
-                                .font(.system(size: 50))
-                                .fontWeight(.black)
-                                .offset(x: -12)
-                        }
-                    }
-                    .frame(height: 80)
-                    .foregroundStyle(Color.primary)
-                    .padding()
                 }
+                .buttonStyle(.next)
             }
         }
         .onReceive(timer) { time in

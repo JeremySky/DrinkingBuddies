@@ -8,22 +8,26 @@
 import SwiftUI
 
 struct IconPicker: View {
-    @Binding var selectedIcon: Icon
+    @Binding var selectedIcon: IconSelection
     @Binding var color: Color
+    @Binding var players: [Player]
+    var takenIcons: [IconSelection] { players.map({$0.icon}) }
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 Spacer()
                     .frame(width: 10)
-                ForEach(Icon.allCases, id: \.self) { icon in
-                    Button {
-                        selectedIcon = icon
-                    } label: {
-                        PlayerIcon(icon: icon, color: color, weight: .semibold, selected: selectedIcon == icon)
-                        .frame(width: 80, height: 80)
-                        .padding(.vertical)
+                ForEach(IconSelection.allCases, id: \.self) { icon in
+                    if !takenIcons.contains(icon) {
+                        Button {
+                            selectedIcon = icon
+                        } label: {
+                            PlayerIcon(icon: icon, color: color, weight: .semibold, selected: selectedIcon == icon)
+                                .frame(width: 80, height: 80)
+                                .padding(.vertical)
+                        }
+                        .foregroundStyle(color)
                     }
-                    .foregroundStyle(color)
                 }
                 Spacer()
                     .frame(width: 10)
@@ -33,7 +37,7 @@ struct IconPicker: View {
 }
 
 #Preview {
-    @State var icon: Icon = .backpack
+    @State var icon: IconSelection = .backpack
     @State var color: Color = .red
-    return IconPicker(selectedIcon: $icon, color: $color)
+    return IconPicker(selectedIcon: $icon, color: $color, players: .constant([]))
 }

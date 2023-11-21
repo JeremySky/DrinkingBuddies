@@ -8,10 +8,11 @@
 import Foundation
 import SwiftUI
 
+
 struct Player {
     let id = UUID()
     var name: String
-    var icon: Icon
+    var icon: IconSelection
     var color: Color
     var hand: [Card]
     
@@ -21,7 +22,7 @@ struct Player {
     var pointsToTake: Int = 0
     
     
-    init(name: String, icon: Icon, color: Color, hand: [Card], stage: PlayerStage = .wait, pointsToGive: Int = 0, pointsToTake: Int = 0) {
+    init(name: String, icon: IconSelection, color: Color, hand: [Card] = [], stage: PlayerStage = .wait, pointsToGive: Int = 0, pointsToTake: Int = 0) {
         self.name = name
         self.icon = icon
         self.color = color
@@ -34,20 +35,6 @@ struct Player {
     init() {
         self.init(name: "", icon: .clipboard, color: .red, hand: [])
     }
-}
-
-
-enum Icon: String, RawRepresentable, CaseIterable {
-    case clipboard = "pencil.and.list.clipboard"
-    case book = "text.book.closed"
-    case gradCap = "graduationcap"
-    case backpack = "backpack"
-    case paperclip = "paperclip"
-    case personFrame = "person.crop.artframe"
-    case photoFrame = "photo.artframe"
-    case idCard = "person.text.rectangle"
-    case dumbbell = "dumbbell.fill"
-    case skateboard = "skateboard"
 }
 
 
@@ -93,7 +80,68 @@ extension Player {
     
     static var testArr = [test1, test2, test3, test4]
     
-    static var take = Player(name: "Peter", icon: Icon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToTake: 5)
+    static var take = Player(name: "Peter", icon: IconSelection.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToTake: 5)
     
-    static var give = Player(name: "Peter", icon: Icon.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToGive: 9)
+    static var give = Player(name: "Peter", icon: IconSelection.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToGive: 9)
+}
+
+
+enum ColorSelection: String, RawRepresentable, CaseIterable, Codable {
+    case red = "red"
+    case pink = "pink"
+    case orange = "orange"
+    case yellow = "yellow"
+    case green = "green"
+    case mint = "mint"
+    case teal = "teal"
+    case cyan = "cyan"
+    case blue = "blue"
+    case purple = "purple"
+    case indigo = "indigo"
+    case brown = "brown"
+    case gray = "gray"
+    case black = "black"
+    
+    var value: Color {
+        switch self {
+        case .red:
+                .red
+        case .pink:
+                .pink
+        case .orange:
+                .orange
+        case .yellow:
+                .yellow
+        case .green:
+                .green
+        case .mint:
+                .mint
+        case .teal:
+                .teal
+        case .cyan:
+                .cyan
+        case .blue:
+                .blue
+        case .purple:
+                .purple
+        case .indigo:
+                .indigo
+        case .brown:
+                .brown
+        case .gray:
+                .gray
+        case .black:
+                .black
+        }
+    }
+    
+    static func matching(_ color: Color) -> ColorSelection {
+        var colorSelection: ColorSelection?
+        for selection in ColorSelection.allCases {
+            if selection.value == color {
+                colorSelection = selection
+            }
+        }
+        return colorSelection ?? ColorSelection.red
+    }
 }

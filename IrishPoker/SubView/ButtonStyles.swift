@@ -11,6 +11,9 @@ extension ButtonStyle where Self == ButtonIconRight {
     static var next: ButtonIconRight {
         ButtonIconRight(icon: "arrowshape.right.fill", color: .blue)
     }
+    static var save: ButtonIconRight {
+        ButtonIconRight(icon: "square.and.arrow.down", color: .blue)
+    }
 }
 extension ButtonStyle where Self == ButtonIconLeft {
     static var correct: ButtonIconLeft {
@@ -38,11 +41,11 @@ struct ButtonIconRight: ButtonStyle {
                         .frame(width: 25)
                     configuration.label
                     Image(systemName: icon)
-                        .fontWeight(.thin)
+                        .fontWeight(icon == "arrowshape.right.fill" ? .thin : .heavy)
                         .foregroundStyle(color)
                 }
             } else {
-                ProgressView()
+                Spacer()
             }
         }
         .font(.system(size: 50))
@@ -52,7 +55,7 @@ struct ButtonIconRight: ButtonStyle {
         .frame(maxWidth: .infinity)
         .background(.white)
         .cornerRadius(10)
-        .shadow(radius: 10)
+        .shadow(radius: isEnabled ? 10 : 0)
         .animation(.default, value: isEnabled)
         .padding()
     }
@@ -111,7 +114,6 @@ struct PrimaryButtonStyle: ButtonStyle {
         .padding()
         .frame(maxWidth: .infinity)
         .foregroundColor(.white)
-        .background(Color.accentColor)
         .cornerRadius(10)
         .animation(.default, value: isEnabled)
     }
@@ -129,6 +131,8 @@ struct PrimaryButtonStyle_Previews: PreviewProvider {
         
         var body: some View {
             VStack {
+                Button("Save", action: {})
+                    .buttonStyle(.save)
                 Button("Next", action: {})
                     .buttonStyle(.next)
                 Button("Correct", action: {})
@@ -137,6 +141,11 @@ struct PrimaryButtonStyle_Previews: PreviewProvider {
                     .buttonStyle(.wrong)
                 Button("Start", action: {})
                     .buttonStyle(.start)
+                Button("Host", action: {})
+                    .buttonStyle(.primary)
+                    .background(.blue)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
             }
         }
     }

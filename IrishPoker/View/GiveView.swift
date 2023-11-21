@@ -85,30 +85,10 @@ struct GiveView: View {
             }
             
             if points == 0 {
-                Button {
-                    giveAction(players)
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.white)
-                            .shadow(radius: 10)
-                        HStack {
-                            Image(systemName: "arrow.right")
-                                .foregroundStyle(.blue)
-                                .font(.system(size: 60))
-                                .fontWeight(.black)
-                            Text("NEXT")
-                                .font(.system(size: 50))
-                                .fontWeight(.black)
-                                .offset(x: -12)
-                        }
-                    }
-                    .frame(height: 80)
-                    .foregroundStyle(Color.primary)
-                    .padding()
+                Button("Next", action: { giveAction(players) })
+                    .buttonStyle(.next)
                     .onAppear {
                         disableButtons = true
-                    }
                 }
             }
         }

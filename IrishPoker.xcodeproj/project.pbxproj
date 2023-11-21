@@ -13,6 +13,12 @@
 		6236A02A2B09ADDB002542E7 /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0292B09ADDB002542E7 /* IconPicker.swift */; };
 		6236A02C2B09AE37002542E7 /* PlayerIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A02B2B09AE37002542E7 /* PlayerIcon.swift */; };
 		6236A02E2B09B2EA002542E7 /* PlayerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A02D2B09B2EA002542E7 /* PlayerHeader.swift */; };
+		6236A0302B0ACA78002542E7 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A02F2B0ACA78002542E7 /* ButtonStyles.swift */; };
+		6236A0322B0C0D32002542E7 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0312B0C0D32002542E7 /* SetupView.swift */; };
+		6236A0382B0C3D55002542E7 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0372B0C3D55002542E7 /* MainView.swift */; };
+		6236A03C2B0C41A7002542E7 /* LocalGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03B2B0C41A7002542E7 /* LocalGameView.swift */; };
+		6236A03E2B0C4293002542E7 /* WaitingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03D2B0C4293002542E7 /* WaitingRoomView.swift */; };
+		6236A0402B0C4304002542E7 /* PlayerOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03F2B0C4304002542E7 /* PlayerOverview.swift */; };
 		6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242613E2B000387001C5410 /* IrishPokerApp.swift */; };
 		624261412B000387001C5410 /* PlayersTurnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624261402B000387001C5410 /* PlayersTurnView.swift */; };
 		624261432B000389001C5410 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 624261422B000389001C5410 /* Assets.xcassets */; };
@@ -39,6 +45,12 @@
 		6236A0292B09ADDB002542E7 /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
 		6236A02B2B09AE37002542E7 /* PlayerIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerIcon.swift; sourceTree = "<group>"; };
 		6236A02D2B09B2EA002542E7 /* PlayerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeader.swift; sourceTree = "<group>"; };
+		6236A02F2B0ACA78002542E7 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		6236A0312B0C0D32002542E7 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		6236A0372B0C3D55002542E7 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		6236A03B2B0C41A7002542E7 /* LocalGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGameView.swift; sourceTree = "<group>"; };
+		6236A03D2B0C4293002542E7 /* WaitingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingRoomView.swift; sourceTree = "<group>"; };
+		6236A03F2B0C4304002542E7 /* PlayerOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerOverview.swift; sourceTree = "<group>"; };
 		6242613B2B000387001C5410 /* IrishPoker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IrishPoker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6242613E2B000387001C5410 /* IrishPokerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrishPokerApp.swift; sourceTree = "<group>"; };
 		624261402B000387001C5410 /* PlayersTurnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersTurnView.swift; sourceTree = "<group>"; };
@@ -110,6 +122,8 @@
 		627C616E2B04292200DE56A4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6236A0372B0C3D55002542E7 /* MainView.swift */,
+				6236A0312B0C0D32002542E7 /* SetupView.swift */,
 				622373B02B09897F006990DD /* CreatePlayerForm.swift */,
 				627C61772B048F1A00DE56A4 /* GameView.swift */,
 				62FECDB02B03004400F13854 /* PlayerView.swift */,
@@ -118,6 +132,8 @@
 				62FECDAC2B029E2300F13854 /* GiveView.swift */,
 				62FECDB22B03143800F13854 /* TakeView.swift */,
 				62FECDB42B0344FB00F13854 /* GiveTakeView.swift */,
+				6236A03B2B0C41A7002542E7 /* LocalGameView.swift */,
+				6236A03D2B0C4293002542E7 /* WaitingRoomView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -132,6 +148,8 @@
 				6236A0292B09ADDB002542E7 /* IconPicker.swift */,
 				6236A02B2B09AE37002542E7 /* PlayerIcon.swift */,
 				6236A02D2B09B2EA002542E7 /* PlayerHeader.swift */,
+				6236A02F2B0ACA78002542E7 /* ButtonStyles.swift */,
+				6236A03F2B0C4304002542E7 /* PlayerOverview.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -219,14 +237,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				6242614F2B0144F5001C5410 /* Deck.swift in Sources */,
+				6236A0382B0C3D55002542E7 /* MainView.swift in Sources */,
 				6236A02C2B09AE37002542E7 /* PlayerIcon.swift in Sources */,
 				627C61812B05878F00DE56A4 /* Game.swift in Sources */,
 				62FECDB32B03143800F13854 /* TakeView.swift in Sources */,
 				62FECDAD2B029E2300F13854 /* GiveView.swift in Sources */,
 				624261412B000387001C5410 /* PlayersTurnView.swift in Sources */,
+				6236A0302B0ACA78002542E7 /* ButtonStyles.swift in Sources */,
 				6236A02A2B09ADDB002542E7 /* IconPicker.swift in Sources */,
 				622373B32B098A53006990DD /* CustomColorPicker.swift in Sources */,
 				6242614D2B0003A4001C5410 /* BigCard.swift in Sources */,
+				6236A0402B0C4304002542E7 /* PlayerOverview.swift in Sources */,
 				627C61742B042A7500DE56A4 /* MiniCard.swift in Sources */,
 				627C61782B048F1A00DE56A4 /* GameView.swift in Sources */,
 				62FECDAF2B02A08600F13854 /* Player.swift in Sources */,
@@ -235,9 +256,12 @@
 				622373B12B09897F006990DD /* CreatePlayerForm.swift in Sources */,
 				62FECDB52B0344FB00F13854 /* GiveTakeView.swift in Sources */,
 				62FECDB72B034FF200F13854 /* WaitView.swift in Sources */,
+				6236A03C2B0C41A7002542E7 /* LocalGameView.swift in Sources */,
 				6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */,
 				62FECDB12B03004400F13854 /* PlayerView.swift in Sources */,
 				627C617F2B05877D00DE56A4 /* PlayerQueue.swift in Sources */,
+				6236A03E2B0C4293002542E7 /* WaitingRoomView.swift in Sources */,
+				6236A0322B0C0D32002542E7 /* SetupView.swift in Sources */,
 				627C61722B0429B500DE56A4 /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

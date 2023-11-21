@@ -57,6 +57,51 @@ struct BigCard: View {
 }
 
 
+struct WelcomeCard: View {
+    @State var tappable: Bool = true
+    let flipCardAction: () -> Void
+    
+    //for keeping dimensions standardized
+    let dimensions: (width: CGFloat, height: CGFloat, cornerRadius: CGFloat) = (260, 390, 13)
+    
+    //MARK: -- FLIP FUNCTION
+    //properties used for flip animation
+    let durationAndDelay: CGFloat = 0.3
+    @State var frontDegree: Double = -90.0
+    @State var backDegree: Double = 0.0
+    func flipCard() {
+        withAnimation(.linear(duration: durationAndDelay)) {
+            backDegree = 90.0
+        }
+        withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)) {
+            frontDegree = 0.0
+        }
+    }
+    var body: some View {
+        ZStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: dimensions.cornerRadius)
+                    .foregroundStyle(Color.white)
+                    .frame(width: dimensions.width, height: dimensions.height)
+                    .shadow(radius: 10)
+                Group {
+                    ZStack {
+                        Text("Welcome")
+                    }
+                }
+            }
+            .rotation3DEffect(Angle(degrees: frontDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+            
+            CardBack(dimensions: dimensions)
+                .rotation3DEffect(Angle(degrees: backDegree), axis: (x: 0.0, y: 1.0, z: 0.0) )
+        }
+        .onTapGesture {
+            flipCard()
+            flipCardAction()
+        }
+    }
+}
+
 
 //MARK: -- BIGCARD FRONT
 struct CardFront: View {
@@ -234,6 +279,9 @@ struct CardBack: View {
                 .frame(width: (innerDimensions.width - 15), height: (innerDimensions.height - 15))
         }
     }
+}
+#Preview {
+    return WelcomeCard(flipCardAction: {})
 }
 //
 //#Preview {

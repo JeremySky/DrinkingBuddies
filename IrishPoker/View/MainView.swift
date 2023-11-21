@@ -8,8 +8,26 @@
 import SwiftUI
 
 struct MainView: View {
+    @State var selection: AppViewSelection = .setup
+    @State var players: [Player]?
+    @State var gameViewSelection: GameViewSelection = .local
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        switch selection {
+        case .setup:
+            SetupView(selection: .welcome, gameViewSelection: $gameViewSelection) { players in
+                self.players = players
+                selection = .game
+            }
+        case .game:
+            if let players {
+                GameView(game: GameViewModel(players: players), selection: gameViewSelection)
+            }
+        }
+    }
+    
+    enum AppViewSelection {
+        case setup
+        case game
     }
 }
 

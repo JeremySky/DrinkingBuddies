@@ -56,23 +56,30 @@ class GameViewModel: ObservableObject {
 //MARK: -- VIEW
 struct GameView: View {
     @StateObject var game: GameViewModel
+    @State var selection: GameViewSelection
     
     var body: some View {
-        TabView {
-            ForEach($game.players.indices, id: \.self) { i in
-                PlayerView(player: $game.players[i])
-                    .environmentObject(game)
-                    .tabItem {
-                        Label(game.players[i].name, systemImage: game.players[i].icon.rawValue)
-                    }
-            }
+        switch selection {
+        case .local:
+            LocalGameView()
+                .environmentObject(game)
+        case .remoteBluetooth, .remoteWifi:
+            PlayerView(player: .constant(Player.test1))
+                .environmentObject(game)
         }
     }
 }
 
 
+enum GameViewSelection {
+    case local
+    case remoteBluetooth
+    case remoteWifi
+}
+
+
 #Preview {
-    GameView(game: GameViewModel.preview)
+    GameView(game: GameViewModel.preview, selection: .local)
 }
 
 

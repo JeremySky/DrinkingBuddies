@@ -67,28 +67,10 @@ struct PlayersTurnView: View {
             
             //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE BUTTON
             if let isCorrect {
-                Button {
+                Button(isCorrect ? "Correct" : "Wrong", action: {
                     returnResults(isCorrect, pointsToDistribute)
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.white)
-                            .shadow(radius: 10)
-                        HStack {
-                            Image(systemName: isCorrect ? "checkmark" : "xmark")
-                                .foregroundStyle(isCorrect ? .green : .red)
-                                .font(.system(size: 60))
-                                .fontWeight(.black)
-                            Text(isCorrect ? "CORRECT" : "WRONG")
-                                .font(.system(size: 50))
-                                .fontWeight(.black)
-                                .offset(x: -12)
-                        }
-                    }
-                .frame(height: 80)
-                .foregroundStyle(Color.primary)
-                .padding()
-                }
+                })
+                .buttonStyle(isCorrect ? .correct : .wrong)
             }
         }
     }

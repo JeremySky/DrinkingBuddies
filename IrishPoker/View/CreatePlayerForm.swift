@@ -8,43 +8,25 @@
 import SwiftUI
 
 struct CreatePlayerForm: View {
-    @State var player = Player()
+    @Binding var player: Player
+    @Binding var players: [Player]
+    var saveAction: (String, IconSelection, ColorSelection) -> Void
     var body: some View {
         VStack{
             PlayerHeader(player: $player, isForm: true)
             Spacer()
-            CustomColorPicker(selectedColor: $player.color)
-            IconPicker(selectedIcon: $player.icon, color: $player.color)
+            CustomColorPicker(selectedColor: $player.color, players: $players)
+            IconPicker(selectedIcon: $player.icon, color: $player.color, players: $players)
             Spacer()
             
-            Button {
-                //
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.white)
-                        .shadow(radius: 10)
-                    HStack {
-                        Spacer()
-                            .frame(width: 15)
-                        Text("NEXT")
-                            .font(.system(size: 50))
-                            .fontWeight(.black)
-                        Image(systemName: "arrow.right")
-                            .foregroundStyle(.blue)
-                            .font(.system(size: 60))
-                            .fontWeight(.black)
-                    }
-                }
-                .frame(height: 80)
-                .foregroundStyle(Color.primary)
-                .padding()
-            }
+            Button("Save", action: { saveAction(player.name, player.icon, ColorSelection.matching(player.color)) })
+                .buttonStyle(.save)
         }
     }
 }
 
 #Preview {
-    CreatePlayerForm()
+    @State var player = Player()
+    return CreatePlayerForm(player: $player, players: .constant([])) { _, _, _ in }
 }
 
