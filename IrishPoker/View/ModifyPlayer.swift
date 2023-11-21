@@ -7,10 +7,12 @@
 
 import SwiftUI
 
-struct CreatePlayerForm: View {
+struct ModifyPlayer: View {
     @Binding var player: Player
     @Binding var players: [Player]
     var saveAction: (String, IconSelection, ColorSelection) -> Void
+    
+    
     var body: some View {
         VStack{
             PlayerHeader(player: $player, isForm: true)
@@ -28,6 +30,6 @@ struct CreatePlayerForm: View {
 
 #Preview {
     @State var player = Player()
-    return CreatePlayerForm(player: $player, players: .constant([])) { _, _, _ in }
+    return ModifyPlayer(player: $player, players: .constant([])) { _, _, _ in }
 }
 
