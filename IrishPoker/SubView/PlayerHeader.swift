@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 struct PlayerHeader: View {
     @Binding var player: Player
     var isForm: Bool = false
+    let textLimit = 10
     var body: some View {
         HStack {
             PlayerIcon(icon: player.icon, color: player.color, weight: .black)
@@ -22,6 +24,10 @@ struct PlayerHeader: View {
                             Text("Name").foregroundColor(.white)
                         }
                         .padding(.horizontal, isForm ? 8 : 0)
+                        .onReceive(Just(player.name), perform: { _ in
+                            limitText(textLimit)
+                        })
+                    
                 } else {
                     Text(player.name)
                 }
@@ -36,6 +42,12 @@ struct PlayerHeader: View {
         .frame(maxWidth: .infinity)
         .background(player.color)
     }
+    
+    func limitText(_ upper: Int) {
+        if player.name.count > upper {
+            player.name = String(player.name.prefix(upper))
+            }
+        }
 }
 
 #Preview {

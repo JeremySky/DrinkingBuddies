@@ -21,6 +21,7 @@ struct CreatePlayerForm: View {
             
             Button("Save", action: { saveAction(player.name, player.icon, ColorSelection.matching(player.color)) })
                 .buttonStyle(.save)
+                .disabled(player.name.isEmpty)
         }
     }
 }
