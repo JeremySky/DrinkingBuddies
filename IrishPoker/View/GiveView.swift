@@ -31,22 +31,21 @@ struct GiveView: View {
                 Spacer()
                 VStack {
                     ForEach(temporaryPlayers.indices, id: \.self) { i in
-                        HStack {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(width: 65, height: 65)
-                                    .foregroundStyle(Color.white)
-                                    .shadow(radius: 10)
-                                Text("\(temporaryPlayers[i].pointsToTake)")
-                                    .font(.largeTitle)
-                                    .fontWeight(.semibold)
-                            }
-                            
-                            Button {
-                                if points > 0 {
-                                    givePoints(to: &temporaryPlayers[i])
+                        Button {
+                            givePoints(to: &temporaryPlayers[i])
+                        } label: {
+                            HStack {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(width: 65, height: 65)
+                                        .foregroundStyle(Color.white)
+                                        .shadow(radius: 10)
+                                    Text("\(temporaryPlayers[i].pointsToTake)")
+                                        .font(.largeTitle)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.black)
                                 }
-                            } label: {
+                                
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(height: 65)
@@ -78,8 +77,8 @@ struct GiveView: View {
                                     .padding()
                                 }
                             }
-                            .disabled(disableButtons)
                         }
+                        .disabled(disableButtons)
                     }
                     .padding([.horizontal, .bottom])
                 }
@@ -90,7 +89,7 @@ struct GiveView: View {
                     .buttonStyle(.next)
                     .onAppear {
                         disableButtons = true
-                }
+                    }
             }
         }
     }
