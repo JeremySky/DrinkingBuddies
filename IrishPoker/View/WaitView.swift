@@ -15,28 +15,30 @@ struct WaitView: View {
     var body: some View {
         VStack {
             //MARK: -- TITLE
-            HStack {
-                ZStack {
-                    Circle()
-                        .fill(.white)
-                    Image(systemName: game.currentPlayer.icon.rawValue)
-                        .resizable()
-                        .scaledToFit()
+            VStack {
+                HStack {
+                    ZStack {
+                        Circle()
+                            .fill(.white)
+                        Image(systemName: game.currentPlayer.icon.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .fontWeight(.heavy)
+                            .foregroundStyle(game.currentPlayer.color)
+                            .padding()
+                        Image(systemName: game.currentPlayer.icon.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .fontWeight(.heavy)
+                            .foregroundStyle(.black.opacity(0.3))
+                            .padding()
+                    }
+                    .frame(width: 100, height: 100)
+                    Text("\(game.currentPlayer.name)'s Turn")
+                        .font(.largeTitle)
                         .fontWeight(.heavy)
-                        .foregroundStyle(game.currentPlayer.color)
-                        .padding()
-                    Image(systemName: game.currentPlayer.icon.rawValue)
-                        .resizable()
-                        .scaledToFit()
-                        .fontWeight(.heavy)
-                        .foregroundStyle(.black.opacity(0.3))
-                        .padding()
+                        .foregroundStyle(.white)
                 }
-                .frame(width: 100, height: 100)
-                Text("\(game.currentPlayer.name)'s Turn")
-                    .font(.largeTitle)
-                    .fontWeight(.heavy)
-                    .foregroundStyle(.white)
             }
             .padding(.bottom)
             .frame(maxWidth: .infinity)
@@ -48,15 +50,46 @@ struct WaitView: View {
                 Spacer()
                     .frame(height: 10)
                 ForEach($game.players.indices, id: \.self) { i in
-                    PlayerOverview(player: $game.players[i], highlightPlayer: true)
-                        .padding(.horizontal)
+                    ZStack(alignment: .topTrailing) {
+                        PlayerOverview(player: $game.players[i], highlightPlayer: true)
+                            .padding(.horizontal)
+                            .disabled(true)
+                        
+                        if game.players[i].pointsToTake > 0 {
+                            ZStack {
+                                Ellipse()
+                                    .fill(.white)
+                                    .stroke(.black, lineWidth: 3)
+                                Text("Take")
+                                    .font(.title2)
+                                    .fontWeight(.black)
+                                    .foregroundStyle(.black)
+                            }
+                            .frame(width: 80, height: 65)
+                            .padding([.top, .trailing], 20)
+                            .rotationEffect(.degrees(18))
+                            .scaleEffect(game.players[i].pointsToGive > 0 ? 0.6 : 1)
+                            .offset(x: game.players[i].pointsToGive > 0 ? 30 : 0, y:  game.players[i].pointsToGive > 0 ? -20 : 0)
+                        }
+                        
+                        if game.players[i].pointsToGive > 0 {
+                            ZStack {
+                                Ellipse()
+                                    .fill(.white)
+                                    .stroke(.black, lineWidth: 3)
+                                Text("Give")
+                                    .font(.title2)
+                                    .fontWeight(.black)
+                                    .foregroundStyle(.black)
+                            }
+                            .frame(width: 80, height: 65)
+                            .padding([.top, .trailing], 20)
+                            .rotationEffect(.degrees(18))
+                        }
+                    }
                 }
             }
-        }
-        .onAppear {
-            if player.id == game.currentPlayer.id {
-                player.stage = .guess
-            }
+            .scrollIndicators(.hidden)
         }
     }
     enum Selection {

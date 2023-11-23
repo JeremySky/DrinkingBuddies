@@ -100,3 +100,9 @@ struct GiveView: View {
     @State var players = Player.testArr
     return GiveView(player: $player, points: player.pointsToGive, temporaryPlayers: players, giveAction: {_ in })
 }
+
+extension GiveView {
+    init(player: Binding<Player>, players: [Player], giveAction: @escaping ([Player]) -> Void) {
+        self.init(player: player, points: player.pointsToGive.wrappedValue, temporaryPlayers: players, giveAction: giveAction)
+    }
+}

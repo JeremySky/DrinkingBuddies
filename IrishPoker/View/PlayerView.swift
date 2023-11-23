@@ -15,52 +15,57 @@ struct PlayerView: View {
         ZStack {
             switch player.stage {
             case .guess:
-                if game.phase == .guessing {
+                switch game.phase {
+                case .guessing:
                     PlayersTurnView(player: $player, question: $game.question) { isCorrect, points in
                         if isCorrect {
                             player.pointsToGive = points
-                            player.stage = .give
                         } else {
-                            game.updateCurrentPlayer()
-                            game.updateQuestion()
                             player.pointsToTake = points
-                            player.stage = .take
                         }
+                        game.turnTaken = true
+                        player.stage = .wait
                     }
-                } else if game.phase == .giveTake {
-                    GiveTakeView(player: $player)
+                    
+                    
+                case .giveTake:
+                    GiveTakeView(player: $player) {
+                        game.turnTaken = true
+                        player.stage = .wait
+                    }
+                    
+                    
+                case .end:
+                    Text("END")
                 }
             case .give:
-                GiveView(player: $player, points: player.pointsToGive, temporaryPlayers: game.players.map({$0.copyAndRemovePointsToTake()})) { temporaryPlayersWithPointsToAdd in
+                GiveView(player: $player, players: game.players.map({$0.copyAndRemovePointsToTake()})) { temporaryPlayersWithPointsToAdd in
                     addPointsToPlayers(from: temporaryPlayersWithPointsToAdd)
-                    if game.phase == .guessing {
-                        game.updateCurrentPlayer()
-                        game.updateQuestion()
-                    }
-                    if player.pointsToTake > 0 {
-                        player.stage = .take
-                    } else {
-                        player.stage = .wait
-                        if game.phase == .giveTake && player == game.currentPlayer {
-                            game.dequeuePairOfCards()
-                            game.updateCurrentPlayer()
-                        }
-                    }
+                    player.stage = .wait
                 }
             case .take:
                 TakeView(player: $player, countdown: player.pointsToTake, points: player.pointsToTake) {
-                    if player == game.currentPlayer {
-                        player.stage = .guess
-                    } else {
-                        if game.phase == .giveTake && player == game.currentPlayer {
-                            game.dequeuePairOfCards()
-                            game.updateCurrentPlayer()
-                        }
-                        player.stage = .wait
-                    }
+                    player.stage = .wait
                 }
             case .wait:
                 WaitView(player: $player)
+                    .onAppear {
+                        if !game.turnTaken && player == game.currentPlayer {
+                            player.stage = .guess
+                        }
+                        if player.pointsToGive > 0 {
+                            player.stage = .give
+                        } else if player.pointsToTake > 0 {
+                            player.stage = .take
+                        } else if !game.players.map( {
+                            $0.pointsToGive == 0 && $0.pointsToTake == 0
+                        }).contains(false) && game.turnTaken {
+                            game.updateQuestion()
+                            game.updateDeck()
+                            game.updateCurrentPlayer()
+                            game.turnTaken = false
+                        }
+                    }
                     .environmentObject(game)
             case .end:
                 switch game.phase {
@@ -70,21 +75,6 @@ struct PlayerView: View {
                     Text("END GIVE TAKE PHASE")
                 case .end:
                     Text("END GAME")
-                }
-            }
-        }
-        .onAppear {
-            if game.phase == .guessing {
-                if player.pointsToTake > 0 {
-                   player.stage = .take
-               }
-            } else if game.phase == .giveTake {
-                if player != game.currentPlayer {
-                    if player.pointsToGive > 0 {
-                        player.stage = .give
-                    } else if player.pointsToTake > 0 {
-                        player.stage = .take
-                    }
                 }
             }
         }

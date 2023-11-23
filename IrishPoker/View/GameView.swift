@@ -14,6 +14,7 @@ class GameViewModel: ObservableObject {
     @Published var game: Game
     @Published var currentPlayer: Player
     @Published var waitingRoom: [Player]
+    @Published var turnTaken = false
     
     init(players: [Player]) {
         var shuffledPlayers = players.shuffled()
@@ -31,7 +32,7 @@ class GameViewModel: ObservableObject {
     
     
     func updateQuestion() {
-        if waitingRoom[0].id == game.players[0].id {
+        if game.phase == .guessing {
             switch game.question {
             case .one:
                 game.question = .two
@@ -60,6 +61,7 @@ class GameViewModel: ObservableObject {
             }
         }
     }
+    
     func checkForTake(_ card: Card) {
         for playerIndex in game.players.indices {
             for cardIndex in game.players[playerIndex].hand.indices {
@@ -70,9 +72,11 @@ class GameViewModel: ObservableObject {
         }
     }
     
-    func dequeuePairOfCards() {
-        game.deck.pile.removeFirst()
-        game.deck.pile.removeFirst()
+    func updateDeck() {
+        if game.phase == .giveTake {
+            game.deck.pile.removeFirst()
+            game.deck.pile.removeFirst()
+        }
     }
 }
 
