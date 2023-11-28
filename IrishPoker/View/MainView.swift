@@ -38,9 +38,11 @@ struct MainView: View {
     var body: some View {
         switch selection {
         case .setup:
-            SetupView() {
-                settings.deal()
-                selection = .game
+            NavigationStack {
+                SetupView() {
+                    settings.deal()
+                    selection = .game
+                }
             }
             .environmentObject(settings)
         case .game:

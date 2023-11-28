@@ -18,14 +18,11 @@ struct WaitingRoomView: View {
     
     @State var modifyPlayerIsPresenting = false
     
-    
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack {
             ZStack(alignment: .topTrailing) {
                 VStack(spacing: 0) {
-                    Text("Hosting")
-                        .font(.title2)
-                        .fontWeight(.bold)
                     PlayerHeader(player: .constant(host))
                     if settings.gameViewSelection != .local {
                         Text("783-128-222")
@@ -37,22 +34,6 @@ struct WaitingRoomView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .background(host.color)
-                
-                if settings.players.count < 4 && settings.gameViewSelection == .local {
-                    Button(action: { modifyPlayerIsPresenting = true }, label: {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(.white)
-                            Image(systemName: "person.badge.plus")
-                                .resizable()
-                                .scaledToFit()
-                                .padding(.all, 6)
-                                .foregroundStyle(host.color)
-                        }
-                        .frame(width: 50, height: 50)
-                        .padding(.trailing)
-                    })
-                }
             }
             ScrollView {
                 Spacer()
@@ -79,9 +60,49 @@ struct WaitingRoomView: View {
                     .buttonStyle(.start)
             }
         }
-        .fullScreenCover(isPresented: $modifyPlayerIsPresenting) {
+        .onAppear {
+            settings.players = [host]
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {dismiss()}) {
+                    Image(systemName: "chevron.left")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(.white)
+                        .frame(width: 25, height: 20)
+                        .fontWeight(.heavy)
+                }
+            }
+            ToolbarItem(placement: .principal) {
+                Text("Host")
+                    .foregroundStyle(.white)
+                    .font(.title3)
+                    .fontWeight(.bold)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                if settings.players.count < 4 && settings.gameViewSelection == .local {
+                    Button(action: { modifyPlayerIsPresenting = true }, label: {
+                        ZStack {
+                            Circle()
+                                .foregroundColor(.white)
+                            Image(systemName: "person.badge.plus")
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.all, 6)
+                                .foregroundStyle(host.color)
+                        }
+                        .frame(width: 40, height: 40)
+                        .padding(.trailing)
+                    })
+                }
+            }
+        }
+
+        .sheet(isPresented: $modifyPlayerIsPresenting) {
             ZStack {
-                ModifyPlayer(player: $newPlayer, players: $settings.players) { name, icon, color in
+                ModifyPlayer(player: $newPlayer, players: $settings.players, paddingTop: true) { name, icon, color in
                     let modifiedPlayer = Player(name: name, icon: icon, color: color.value)
                     if !settings.players.contains(modifiedPlayer) {
                         settings.players.append(modifiedPlayer)
@@ -91,6 +112,9 @@ struct WaitingRoomView: View {
                         
                     }
                 }
+                .onDisappear(perform: {
+                    resetNewPlayer()
+                })
             }
         }
     }
@@ -117,17 +141,19 @@ struct WaitingRoomView: View {
         newPlayer = Player(name: "", icon: defaultIcon, color: defaultColor)
     }
 }
-#Preview {
-    @State var player = Player.test1
-    @State var players = [Player.test1, Player.test2]
-    return WaitingRoomView(host: $player, startGameAction: { }, modifyPlayerIsPresenting: true)
-        .environmentObject(SetupViewModel())
-}
+//#Preview {
+//    @State var player = Player.test1
+//    @State var players = [Player.test1, Player.test2]
+//    return WaitingRoomView(host: $player, startGameAction: { }, modifyPlayerIsPresenting: true)
+//        .environmentObject(SetupViewModel())
+//}
 
 #Preview {
     @State var players: [Player] = [Player.test1, Player.test2]
-    return WaitingRoomView(host: $players[0]) { }
-        .environmentObject(SetupViewModel())
+    return NavigationStack {
+        WaitingRoomView(host: $players[0]) { }
+    }
+    .environmentObject(SetupViewModel())
 }
 #Preview {
     @State var players: [Player] = Player.testArr
