@@ -16,13 +16,27 @@ class GameViewModel: ObservableObject {
     @Published var waitingRoom: [Player]
     @Published var turnTaken = false
     
-    init(players: [Player]) {
-        var shuffledPlayers = players.shuffled()
-        shuffledPlayers[0].stage = .guess
+    init(players: [Player], deck: Deck) {
+        let playersShuffled = players.shuffled()
+        var tempPlayer: Player? = nil
+        var playersSetUp = [Player]()
         
-        self.game = Game(players: shuffledPlayers)
-        self.currentPlayer = shuffledPlayers[0]
-        self.waitingRoom = shuffledPlayers
+        for i in playersShuffled.indices {
+            tempPlayer = playersShuffled[i]
+            if tempPlayer != nil {
+                tempPlayer!.setUp(from: playersShuffled, index: i)
+                playersSetUp.append(tempPlayer!)
+                tempPlayer = nil
+            }
+        }
+        
+        var playersShuffledAndSetUp = playersSetUp
+        playersShuffledAndSetUp[0].stage = .guess
+        
+        
+        self.game = Game(deck: deck, players: playersShuffledAndSetUp)
+        self.currentPlayer = playersShuffledAndSetUp[0]
+        self.waitingRoom = playersShuffledAndSetUp
     }
     
     subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
@@ -30,9 +44,14 @@ class GameViewModel: ObservableObject {
         set { game[keyPath: keyPath] = newValue }
     }
     
+    func endGame() {
+        for i in waitingRoom.indices {
+            waitingRoom[i].stage = .end
+        }
+    }
     
     func updateQuestion() {
-        if game.phase == .guessing {
+        if game.phase == .guessing && game.players[0].id == waitingRoom[0].id {
             switch game.question {
             case .one:
                 game.question = .two
@@ -47,6 +66,9 @@ class GameViewModel: ObservableObject {
     }
     
     func updateCurrentPlayer() {
+        if game.deck.pile.count < 2 {
+            game.phase = .end
+        }
         waitingRoom.append(currentPlayer)
         waitingRoom.removeFirst()
         currentPlayer = waitingRoom[0]
@@ -57,6 +79,9 @@ class GameViewModel: ObservableObject {
             for cardIndex in game.players[playerIndex].hand.indices {
                 if game.players[playerIndex].hand[cardIndex].value == card.value {
                     game.players[playerIndex].pointsToGive += card.value.rawValue
+                    
+                    //add card to player's card.giveCards array for results
+                    game.players[playerIndex].hand[cardIndex].giveCards.append(card)
                 }
             }
         }
@@ -67,6 +92,9 @@ class GameViewModel: ObservableObject {
             for cardIndex in game.players[playerIndex].hand.indices {
                 if game.players[playerIndex].hand[cardIndex].value == card.value {
                     game.players[playerIndex].pointsToTake += card.value.rawValue
+                    
+                    //add card to player's card.takeCards array for results
+                    game.players[playerIndex].hand[cardIndex].takeCards.append(card)
                 }
             }
         }
@@ -115,5 +143,5 @@ enum GameViewSelection {
 
 
 extension GameViewModel {
-    static var preview = GameViewModel(players: Player.testArr)
+    static var preview = GameViewModel(players: Player.testArr, deck: Deck.newDeck())
 }

@@ -77,6 +77,7 @@ struct TakeView: View {
             
             if countdown == 0 {
                 Button("Next") {
+                    player.score += points
                     player.pointsToTake -= points
                     if player.pointsToTake == 0 {
                         endTakeAction()

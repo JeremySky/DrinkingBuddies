@@ -34,4 +34,9 @@ extension Deck {
         deck.shuffle()
         return deck
     }
+    
+    static func testDeck() -> Deck {
+        let deck = Deck.newDeck()
+        return Deck(pile: [deck.pile[0], deck.pile[1]])
+    }
 }

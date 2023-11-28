@@ -33,6 +33,8 @@ struct GiveView: View {
                     ForEach(temporaryPlayers.indices, id: \.self) { i in
                         Button {
                             givePoints(to: &temporaryPlayers[i])
+                            //track points for PlayerResultsView
+                            self.player.giveTo[i].1 += 1
                         } label: {
                             HStack {
                                 ZStack {
@@ -45,37 +47,7 @@ struct GiveView: View {
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.black)
                                 }
-                                
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .frame(height: 65)
-                                        .foregroundStyle(temporaryPlayers[i].color)
-                                        .shadow(radius: 10)
-                                    HStack {
-                                        ZStack {
-                                            Circle()
-                                                .frame(width: 45, height: 45)
-                                                .foregroundStyle(Color.white)
-                                            Image(systemName: temporaryPlayers[i].icon.rawValue)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 35, height: 35)
-                                                .foregroundStyle(temporaryPlayers[i].color)
-                                            Image(systemName: temporaryPlayers[i].icon.rawValue)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 35, height: 35)
-                                                .foregroundStyle(.black.opacity(0.3))
-                                        }
-                                        Spacer()
-                                        Text(temporaryPlayers[i].name)
-                                            .font(.largeTitle)
-                                            .fontWeight(.semibold)
-                                            .foregroundStyle(Color.white)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                }
+                                PlayerLabel(player: temporaryPlayers[i])
                             }
                         }
                         .disabled(disableButtons)

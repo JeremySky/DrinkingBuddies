@@ -10,9 +10,9 @@ import SwiftUI
 
 struct Game {
     let id = UUID()
-    var deck: Deck = Deck.newDeck()
+    var deck: Deck
     var players: [Player]
-    var phase: GamePhase = .giveTake
+    var phase: GamePhase = .guessing
     var question: Question = .one
 }
 

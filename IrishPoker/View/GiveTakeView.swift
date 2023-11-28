@@ -29,6 +29,7 @@ struct GiveTakeView: View {
                         .fontWeight(.heavy)
                     Text("The other will be TAKE")
                         .font(.headline)
+                        .foregroundStyle(.gray)
                 }
                 .multilineTextAlignment(.center)
                 

@@ -44,7 +44,7 @@ struct MainView: View {
             }
             .environmentObject(settings)
         case .game:
-            GameView(game: GameViewModel(players: settings.players), selection: settings.gameViewSelection)
+            GameView(game: GameViewModel(players: settings.players, deck: settings.deck), selection: settings.gameViewSelection)
         }
     }
     

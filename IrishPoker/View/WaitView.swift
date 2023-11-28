@@ -34,10 +34,14 @@ struct WaitView: View {
                             .padding()
                     }
                     .frame(width: 100, height: 100)
-                    Text("\(game.currentPlayer.name)'s Turn")
-                        .font(.largeTitle)
-                        .fontWeight(.heavy)
-                        .foregroundStyle(.white)
+                    VStack {
+                        Text("\(game.currentPlayer.name)'s Turn")
+                            .font(.largeTitle)
+                            .fontWeight(.heavy)
+                            .foregroundStyle(.white)
+                        Text("Cards Left: \(game.deck.pile.count)")
+                            .foregroundStyle(.white)
+                    }
                 }
             }
             .padding(.bottom)

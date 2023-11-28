@@ -68,6 +68,11 @@ struct PlayersTurnView: View {
             //MARK: -- CORRECT OR INCORRECT & CHANGE PHASE BUTTON
             if let isCorrect {
                 Button(isCorrect ? "Correct" : "Wrong", action: {
+                    if isCorrect {
+                        player.hand[question.number - 1].giveCards.append(player.hand[question.number - 1])
+                    } else {
+                        player.hand[question.number - 1].takeCards.append(player.hand[question.number - 1])
+                    }
                     returnResults(isCorrect, pointsToDistribute)
                 })
                 .buttonStyle(isCorrect ? .correct : .wrong)

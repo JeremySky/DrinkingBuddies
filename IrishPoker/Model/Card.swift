@@ -29,6 +29,12 @@ struct Card: Hashable {
     }
     var isFlipped: Bool = false
     
+    //MARK: -- Results
+    var giveCards = [Card]()
+    var takeCards = [Card]()
+    
+    
+    
     mutating func flip() {
         isFlipped = true
     }
@@ -113,28 +119,35 @@ extension Card {
 //    ]
     
     static var testHandArray1 = [
-        Card(value: .two, suit: .clubs, isFlipped: true),
-        Card(value: .three, suit: .hearts, isFlipped: true),
-        Card(value: .four, suit: .diamonds, isFlipped: true),
-        Card(value: .five, suit: .spades, isFlipped: true)
+        Card(value: .two, suit: .clubs, isFlipped: false),
+        Card(value: .three, suit: .hearts, isFlipped: false),
+        Card(value: .four, suit: .diamonds, isFlipped: false),
+        Card(value: .five, suit: .spades, isFlipped: false)
     ]
     static var testHandArray2 = [
-        Card(value: .five, suit: .clubs, isFlipped: true),
-        Card(value: .six, suit: .clubs, isFlipped: true),
-        Card(value: .seven, suit: .diamonds, isFlipped: true),
-        Card(value: .eight, suit: .hearts, isFlipped: true)
+        Card(value: .five, suit: .clubs, isFlipped: false),
+        Card(value: .six, suit: .clubs, isFlipped: false),
+        Card(value: .seven, suit: .diamonds, isFlipped: false),
+        Card(value: .eight, suit: .hearts, isFlipped: false)
     ]
     static var testHandArray3 = [
-        Card(value: .eight, suit: .diamonds, isFlipped: true),
-        Card(value: .nine, suit: .clubs, isFlipped: true),
-        Card(value: .ten, suit: .diamonds, isFlipped: true),
-        Card(value: .king, suit: .clubs, isFlipped: true)
+        Card(value: .eight, suit: .diamonds, isFlipped: false),
+        Card(value: .nine, suit: .clubs, isFlipped: false),
+        Card(value: .ten, suit: .diamonds, isFlipped: false),
+        Card(value: .king, suit: .clubs, isFlipped: false)
     ]
     static var testHandArray4 = [
-        Card(value: .king, suit: .clubs, isFlipped: true),
-        Card(value: .queen, suit: .diamonds, isFlipped: true),
-        Card(value: .jack, suit: .diamonds, isFlipped: true),
-        Card(value: .ace, suit: .diamonds, isFlipped: true)
+        Card(value: .king, suit: .clubs, isFlipped: false),
+        Card(value: .queen, suit: .diamonds, isFlipped: false),
+        Card(value: .jack, suit: .diamonds, isFlipped: false),
+        Card(value: .ace, suit: .diamonds, isFlipped: false)
+    ]
+    
+    static var testHandArrayResults = [
+        Card(value: .two, suit: .clubs, isFlipped: true, giveCards: [Card(value: .two, suit: .diamonds)]),
+        Card(value: .three, suit: .hearts, isFlipped: true, giveCards: [Card(value: .three, suit: .clubs), Card(value: .three, suit: .diamonds)]),
+        Card(value: .four, suit: .diamonds, isFlipped: true, giveCards: []),
+        Card(value: .five, suit: .spades, isFlipped: true, giveCards: [Card(value: .five, suit: .clubs), Card(value: .five, suit: .hearts), Card(value: .five, suit: .diamonds)])
     ]
     
     static var test1 = Card(value: .ten, suit: .spades)
