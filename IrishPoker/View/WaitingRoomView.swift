@@ -84,17 +84,13 @@ struct WaitingRoomView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if settings.players.count < 4 && settings.gameViewSelection == .local {
                     Button(action: { modifyPlayerIsPresenting = true }, label: {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(.white)
-                            Image(systemName: "person.badge.plus")
-                                .resizable()
-                                .scaledToFit()
-                                .padding(.all, 6)
-                                .foregroundStyle(host.color)
-                        }
-                        .frame(width: 40, height: 40)
-                        .padding(.trailing)
+                        Image(systemName: "person.badge.plus")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.all, 6)
+                            .foregroundStyle(.white)
+                            .frame(width: 40, height: 40)
+                            .fontWeight(.bold)
                     })
                 }
             }
