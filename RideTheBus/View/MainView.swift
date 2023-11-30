@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 @MainActor
 class SetupViewModel: ObservableObject {
     @Published var player: Player = Player()
@@ -14,12 +16,14 @@ class SetupViewModel: ObservableObject {
     @Published var gameViewSelection: GameViewSelection = .local
     @Published var deck: Deck = Deck.newDeck()
     @Published var mainSelection: AppViewSelection = .setup
+    @Published var setupSelection: SetupSelection = .main
     
-    init(player: Player = Player(), players: [Player] = [], gameViewSelection: GameViewSelection = .local, deck: Deck = Deck.newDeck()) {
+    init(player: Player = Player(), players: [Player] = [], gameViewSelection: GameViewSelection = .local, deck: Deck = Deck.newDeck(), mainSelection: AppViewSelection = .setup) {
         self.player = player
         self.players = players
         self.gameViewSelection = gameViewSelection
         self.deck = deck
+        self.mainSelection = mainSelection
     }
     
     func deal() {
@@ -33,21 +37,18 @@ class SetupViewModel: ObservableObject {
 }
 
 struct MainView: View {
-    @State var settings: SetupViewModel
+    @ObservedObject var settings: SetupViewModel
     
     var body: some View {
-        switch settings.mainSelection {
-        case .setup:
-            NavigationStack {
-                SetupView() {
-                    settings.deal()
-                    settings.mainSelection = .game
-                }
+        ZStack {
+            switch settings.mainSelection {
+            case .setup:
+                SetupView()
+                    .environmentObject(settings)
+            case .game:
+                GameView(game: GameViewModel(players: settings.players, deck: settings.deck), selection: settings.gameViewSelection)
+                    .environmentObject(settings)
             }
-            .environmentObject(settings)
-        case .game:
-            GameView(game: GameViewModel(players: settings.players, deck: settings.deck), selection: settings.gameViewSelection)
-                .environmentObject(settings)
         }
     }
 }

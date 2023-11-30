@@ -10,19 +10,48 @@ import SwiftUI
 struct HostRoomView: View {
     @EnvironmentObject var settings: SetupViewModel
     @Binding var host: Player
-    var startGameAction: () -> Void
     
     @State var newPlayer = Player()
     var takenColors: [Color] { settings.players.map({$0.color}) }
     var takenIcons: [IconSelection] { settings.players.map({$0.icon}) }
     
     @State var modifyPlayerIsPresenting = false
+    @State var playerIndex: Int? = nil
     
-    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStack {
             ZStack(alignment: .topTrailing) {
                 VStack(spacing: 0) {
+                    ZStack {
+                        HStack {
+                            Button(action: {settings.setupSelection = .main}) {
+                                Image(systemName: "chevron.left")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(.white)
+                                    .frame(width: 25, height: 20)
+                                    .fontWeight(.heavy)
+                            }
+                            
+                            Spacer()
+                            
+                            if settings.players.count < 4 && settings.gameViewSelection == .local {
+                                Button(action: { modifyPlayerIsPresenting = true }, label: {
+                                    Image(systemName: "person.badge.plus")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 28, height: 28)
+                                        .fontWeight(.bold)
+                                })
+                            }
+                        }
+                        Text("Host")
+                            .foregroundStyle(.white)
+                            .font(.title3)
+                            .fontWeight(.bold)
+                    }
                     PlayerHeader(player: .constant(host))
                     if settings.gameViewSelection != .local {
                         Text("783-128-222")
@@ -31,6 +60,7 @@ struct HostRoomView: View {
                             .padding(.bottom)
                     }
                 }
+                .padding(.horizontal)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .background(host.color)
@@ -46,7 +76,7 @@ struct HostRoomView: View {
                             if i != 0 {
                                 newPlayer = settings.players[i]
                                 modifyPlayerIsPresenting = true
-                                settings.players.remove(at: i)
+                                playerIndex = i
                             }
                         }
                 }
@@ -55,58 +85,30 @@ struct HostRoomView: View {
             
             if settings.player == host && settings.players.count > 1 {
                 Button("Start") {
-                    startGameAction()
+                    print("Start")
+                    print(settings.mainSelection)
+                    settings.deal()
+                    settings.mainSelection = .game
+                    print(settings.mainSelection)
                 }
-                    .buttonStyle(.start)
+                .buttonStyle(.start)
             }
         }
         .onAppear {
             settings.players = [host]
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {dismiss()}) {
-                    Image(systemName: "chevron.left")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundStyle(.white)
-                        .frame(width: 25, height: 20)
-                        .fontWeight(.heavy)
-                }
-            }
-            ToolbarItem(placement: .principal) {
-                Text("Host")
-                    .foregroundStyle(.white)
-                    .font(.title3)
-                    .fontWeight(.bold)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                if settings.players.count < 4 && settings.gameViewSelection == .local {
-                    Button(action: { modifyPlayerIsPresenting = true }, label: {
-                        Image(systemName: "person.badge.plus")
-                            .resizable()
-                            .scaledToFit()
-                            .padding(.all, 6)
-                            .foregroundStyle(.white)
-                            .frame(width: 40, height: 40)
-                            .fontWeight(.bold)
-                    })
-                }
-            }
-        }
-
         .sheet(isPresented: $modifyPlayerIsPresenting) {
             ZStack {
                 ModifyPlayer(player: $newPlayer, players: $settings.players, paddingTop: true) { name, icon, color in
                     let modifiedPlayer = Player(name: name, icon: icon, color: color.value)
-                    if !settings.players.contains(modifiedPlayer) {
+                    guard let playerIndex else {
                         settings.players.append(modifiedPlayer)
-                        resetNewPlayer()
                         modifyPlayerIsPresenting = false
-                    } else {
-                        
+                        return
                     }
+                    settings.players[playerIndex] = newPlayer
+                    self.playerIndex = nil
+                    modifyPlayerIsPresenting = false
                 }
                 .onDisappear(perform: {
                     resetNewPlayer()
@@ -147,13 +149,13 @@ struct HostRoomView: View {
 #Preview {
     @State var players: [Player] = [Player.test1, Player.test2]
     return NavigationStack {
-        HostRoomView(host: $players[0]) { }
+        HostRoomView(host: $players[0])
     }
     .environmentObject(SetupViewModel())
 }
 #Preview {
     @State var players: [Player] = Player.testArr
-    return HostRoomView(host: $players[0]) { }
+    return HostRoomView(host: $players[0])
         .environmentObject(SetupViewModel())
 }
 

@@ -47,7 +47,7 @@ struct Player {
     }
     
     init() {
-        self.init(name: "", icon: .clipboard, color: .red, hand: [])
+        self.init(name: "", icon: .drink, color: .red, hand: [])
     }
     
     func copyAndRemovePointsToTake() -> Player {

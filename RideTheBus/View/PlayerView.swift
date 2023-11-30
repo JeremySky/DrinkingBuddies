@@ -50,6 +50,14 @@ struct PlayerView: View {
             case .take:
                 TakeView(player: $player, countdown: player.pointsToTake, points: player.pointsToTake) {
                     player.stage = .wait
+                    if !game.players.map( {
+                        $0.pointsToGive == 0 && $0.pointsToTake == 0
+                    }).contains(false) && game.turnTaken {
+                        game.turnTaken = false
+                        game.updateDeck()
+                        game.updateCurrentPlayer()
+                        game.updateQuestion()
+                    }
                 }
             case .wait:
                 WaitView(player: $player)
@@ -73,7 +81,8 @@ struct PlayerView: View {
                             game.turnTaken = false
                             game.updateDeck()
                             game.updateCurrentPlayer()
-                            game.updateQuestion()                        }
+                            game.updateQuestion()
+                        }
                     }
                     .environmentObject(game)
             case .end:

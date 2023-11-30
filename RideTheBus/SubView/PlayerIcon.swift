@@ -14,6 +14,8 @@ struct PlayerIcon: View {
     var selected: Bool = false
     var width: CGFloat {
         switch icon {
+        case .drink:
+            70
         case .clipboard:
             75
         case .book:
@@ -38,6 +40,8 @@ struct PlayerIcon: View {
     }
     var height: CGFloat {
         switch icon {
+        case .drink:
+            70
         case .clipboard:
             70
         case .book:
@@ -88,13 +92,14 @@ struct PlayerIcon: View {
     return ZStack {
         Color.brown
         VStack {
-            PlayerIcon(icon: IconSelection.backpack, color: Color.red, weight: .heavy, selected: false)
+            PlayerIcon(icon: IconSelection.drink, color: Color.red, weight: .heavy, selected: false)
             PlayerIcon(icon: IconSelection.clipboard, color: Color.red, weight: .semibold, selected: true)
         }
     }
 }
 
 enum IconSelection: String, RawRepresentable, CaseIterable, Codable {
+    case drink = "mug"
     case clipboard = "pencil.and.list.clipboard"
     case book = "text.book.closed"
     case gradCap = "graduationcap"
@@ -105,4 +110,5 @@ enum IconSelection: String, RawRepresentable, CaseIterable, Codable {
     case idCard = "person.text.rectangle"
     case dumbbell = "dumbbell.fill"
     case skateboard = "skateboard"
+    
 }

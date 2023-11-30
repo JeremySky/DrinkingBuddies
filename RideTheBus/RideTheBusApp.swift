@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct IrishPokerApp: App {
+struct RideTheBusApp: App {
     var body: some Scene {
         WindowGroup {
             MainView(settings: SetupViewModel())
