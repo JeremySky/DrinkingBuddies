@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HostRoomView: View {
+struct SetupWaitingRoom: View {
     @EnvironmentObject var settings: SetupViewModel
     @Binding var host: Player
     
@@ -149,13 +149,13 @@ struct HostRoomView: View {
 #Preview {
     @State var players: [Player] = [Player.test1, Player.test2]
     return NavigationStack {
-        HostRoomView(host: $players[0])
+        SetupWaitingRoom(host: $players[0])
     }
     .environmentObject(SetupViewModel())
 }
 #Preview {
     @State var players: [Player] = Player.testArr
-    return HostRoomView(host: $players[0])
+    return SetupWaitingRoom(host: $players[0])
         .environmentObject(SetupViewModel())
 }
 
