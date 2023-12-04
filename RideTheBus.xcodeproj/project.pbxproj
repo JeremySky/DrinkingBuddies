@@ -17,11 +17,17 @@
 		6236A0322B0C0D32002542E7 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0312B0C0D32002542E7 /* SetupView.swift */; };
 		6236A0382B0C3D55002542E7 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0372B0C3D55002542E7 /* MainView.swift */; };
 		6236A03C2B0C41A7002542E7 /* LocalGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03B2B0C41A7002542E7 /* LocalGameView.swift */; };
-		6236A03E2B0C4293002542E7 /* HostRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03D2B0C4293002542E7 /* HostRoomView.swift */; };
+		6236A03E2B0C4293002542E7 /* SetupWaitingRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03D2B0C4293002542E7 /* SetupWaitingRoom.swift */; };
 		6236A0402B0C4304002542E7 /* PlayerOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A03F2B0C4304002542E7 /* PlayerOverview.swift */; };
 		6236A0422B101B35002542E7 /* PlayerResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0412B101B35002542E7 /* PlayerResultsView.swift */; };
 		6236A0442B1534BA002542E7 /* PlayerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0432B1534BA002542E7 /* PlayerLabel.swift */; };
-		6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242613E2B000387001C5410 /* IrishPokerApp.swift */; };
+		6236A0462B1E43A5002542E7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6236A0452B1E43A5002542E7 /* GoogleService-Info.plist */; };
+		6236A0492B1E4423002542E7 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A0482B1E4423002542E7 /* FirebaseAnalytics */; };
+		6236A04B2B1E4423002542E7 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A04A2B1E4423002542E7 /* FirebaseAnalyticsOnDeviceConversion */; };
+		6236A04D2B1E4423002542E7 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A04C2B1E4423002542E7 /* FirebaseAnalyticsSwift */; };
+		6236A04F2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A04E2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		6236A0512B1E4423002542E7 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A0502B1E4423002542E7 /* FirebaseAppCheck */; };
+		6242613F2B000387001C5410 /* RideTheBusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242613E2B000387001C5410 /* RideTheBusApp.swift */; };
 		624261412B000387001C5410 /* PlayersTurnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624261402B000387001C5410 /* PlayersTurnView.swift */; };
 		624261432B000389001C5410 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 624261422B000389001C5410 /* Assets.xcassets */; };
 		624261462B000389001C5410 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 624261452B000389001C5410 /* Preview Assets.xcassets */; };
@@ -51,12 +57,13 @@
 		6236A0312B0C0D32002542E7 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
 		6236A0372B0C3D55002542E7 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		6236A03B2B0C41A7002542E7 /* LocalGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGameView.swift; sourceTree = "<group>"; };
-		6236A03D2B0C4293002542E7 /* HostRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostRoomView.swift; sourceTree = "<group>"; };
+		6236A03D2B0C4293002542E7 /* SetupWaitingRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupWaitingRoom.swift; sourceTree = "<group>"; };
 		6236A03F2B0C4304002542E7 /* PlayerOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerOverview.swift; sourceTree = "<group>"; };
 		6236A0412B101B35002542E7 /* PlayerResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerResultsView.swift; sourceTree = "<group>"; };
 		6236A0432B1534BA002542E7 /* PlayerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLabel.swift; sourceTree = "<group>"; };
-		6242613B2B000387001C5410 /* IrishPoker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IrishPoker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6242613E2B000387001C5410 /* IrishPokerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrishPokerApp.swift; sourceTree = "<group>"; };
+		6236A0452B1E43A5002542E7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6242613B2B000387001C5410 /* RideTheBus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideTheBus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6242613E2B000387001C5410 /* RideTheBusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideTheBusApp.swift; sourceTree = "<group>"; };
 		624261402B000387001C5410 /* PlayersTurnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersTurnView.swift; sourceTree = "<group>"; };
 		624261422B000389001C5410 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		624261452B000389001C5410 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -80,6 +87,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6236A04D2B1E4423002542E7 /* FirebaseAnalyticsSwift in Frameworks */,
+				6236A0492B1E4423002542E7 /* FirebaseAnalytics in Frameworks */,
+				6236A04B2B1E4423002542E7 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				6236A0512B1E4423002542E7 /* FirebaseAppCheck in Frameworks */,
+				6236A04F2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +101,7 @@
 		624261322B000387001C5410 = {
 			isa = PBXGroup;
 			children = (
-				6242613D2B000387001C5410 /* IrishPoker */,
+				6242613D2B000387001C5410 /* RideTheBus */,
 				6242613C2B000387001C5410 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,27 +109,28 @@
 		6242613C2B000387001C5410 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6242613B2B000387001C5410 /* IrishPoker.app */,
+				6242613B2B000387001C5410 /* RideTheBus.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6242613D2B000387001C5410 /* IrishPoker */ = {
+		6242613D2B000387001C5410 /* RideTheBus */ = {
 			isa = PBXGroup;
 			children = (
-				6242613E2B000387001C5410 /* IrishPokerApp.swift */,
+				6242613E2B000387001C5410 /* RideTheBusApp.swift */,
 				627C616E2B04292200DE56A4 /* View */,
 				627C616F2B04295800DE56A4 /* SubView */,
 				627C61702B04298C00DE56A4 /* Model */,
 				624261422B000389001C5410 /* Assets.xcassets */,
 				624261442B000389001C5410 /* Preview Content */,
 			);
-			path = IrishPoker;
+			path = RideTheBus;
 			sourceTree = "<group>";
 		};
 		624261442B000389001C5410 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				6236A0452B1E43A5002542E7 /* GoogleService-Info.plist */,
 				624261452B000389001C5410 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -129,7 +142,7 @@
 				6236A0372B0C3D55002542E7 /* MainView.swift */,
 				6236A0312B0C0D32002542E7 /* SetupView.swift */,
 				622373B02B09897F006990DD /* ModifyPlayer.swift */,
-				6236A03D2B0C4293002542E7 /* HostRoomView.swift */,
+				6236A03D2B0C4293002542E7 /* SetupWaitingRoom.swift */,
 				627C61772B048F1A00DE56A4 /* GameView.swift */,
 				6236A03B2B0C41A7002542E7 /* LocalGameView.swift */,
 				62FECDB02B03004400F13854 /* PlayerView.swift */,
@@ -175,9 +188,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6242613A2B000387001C5410 /* IrishPoker */ = {
+		6242613A2B000387001C5410 /* RideTheBus */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 624261492B000389001C5410 /* Build configuration list for PBXNativeTarget "IrishPoker" */;
+			buildConfigurationList = 624261492B000389001C5410 /* Build configuration list for PBXNativeTarget "RideTheBus" */;
 			buildPhases = (
 				624261372B000387001C5410 /* Sources */,
 				624261382B000387001C5410 /* Frameworks */,
@@ -187,9 +200,16 @@
 			);
 			dependencies = (
 			);
-			name = IrishPoker;
+			name = RideTheBus;
+			packageProductDependencies = (
+				6236A0482B1E4423002542E7 /* FirebaseAnalytics */,
+				6236A04A2B1E4423002542E7 /* FirebaseAnalyticsOnDeviceConversion */,
+				6236A04C2B1E4423002542E7 /* FirebaseAnalyticsSwift */,
+				6236A04E2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				6236A0502B1E4423002542E7 /* FirebaseAppCheck */,
+			);
 			productName = IrishPoker;
-			productReference = 6242613B2B000387001C5410 /* IrishPoker.app */;
+			productReference = 6242613B2B000387001C5410 /* RideTheBus.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -207,7 +227,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 624261362B000387001C5410 /* Build configuration list for PBXProject "IrishPoker" */;
+			buildConfigurationList = 624261362B000387001C5410 /* Build configuration list for PBXProject "RideTheBus" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -216,11 +236,14 @@
 				Base,
 			);
 			mainGroup = 624261322B000387001C5410;
+			packageReferences = (
+				6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 6242613C2B000387001C5410 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6242613A2B000387001C5410 /* IrishPoker */,
+				6242613A2B000387001C5410 /* RideTheBus */,
 			);
 		};
 /* End PBXProject section */
@@ -232,6 +255,7 @@
 			files = (
 				624261462B000389001C5410 /* Preview Assets.xcassets in Resources */,
 				624261432B000389001C5410 /* Assets.xcassets in Resources */,
+				6236A0462B1E43A5002542E7 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,10 +289,10 @@
 				62FECDB52B0344FB00F13854 /* GiveTakeView.swift in Sources */,
 				62FECDB72B034FF200F13854 /* WaitView.swift in Sources */,
 				6236A03C2B0C41A7002542E7 /* LocalGameView.swift in Sources */,
-				6242613F2B000387001C5410 /* IrishPokerApp.swift in Sources */,
+				6242613F2B000387001C5410 /* RideTheBusApp.swift in Sources */,
 				62FECDB12B03004400F13854 /* PlayerView.swift in Sources */,
 				627C617F2B05877D00DE56A4 /* PlayerQueue.swift in Sources */,
-				6236A03E2B0C4293002542E7 /* HostRoomView.swift in Sources */,
+				6236A03E2B0C4293002542E7 /* SetupWaitingRoom.swift in Sources */,
 				6236A0322B0C0D32002542E7 /* SetupView.swift in Sources */,
 				627C61722B0429B500DE56A4 /* Card.swift in Sources */,
 			);
@@ -403,7 +427,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"IrishPoker/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"RideTheBus/Preview Content\"";
 				DEVELOPMENT_TEAM = 49HBQH4LWP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -433,7 +457,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"IrishPoker/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"RideTheBus/Preview Content\"";
 				DEVELOPMENT_TEAM = 49HBQH4LWP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -459,7 +483,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		624261362B000387001C5410 /* Build configuration list for PBXProject "IrishPoker" */ = {
+		624261362B000387001C5410 /* Build configuration list for PBXProject "RideTheBus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				624261472B000389001C5410 /* Debug */,
@@ -468,7 +492,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		624261492B000389001C5410 /* Build configuration list for PBXNativeTarget "IrishPoker" */ = {
+		624261492B000389001C5410 /* Build configuration list for PBXNativeTarget "RideTheBus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6242614A2B000389001C5410 /* Debug */,
@@ -478,6 +502,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.18.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6236A0482B1E4423002542E7 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		6236A04A2B1E4423002542E7 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		6236A04C2B1E4423002542E7 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		6236A04E2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		6236A0502B1E4423002542E7 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 624261332B000387001C5410 /* Project object */;
 }

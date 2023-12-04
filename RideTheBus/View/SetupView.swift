@@ -34,9 +34,10 @@ struct SetupView: View {
                 })
                 
                 Spacer()
-                Text("Ride The Bus")
+                Text("Ride \nThe \nBus")
                     .font(.system(size: 100))
                     .fontWeight(.heavy)
+                    .multilineTextAlignment(.center)
                 Spacer()
                 
                 if settings.player != Player() {
@@ -82,7 +83,7 @@ struct SetupView: View {
                 settings.setupSelection = .main
             }
         case .host:
-            HostRoomView(host: $settings.player)
+            SetupWaitingRoom(host: $settings.player)
             
             //                    Button("Join", action: {})
             //                        .foregroundColor(settings.player.color)
