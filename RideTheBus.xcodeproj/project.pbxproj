@@ -30,6 +30,7 @@
 		6236A05E2B1FB0EA002542E7 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A05D2B1FB0EA002542E7 /* FirebaseDatabase */; };
 		6236A0602B1FB0EA002542E7 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A05F2B1FB0EA002542E7 /* FirebaseDatabaseSwift */; };
 		6236A0622B1FB7DC002542E7 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0612B1FB7DC002542E7 /* Color.swift */; };
+		6236A0682B1FC9F5002542E7 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236A0672B1FC9F5002542E7 /* GameViewModel.swift */; };
 		6242613F2B000387001C5410 /* RideTheBusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242613E2B000387001C5410 /* RideTheBusApp.swift */; };
 		624261412B000387001C5410 /* PlayersTurnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624261402B000387001C5410 /* PlayersTurnView.swift */; };
 		624261432B000389001C5410 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 624261422B000389001C5410 /* Assets.xcassets */; };
@@ -66,6 +67,7 @@
 		6236A0432B1534BA002542E7 /* PlayerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLabel.swift; sourceTree = "<group>"; };
 		6236A0452B1E43A5002542E7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6236A0612B1FB7DC002542E7 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		6236A0672B1FC9F5002542E7 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		6242613B2B000387001C5410 /* RideTheBus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideTheBus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6242613E2B000387001C5410 /* RideTheBusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideTheBusApp.swift; sourceTree = "<group>"; };
 		624261402B000387001C5410 /* PlayersTurnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersTurnView.swift; sourceTree = "<group>"; };
@@ -111,6 +113,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6236A0662B1FC9E4002542E7 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6236A0672B1FC9F5002542E7 /* GameViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		624261322B000387001C5410 = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +141,7 @@
 		6242613D2B000387001C5410 /* RideTheBus */ = {
 			isa = PBXGroup;
 			children = (
+				6236A0662B1FC9E4002542E7 /* ViewModel */,
 				6242613E2B000387001C5410 /* RideTheBusApp.swift */,
 				627C616E2B04292200DE56A4 /* View */,
 				627C616F2B04295800DE56A4 /* SubView */,
@@ -290,6 +301,7 @@
 				62FECDB32B03143800F13854 /* TakeView.swift in Sources */,
 				62FECDAD2B029E2300F13854 /* GiveView.swift in Sources */,
 				624261412B000387001C5410 /* PlayersTurnView.swift in Sources */,
+				6236A0682B1FC9F5002542E7 /* GameViewModel.swift in Sources */,
 				6236A0302B0ACA78002542E7 /* ButtonStyles.swift in Sources */,
 				6236A02A2B09ADDB002542E7 /* IconPicker.swift in Sources */,
 				622373B32B098A53006990DD /* CustomColorPicker.swift in Sources */,
