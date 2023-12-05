@@ -27,6 +27,8 @@
 		6236A04D2B1E4423002542E7 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A04C2B1E4423002542E7 /* FirebaseAnalyticsSwift */; };
 		6236A04F2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A04E2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		6236A0512B1E4423002542E7 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A0502B1E4423002542E7 /* FirebaseAppCheck */; };
+		6236A05E2B1FB0EA002542E7 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A05D2B1FB0EA002542E7 /* FirebaseDatabase */; };
+		6236A0602B1FB0EA002542E7 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6236A05F2B1FB0EA002542E7 /* FirebaseDatabaseSwift */; };
 		6242613F2B000387001C5410 /* RideTheBusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242613E2B000387001C5410 /* RideTheBusApp.swift */; };
 		624261412B000387001C5410 /* PlayersTurnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624261402B000387001C5410 /* PlayersTurnView.swift */; };
 		624261432B000389001C5410 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 624261422B000389001C5410 /* Assets.xcassets */; };
@@ -87,6 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6236A0602B1FB0EA002542E7 /* FirebaseDatabaseSwift in Frameworks */,
+				6236A05E2B1FB0EA002542E7 /* FirebaseDatabase in Frameworks */,
 				6236A04D2B1E4423002542E7 /* FirebaseAnalyticsSwift in Frameworks */,
 				6236A0492B1E4423002542E7 /* FirebaseAnalytics in Frameworks */,
 				6236A04B2B1E4423002542E7 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
@@ -98,11 +102,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6236A05C2B1FB0EA002542E7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		624261322B000387001C5410 = {
 			isa = PBXGroup;
 			children = (
 				6242613D2B000387001C5410 /* RideTheBus */,
 				6242613C2B000387001C5410 /* Products */,
+				6236A05C2B1FB0EA002542E7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -207,6 +219,8 @@
 				6236A04C2B1E4423002542E7 /* FirebaseAnalyticsSwift */,
 				6236A04E2B1E4423002542E7 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				6236A0502B1E4423002542E7 /* FirebaseAppCheck */,
+				6236A05D2B1FB0EA002542E7 /* FirebaseDatabase */,
+				6236A05F2B1FB0EA002542E7 /* FirebaseDatabaseSwift */,
 			);
 			productName = IrishPoker;
 			productReference = 6242613B2B000387001C5410 /* RideTheBus.app */;
@@ -539,6 +553,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAppCheck;
+		};
+		6236A05D2B1FB0EA002542E7 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		6236A05F2B1FB0EA002542E7 /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6236A0472B1E4423002542E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
