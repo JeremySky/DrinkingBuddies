@@ -97,7 +97,7 @@ struct PlayerView: View {
                 for i in game.players.indices {
                     if tempPlayer.id == game.players[i].id {
                         game.players[i].pointsToTake += tempPlayer.pointsToTake
-                        game.players[i].takeFrom[giver.index].1 += tempPlayer.pointsToTake
+                        game.players[i].takeFrom[giver.index] += tempPlayer.pointsToTake
                     }
                 }
             }

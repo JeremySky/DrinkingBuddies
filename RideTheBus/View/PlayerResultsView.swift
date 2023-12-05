@@ -10,6 +10,7 @@ import SwiftUI
 struct PlayerResultsView: View {
     @State var player: Player
     
+    @EnvironmentObject var game: GameViewModel
     @EnvironmentObject var settings: SetupViewModel
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -94,14 +95,14 @@ struct PlayerResultsView: View {
                         
                         ForEach(player.giveTo.indices) { i in
                             HStack {
-                                PlayerLabel(player: player.giveTo[i].0)
+                                PlayerLabel(player: game.players[i])
                                 
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(width: 65, height: 65)
                                         .foregroundStyle(Color.white)
                                         .shadow(radius: 10)
-                                    Text("\(player.giveTo[i].1)")
+                                    Text("\(player.giveTo[i])")
                                         .font(.largeTitle)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.black)
@@ -153,14 +154,14 @@ struct PlayerResultsView: View {
                         
                         ForEach(player.takeFrom.indices) { i in
                             HStack {
-                                PlayerLabel(player: player.takeFrom[i].0)
+                                PlayerLabel(player: game.players[i])
                                 
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(width: 65, height: 65)
                                         .foregroundStyle(Color.white)
                                         .shadow(radius: 10)
-                                    Text("\(player.takeFrom[i].1)")
+                                    Text("\(player.takeFrom[i])")
                                         .font(.largeTitle)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.black)
@@ -189,4 +190,5 @@ struct PlayerResultsView: View {
     @State var player = Player.results
     return PlayerResultsView(player: player)
         .environmentObject(SetupViewModel.init())
+        .environmentObject(GameViewModel.preview)
 }

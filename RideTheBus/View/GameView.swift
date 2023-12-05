@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
+import FirebaseDatabase
+import FirebaseDatabaseSwift
 
 //MARK: -- VIEW MODEL
 @MainActor
 @dynamicMemberLookup
 class GameViewModel: ObservableObject {
     @Published var game: Game
-    @Published var currentPlayer: Player
-    @Published var waitingRoom: [Player]
-    @Published var turnTaken = false
     
     init(players: [Player], deck: Deck) {
         let playersShuffled = players.shuffled()
@@ -34,9 +33,7 @@ class GameViewModel: ObservableObject {
         playersShuffledAndSetUp[0].stage = .guess
         
         
-        self.game = Game(deck: deck, players: playersShuffledAndSetUp)
-        self.currentPlayer = playersShuffledAndSetUp[0]
-        self.waitingRoom = playersShuffledAndSetUp
+        self.game = Game(deck: deck, players: playersShuffledAndSetUp, currentPlayer: playersShuffledAndSetUp[0], waitingRoom: playersShuffledAndSetUp)
     }
     
     subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
@@ -45,13 +42,13 @@ class GameViewModel: ObservableObject {
     }
     
     func endGame() {
-        for i in waitingRoom.indices {
-            waitingRoom[i].stage = .end
+        for i in game.waitingRoom.indices {
+            game.waitingRoom[i].stage = .end
         }
     }
     
     func updateQuestion() {
-        if game.phase == .guessing && game.players[0].id == waitingRoom[0].id {
+        if game.phase == .guessing && game.players[0].id == game.waitingRoom[0].id {
             switch game.question {
             case .one:
                 game.question = .two
@@ -69,9 +66,9 @@ class GameViewModel: ObservableObject {
         if game.deck.pile.count < 2 {
             game.phase = .end
         }
-        waitingRoom.append(currentPlayer)
-        waitingRoom.removeFirst()
-        currentPlayer = waitingRoom[0]
+        game.waitingRoom.append(game.currentPlayer)
+        game.waitingRoom.removeFirst()
+        game.currentPlayer = game.waitingRoom[0]
     }
     
     func checkForGive(_ card: Card) {

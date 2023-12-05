@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 
-struct Player {
-    let id = UUID()
+struct Player: Codable {
+    var id = UUID()
     var name: String
     var icon: IconSelection
     var color: Color
@@ -20,8 +20,8 @@ struct Player {
     //MARK: -- Results
     var score: Int = 0
     var guesses: [Bool] = []
-    var giveTo: [(Player, Int)] = []
-    var takeFrom: [(Player, Int)] = []
+    var giveTo: [Int] = []
+    var takeFrom: [Int] = []
     
     
     
@@ -31,7 +31,7 @@ struct Player {
     var pointsToTake: Int = 0
     
     
-    init(name: String, icon: IconSelection, color: Color, hand: [Card] = [], index: Int = 0, score: Int = 0, guesses: [Bool] = [], giveTo: [(Player, Int)] = [], takeFrom: [(Player, Int)] = [], stage: PlayerStage = .wait, pointsToGive: Int = 0, pointsToTake: Int = 0) {
+    init(name: String, icon: IconSelection, color: Color, hand: [Card] = [], index: Int = 0, score: Int = 0, guesses: [Bool] = [], giveTo: [Int] = [], takeFrom: [Int] = [], stage: PlayerStage = .wait, pointsToGive: Int = 0, pointsToTake: Int = 0) {
         self.name = name
         self.icon = icon
         self.color = color
@@ -57,9 +57,9 @@ struct Player {
     }
     
     mutating func setUp(from players: [Player], index: Int) {
-        for player in players {
-            self.giveTo.append((player, 0))
-            self.takeFrom.append((player, 0))
+        for _ in players {
+            self.giveTo.append(0)
+            self.takeFrom.append(0)
             self.index = index
         }
     }
@@ -91,7 +91,7 @@ extension Player: Hashable, Equatable {
 }
 
 
-enum PlayerStage {
+enum PlayerStage: Codable {
     case guess
     case give
     case take
@@ -113,7 +113,7 @@ extension Player {
     static var give = Player(name: "Peter", icon: IconSelection.dumbbell, color: .brown, hand: Card.testHandArray1, pointsToGive: 9)
     
     
-    static var results = Player(name: "Jeremy", icon: .gradCap, color: .blue, hand: Card.testHandArrayResults, score: 130, guesses: [true, false, true, true], giveTo: [(Player.test1, 4), (Player.test2, 39), (Player.test3, 121), (Player.test4, 69)], takeFrom: [(Player.test1, 4), (Player.test2, 3), (Player.test3, 23), (Player.test4, 34)])
+    static var results = Player(name: "Jeremy", icon: .gradCap, color: .blue, hand: Card.testHandArrayResults, score: 130, guesses: [true, false, true, true], giveTo: [4, 39, 121, 69], takeFrom: [4, 3, 23, 34])
 }
 
 

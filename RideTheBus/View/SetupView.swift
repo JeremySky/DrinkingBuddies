@@ -84,10 +84,6 @@ struct SetupView: View {
             }
         case .host:
             SetupWaitingRoom(host: $settings.player)
-            
-            //                    Button("Join", action: {})
-            //                        .foregroundColor(settings.player.color)
-            //                        .padding()
         }
     }
     

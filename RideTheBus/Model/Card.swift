@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Card: Hashable {
+struct Card: Hashable, Codable {
     var id: String { "\(value.string).\(suit.rawValue)" }
     var value: CardValue
     var suit: CardSuit
@@ -40,7 +40,7 @@ struct Card: Hashable {
     }
 }
 
-enum CardValue: Int, CaseIterable {
+enum CardValue: Int, CaseIterable, Codable {
     case two = 2
     case three = 3
     case four  = 4
@@ -71,7 +71,7 @@ enum CardValue: Int, CaseIterable {
     }
 }
 
-enum CardSuit: String, CaseIterable {
+enum CardSuit: String, CaseIterable, Codable {
     case clubs
     case spades
     case hearts

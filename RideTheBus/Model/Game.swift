@@ -8,21 +8,24 @@
 import Foundation
 import SwiftUI
 
-struct Game {
-    let id = UUID()
+struct Game: Codable {
+    var id = UUID()
     var deck: Deck
     var players: [Player]
     var phase: GamePhase = .guessing
     var question: Question = .one
+    var currentPlayer: Player
+    var waitingRoom: [Player]
+    var turnTaken = false
 }
 
-enum GamePhase {
+enum GamePhase: Codable {
     case guessing
     case giveTake
     case end
 }
 
-enum Question: String, RawRepresentable {
+enum Question: String, RawRepresentable, Codable {
     case one = "Guess the Color"
     case two = "Higher or Lower"
     case three = "Inside or Outside"

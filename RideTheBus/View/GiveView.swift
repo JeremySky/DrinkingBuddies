@@ -34,7 +34,7 @@ struct GiveView: View {
                         Button {
                             givePoints(to: &temporaryPlayers[i])
                             //track points for PlayerResultsView
-                            self.player.giveTo[i].1 += 1
+                            self.player.giveTo[i] += 1
                         } label: {
                             HStack {
                                 ZStack {

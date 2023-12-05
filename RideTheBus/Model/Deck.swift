@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct Deck {
+struct Deck: Codable {
     var pile = [Card]()
     
     mutating func createNewPile() {
@@ -36,7 +36,10 @@ extension Deck {
     }
     
     static func testDeck() -> Deck {
-        let deck = Deck.newDeck()
-        return Deck(pile: [deck.pile[0], deck.pile[1]])
+        var deck = Deck.newDeck()
+        while deck.pile.count > 2 {
+            deck.pile.removeFirst()
+        }
+        return deck
     }
 }
