@@ -77,7 +77,7 @@ struct Game: Codable {
     }
 }
 
-enum GamePhase: Codable {
+enum GamePhase: String, RawRepresentable, Codable {
     case guessing
     case giveTake
     case end

@@ -64,6 +64,7 @@ struct SetupView: View {
                             .background(.gray.opacity(0.4))
                             .padding()
                         Button("Join") {
+                            game.joinGame(id: roomID)
                             settings.setupSelection = .host
                         }
                     }

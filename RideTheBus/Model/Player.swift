@@ -160,7 +160,7 @@ extension Player: Hashable, Equatable {
 }
 
 
-enum PlayerStage: Codable {
+enum PlayerStage: String, RawRepresentable,  Codable {
     case guess
     case give
     case take

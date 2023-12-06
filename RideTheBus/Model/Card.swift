@@ -54,7 +54,7 @@ struct Card: Hashable, Codable {
         self.takeCards = try container.decodeIfPresent([Card].self, forKey: .takeCards) ?? []
     }
     
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, RawRepresentable, CodingKey {
         case value
         case suit
         case isFlipped
@@ -79,7 +79,7 @@ struct Card: Hashable, Codable {
     }
 }
 
-enum CardValue: Int, CaseIterable, Codable {
+enum CardValue: Int, RawRepresentable, CaseIterable, Codable {
     case two = 2
     case three = 3
     case four  = 4
@@ -110,7 +110,7 @@ enum CardValue: Int, CaseIterable, Codable {
     }
 }
 
-enum CardSuit: String, CaseIterable, Codable {
+enum CardSuit: String, RawRepresentable, CaseIterable, Codable {
     case clubs
     case spades
     case hearts

@@ -23,9 +23,8 @@ class GameViewModel: ObservableObject {
     
     func createNewGame() {
         self.game.host = player
-        self.game.players.append(player)
         ref.child(gameRoomID).setValue(game.toDictionary)
-        observeGame()
+        joinGame(id: gameRoomID)
     }
     
     func observeGame() {
@@ -39,10 +38,22 @@ class GameViewModel: ObservableObject {
             }
     }
     
-    func joinGame() {
-        observeGame()
-        self.game.players.append(player)
-        ref.child(gameRoomID).setValue(game.toDictionary)
+    func joinGame(id: String) {
+        gameRoomID = id
+        var hasJoined = false
+        
+        ref.child(gameRoomID)
+            .observe(.value) { snapshot in
+                do {
+                    self.game = try snapshot.data(as: Game.self)
+                    if !hasJoined {
+                        self.ref.child("\(self.gameRoomID)/players/\(self.game.players.count)").setValue(self.player.toDictionary)
+                        hasJoined = true
+                    }
+                } catch {
+                    print("Cannot convert to Game")
+                }
+            }
     }
     
     

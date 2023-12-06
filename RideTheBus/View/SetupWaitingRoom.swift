@@ -59,6 +59,11 @@ struct SetupWaitingRoom: View {
                             .fontWeight(.bold)
                             .padding(.bottom)
                     }
+                    
+                    Text(game.gameRoomID)
+                        .font(.headline)
+                        .bold()
+                        .padding(.bottom)
                 }
                 .padding(.horizontal)
                 .foregroundStyle(.white)
