@@ -9,8 +9,8 @@ import SwiftUI
 
 //MARK: -- VIEW
 struct GameView: View {
-    @StateObject var game: GameViewModel
-    @State var selection: GameViewSelection
+    @EnvironmentObject var game: GameViewModel
+    @State var selection: GameViewSelection = .remoteWifi
     
     var body: some View {
         switch selection {
@@ -33,7 +33,8 @@ enum GameViewSelection {
 
 
 #Preview {
-    GameView(game: GameViewModel.preview, selection: .local)
+    GameView()
+        .environmentObject(GameViewModel())
 }
 
 
@@ -41,7 +42,7 @@ enum GameViewSelection {
 
 
 extension GameViewModel {
-    static var preview = GameViewModel(players: Player.testArr, deck: Deck.newDeck(), gameRoomID: "ABCDE", player: Player.test1)
+    static var preview = GameViewModel(game: Game(deck: Deck.newDeck(), players: Player.testArr, phase: .guessing, question: .one, currentPlayer: Player.test1, waitingRoom: Player.testArr),gameRoomID: "ABCDE", player: Player.test1)
 }
 
 extension String {

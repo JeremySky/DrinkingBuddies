@@ -18,6 +18,7 @@ struct SetupView: View {
     @State var iconIndex = 0
     @State var colorIndex = 4
     
+    @State var roomID = ""
     
     @AppStorage("user") private var userData: Data = Data()
     var body: some View {
@@ -55,6 +56,16 @@ struct SetupView: View {
                     }
                     .cornerRadius(10)
                     .padding()
+                    
+                    HStack {
+                        TextField("Room ID", text: $roomID)
+                            .padding()
+                            .background(.gray.opacity(0.4))
+                            .padding()
+                        Button("Join") {
+                            settings.setupSelection = .host
+                        }
+                    }
                 } else {
                     Button {
                         settings.setupSelection = .player

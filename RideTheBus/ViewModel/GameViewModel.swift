@@ -13,7 +13,7 @@ import FirebaseDatabaseSwift
 @MainActor
 @dynamicMemberLookup
 class GameViewModel: ObservableObject {
-    @Published var game = Game(deck: Deck.newDeck(), players: [], currentPlayer: Player.test1, waitingRoom: [])
+    @Published var game = Game()
     var gameRoomID: String
     var player: Player
     private var refHandle: DatabaseHandle!
@@ -48,7 +48,7 @@ class GameViewModel: ObservableObject {
         self.game.players.remove(at: player.index)
         ref.child(gameRoomID).setValue(game.toDictionary)
         ref.child(gameRoomID).removeObserver(withHandle: refHandle)
-        self.game = Game(deck: Deck.newDeck(), players: [], currentPlayer: Player.test1, waitingRoom: [])
+        self.game = Game()
     }
     
     func deleteGame() {
@@ -61,28 +61,34 @@ class GameViewModel: ObservableObject {
     
     
     
-    init(players: [Player], deck: Deck, gameRoomID: String, player: Player) {
-        let playersShuffled = players.shuffled()
-        var tempPlayer: Player? = nil
-        var playersSetUp = [Player]()
-        
-        for i in playersShuffled.indices {
-            tempPlayer = playersShuffled[i]
-            if tempPlayer != nil {
-                tempPlayer!.setUp(from: playersShuffled, index: i)
-                playersSetUp.append(tempPlayer!)
-                tempPlayer = nil
-            }
-        }
-        
-        var playersShuffledAndSetUp = playersSetUp
-        playersShuffledAndSetUp[0].stage = .guess
-        
-        
-        self.game = Game(deck: deck, players: playersShuffledAndSetUp, currentPlayer: playersShuffledAndSetUp[0], waitingRoom: playersShuffledAndSetUp)
+    
+    init(game: Game = Game(), gameRoomID: String = String.randomRoomID(), player: Player = Player()) {
+        self.game = game
         self.gameRoomID = gameRoomID
         self.player = player
     }
+//    init(players: [Player], deck: Deck, gameRoomID: String, player: Player) {
+//        let playersShuffled = players.shuffled()
+//        var tempPlayer: Player? = nil
+//        var playersSetUp = [Player]()
+//        
+//        for i in playersShuffled.indices {
+//            tempPlayer = playersShuffled[i]
+//            if tempPlayer != nil {
+//                tempPlayer!.setUp(from: playersShuffled, index: i)
+//                playersSetUp.append(tempPlayer!)
+//                tempPlayer = nil
+//            }
+//        }
+//        
+//        var playersShuffledAndSetUp = playersSetUp
+//        playersShuffledAndSetUp[0].stage = .guess
+//        
+//        
+//        self.game = Game(deck: deck, players: playersShuffledAndSetUp, currentPlayer: playersShuffledAndSetUp[0], waitingRoom: playersShuffledAndSetUp)
+//        self.gameRoomID = gameRoomID
+//        self.player = player
+//    }
     
     subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
         get { game[keyPath: keyPath] }

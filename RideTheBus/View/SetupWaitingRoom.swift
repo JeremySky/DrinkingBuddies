@@ -9,11 +9,12 @@ import SwiftUI
 
 struct SetupWaitingRoom: View {
     @EnvironmentObject var settings: SetupViewModel
+    @EnvironmentObject var game: GameViewModel
     @Binding var host: Player
     
     @State var newPlayer = Player()
-    var takenColors: [Color] { settings.players.map({$0.color}) }
-    var takenIcons: [IconSelection] { settings.players.map({$0.icon}) }
+    var takenColors: [Color] { game.players.map({$0.color}) }
+    var takenIcons: [IconSelection] { game.players.map({$0.icon}) }
     
     @State var modifyPlayerIsPresenting = false
     @State var playerIndex: Int? = nil
@@ -36,7 +37,7 @@ struct SetupWaitingRoom: View {
                             
                             Spacer()
                             
-                            if settings.players.count < 4 && settings.gameViewSelection == .local {
+                            if game.players.count < 4 && settings.gameViewSelection == .local {
                                 Button(action: { modifyPlayerIsPresenting = true }, label: {
                                     Image(systemName: "person.badge.plus")
                                         .resizable()
@@ -68,13 +69,13 @@ struct SetupWaitingRoom: View {
             ScrollView {
                 Spacer()
                     .frame(height: 20)
-                ForEach(settings.players.indices, id: \.self) { i in
-                    PlayerOverview(player: .constant(settings.players[i]), showHand: false, highlightPlayer: false)
+                ForEach(game.players.indices, id: \.self) { i in
+                    PlayerOverview(player: .constant(game.players[i]), showHand: false, highlightPlayer: false)
                         .padding(.horizontal)
                         .disabled(true)
                         .onTapGesture {
                             if i != 0 {
-                                newPlayer = settings.players[i]
+                                newPlayer = game.players[i]
                                 modifyPlayerIsPresenting = true
                                 playerIndex = i
                             }
@@ -83,11 +84,10 @@ struct SetupWaitingRoom: View {
             }
             .scrollIndicators(.hidden)
             
-            if settings.player == host && settings.players.count > 1 {
+            if game.player == host && game.players.count > 1 {
                 Button("Start") {
                     print("Start")
                     print(settings.mainSelection)
-                    settings.deal()
                     settings.mainSelection = .game
                     print(settings.mainSelection)
                 }
@@ -95,18 +95,18 @@ struct SetupWaitingRoom: View {
             }
         }
         .onAppear {
-            settings.players = [host]
+            game.players = [host]
         }
         .sheet(isPresented: $modifyPlayerIsPresenting) {
             ZStack {
-                ModifyPlayer(player: $newPlayer, players: $settings.players, paddingTop: true) { name, icon, color in
+                ModifyPlayer(player: $newPlayer, players: $game.players, paddingTop: true) { name, icon, color in
                     let modifiedPlayer = Player(name: name, icon: icon, color: color.value)
                     guard let playerIndex else {
-                        settings.players.append(modifiedPlayer)
+                        game.players.append(modifiedPlayer)
                         modifyPlayerIsPresenting = false
                         return
                     }
-                    settings.players[playerIndex] = newPlayer
+                    game.players[playerIndex] = newPlayer
                     self.playerIndex = nil
                     modifyPlayerIsPresenting = false
                 }
@@ -152,10 +152,12 @@ struct SetupWaitingRoom: View {
         SetupWaitingRoom(host: $players[0])
     }
     .environmentObject(SetupViewModel())
+    .environmentObject(GameViewModel())
 }
 #Preview {
     @State var players: [Player] = Player.testArr
     return SetupWaitingRoom(host: $players[0])
         .environmentObject(SetupViewModel())
+        .environmentObject(GameViewModel())
 }
 

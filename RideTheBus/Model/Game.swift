@@ -28,6 +28,16 @@ struct Game: Codable {
         self.turnTaken = turnTaken
     }
     
+    init() {
+        self.deck = Deck.newDeck()
+        self.players = []
+        self.phase = .guessing
+        self.question = .one
+        self.currentPlayer = Player.test1
+        self.waitingRoom = []
+        self.turnTaken = false
+    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.deck = try container.decode(Deck.self, forKey: .deck)

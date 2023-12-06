@@ -28,7 +28,7 @@ struct MainView: View {
                 SetupView()
                     .environmentObject(settings)
             case .game:
-                GameView(game: GameViewModel(players: settings.players, deck: Deck.testDeck(), gameRoomID: String.randomRoomID(), player: settings.player), selection: settings.gameViewSelection)
+                GameView()
             }
         }
     }
