@@ -98,7 +98,7 @@ struct SetupView: View {
                 settings.setupSelection = .main
             }
         case .host:
-            SetupWaitingRoom(host: $game.player)
+            SetupWaitingRoom()
         }
     }
     
