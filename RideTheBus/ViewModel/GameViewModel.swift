@@ -89,6 +89,16 @@ class GameViewModel: ObservableObject {
         set { game[keyPath: keyPath] = newValue }
     }
     
+    
+    func deal() {
+        for i in game.players.indices {
+            while game.players[i].hand.count < 4 {
+                game.players[i].hand.append(game.deck.pile[0])
+                game.deck.pile.removeFirst()
+            }
+        }
+    }
+    
     func endGame() {
         for i in game.waitingRoom.indices {
             game.waitingRoom[i].stage = .end

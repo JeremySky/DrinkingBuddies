@@ -10,6 +10,9 @@ import SwiftUI
 
 struct SetupView: View {
     @EnvironmentObject var settings: SetupViewModel
+    @EnvironmentObject var game: GameViewModel
+    
+    
     var playerIcons: [IconSelection]  = IconSelection.allCases
     var colors: [ColorSelection] = ColorSelection.allCases
     @State var iconIndex = 0
@@ -22,8 +25,8 @@ struct SetupView: View {
         case .main:
             VStack {
                 Button(action: { settings.setupSelection = .player }, label: {
-                    if settings.player != Player() {
-                        PlayerHeader(player: $settings.player)
+                    if game.player != Player() {
+                        PlayerHeader(player: $game.player)
                     } else {
                         PlayerIcon(icon: playerIcons[iconIndex], color: colors[colorIndex].value, weight: .black)
                             .frame(maxWidth: .infinity)
@@ -40,7 +43,7 @@ struct SetupView: View {
                     .multilineTextAlignment(.center)
                 Spacer()
                 
-                if settings.player != Player() {
+                if game.player != Player() {
                     Button {
                         settings.setupSelection = .host
                     } label: {
@@ -48,7 +51,7 @@ struct SetupView: View {
                             .padding()
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.white)
-                            .background(settings.player.color)
+                            .background(game.player.color)
                     }
                     .cornerRadius(10)
                     .padding()
@@ -67,14 +70,14 @@ struct SetupView: View {
                 }
             }
             .onAppear {
-                if settings.player == Player() {
+                if game.player == Player() {
                     startTimers()
                 }
                 guard let user = try? JSONDecoder().decode(User.self, from: userData) else { return }
-                settings.player = Player(name: user.name, icon: user.icon, color: user.color.value)
+                game.player = Player(name: user.name, icon: user.icon, color: user.color.value)
             }
         case .player:
-            ModifyPlayer(player: $settings.player, players: $settings.players) { name, icon, colorSelection in
+            ModifyPlayer(player: $game.player, players: $game.players) { name, icon, colorSelection in
                 let user = User(name: name, icon: icon, color: colorSelection)
                 guard let userData = try? JSONEncoder().encode(user) else {
                     return
@@ -83,7 +86,7 @@ struct SetupView: View {
                 settings.setupSelection = .main
             }
         case .host:
-            SetupWaitingRoom(host: $settings.player)
+            SetupWaitingRoom(host: $game.player)
         }
     }
     
@@ -123,6 +126,6 @@ enum SetupSelection {
 //
 //
 //Button("Host", action: {
-//    settings.players = [settings.player]
+//    game.players = [game.player]
 //    selection = .host
 //})

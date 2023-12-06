@@ -35,6 +35,45 @@ struct Card: Hashable, Codable {
     
     
     
+    
+    init(value: CardValue, suit: CardSuit, isFlipped: Bool = false, giveCards: [Card] = [Card](), takeCards: [Card] = [Card]()) {
+        self.value = value
+        self.suit = suit
+        self.isFlipped = isFlipped
+        self.giveCards = giveCards
+        self.takeCards = takeCards
+    }
+    
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.value = try container.decode(CardValue.self, forKey: .value)
+        self.suit = try container.decode(CardSuit.self, forKey: .suit)
+        self.isFlipped = try container.decode(Bool.self, forKey: .isFlipped)
+        self.giveCards = try container.decodeIfPresent([Card].self, forKey: .giveCards) ?? []
+        self.takeCards = try container.decodeIfPresent([Card].self, forKey: .takeCards) ?? []
+    }
+    
+    enum CodingKeys: CodingKey {
+        case value
+        case suit
+        case isFlipped
+        case giveCards
+        case takeCards
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.value, forKey: .value)
+        try container.encode(self.suit, forKey: .suit)
+        try container.encode(self.isFlipped, forKey: .isFlipped)
+        try container.encode(self.giveCards, forKey: .giveCards)
+        try container.encode(self.takeCards, forKey: .takeCards)
+    }
+    
+    
+    
+    
     mutating func flip() {
         isFlipped = true
     }

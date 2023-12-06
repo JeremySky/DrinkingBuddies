@@ -9,14 +9,56 @@ import Foundation
 import SwiftUI
 
 struct Game: Codable {
-    var id = UUID()
-    var deck: Deck
-    var players: [Player]
+    var deck: Deck = Deck.newDeck()
+    var players: [Player] = []
     var phase: GamePhase = .guessing
     var question: Question = .one
-    var currentPlayer: Player
-    var waitingRoom: [Player]
+    var currentPlayer: Player = Player.test1
+    var waitingRoom: [Player] = []
     var turnTaken = false
+    
+    
+    init(deck: Deck, players: [Player], phase: GamePhase, question: Question, currentPlayer: Player, waitingRoom: [Player], turnTaken: Bool = false) {
+        self.deck = deck
+        self.players = players
+        self.phase = phase
+        self.question = question
+        self.currentPlayer = currentPlayer
+        self.waitingRoom = waitingRoom
+        self.turnTaken = turnTaken
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.deck = try container.decode(Deck.self, forKey: .deck)
+        self.players = try container.decodeIfPresent([Player].self, forKey: .players) ?? []
+        self.phase = try container.decode(GamePhase.self, forKey: .phase)
+        self.question = try container.decode(Question.self, forKey: .question)
+        self.currentPlayer = try container.decode(Player.self, forKey: .currentPlayer)
+        self.waitingRoom = try container.decodeIfPresent([Player].self, forKey: .waitingRoom) ?? []
+        self.turnTaken = try container.decode(Bool.self, forKey: .turnTaken)
+    }
+    
+    enum CodingKeys: CodingKey {
+        case deck
+        case players
+        case phase
+        case question
+        case currentPlayer
+        case waitingRoom
+        case turnTaken
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.deck, forKey: .deck)
+        try container.encode(self.players, forKey: .players)
+        try container.encode(self.phase, forKey: .phase)
+        try container.encode(self.question, forKey: .question)
+        try container.encode(self.currentPlayer, forKey: .currentPlayer)
+        try container.encode(self.waitingRoom, forKey: .waitingRoom)
+        try container.encode(self.turnTaken, forKey: .turnTaken)
+    }
 }
 
 enum GamePhase: Codable {

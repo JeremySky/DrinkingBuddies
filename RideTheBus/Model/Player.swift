@@ -50,6 +50,75 @@ struct Player: Codable {
         self.init(name: "", icon: .drink, color: .red, hand: [])
     }
     
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.icon = try container.decode(IconSelection.self, forKey: .icon)
+        self.color = try container.decode(Color.self, forKey: .color)
+        self.hand = try container.decodeIfPresent([Card].self, forKey: .hand) ?? []
+        self.index = try container.decode(Int.self, forKey: .index)
+        self.score = try container.decode(Int.self, forKey: .score)
+        self.guesses = try container.decodeIfPresent([Bool].self, forKey: .guesses) ?? []
+        self.giveTo = try container.decodeIfPresent([Int].self, forKey: .giveTo) ?? []
+        self.takeFrom = try container.decodeIfPresent([Int].self, forKey: .takeFrom) ?? []
+        self.stage = try container.decode(PlayerStage.self, forKey: .stage)
+        self.pointsToGive = try container.decode(Int.self, forKey: .pointsToGive)
+        self.pointsToTake = try container.decode(Int.self, forKey: .pointsToTake)
+    }
+    
+    enum CodingKeys: CodingKey {
+        case id
+        case name
+        case icon
+        case color
+        case hand
+        case index
+        case score
+        case guesses
+        case giveTo
+        case takeFrom
+        case stage
+        case pointsToGive
+        case pointsToTake
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.name, forKey: .name)
+        try container.encode(self.icon, forKey: .icon)
+        try container.encode(self.color, forKey: .color)
+        try container.encode(self.hand, forKey: .hand)
+        try container.encode(self.index, forKey: .index)
+        try container.encode(self.score, forKey: .score)
+        try container.encode(self.guesses, forKey: .guesses)
+        try container.encode(self.giveTo, forKey: .giveTo)
+        try container.encode(self.takeFrom, forKey: .takeFrom)
+        try container.encode(self.stage, forKey: .stage)
+        try container.encode(self.pointsToGive, forKey: .pointsToGive)
+        try container.encode(self.pointsToTake, forKey: .pointsToTake)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func copyAndRemovePointsToTake() -> Player {
         var player = self
         player.pointsToTake = 0
