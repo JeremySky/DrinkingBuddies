@@ -46,6 +46,7 @@ struct SetupView: View {
                 
                 if game.player != Player() {
                     Button {
+                        game.createNewGame()
                         settings.setupSelection = .host
                     } label: {
                         Text("Host")
@@ -124,6 +125,7 @@ enum SetupSelection {
         SetupView()
     }
     .environmentObject(SetupViewModel())
+    .environmentObject(GameViewModel())
 }
 
 

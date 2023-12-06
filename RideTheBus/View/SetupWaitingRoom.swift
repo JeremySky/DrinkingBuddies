@@ -10,7 +10,6 @@ import SwiftUI
 struct SetupWaitingRoom: View {
     @EnvironmentObject var settings: SetupViewModel
     @EnvironmentObject var game: GameViewModel
-    @Binding var host: Player
     
     @State var newPlayer = Player()
     var takenColors: [Color] { game.players.map({$0.color}) }
@@ -53,9 +52,9 @@ struct SetupWaitingRoom: View {
                             .font(.title3)
                             .fontWeight(.bold)
                     }
-                    PlayerHeader(player: .constant(host))
+                    PlayerHeader(player: .constant(game.host))
                     if settings.gameViewSelection != .local {
-                        Text("783-128-222")
+                        Text(game.gameRoomID)
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding(.bottom)
@@ -64,7 +63,7 @@ struct SetupWaitingRoom: View {
                 .padding(.horizontal)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .background(host.color)
+                .background(game.host.color)
             }
             ScrollView {
                 Spacer()
@@ -84,7 +83,7 @@ struct SetupWaitingRoom: View {
             }
             .scrollIndicators(.hidden)
             
-            if game.player == host && game.players.count > 1 {
+            if game.player == game.host && game.players.count > 1 {
                 Button("Start") {
                     print("Start")
                     print(settings.mainSelection)
@@ -95,7 +94,7 @@ struct SetupWaitingRoom: View {
             }
         }
         .onAppear {
-            game.players = [host]
+            game.players = [game.host]
         }
         .sheet(isPresented: $modifyPlayerIsPresenting) {
             ZStack {
@@ -142,21 +141,21 @@ struct SetupWaitingRoom: View {
 //#Preview {
 //    @State var player = Player.test1
 //    @State var players = [Player.test1, Player.test2]
-//    return WaitingRoomView(host: $player, startGameAction: { }, modifyPlayerIsPresenting: true)
+//    return WaitingRoomView(game.host: $player, startGameAction: { }, modifyPlayerIsPresenting: true)
 //        .environmentObject(SetupViewModel())
 //}
 
 #Preview {
     @State var players: [Player] = [Player.test1, Player.test2]
     return NavigationStack {
-        SetupWaitingRoom(host: $players[0])
+        SetupWaitingRoom()
     }
     .environmentObject(SetupViewModel())
     .environmentObject(GameViewModel())
 }
 #Preview {
     @State var players: [Player] = Player.testArr
-    return SetupWaitingRoom(host: $players[0])
+    return SetupWaitingRoom()
         .environmentObject(SetupViewModel())
         .environmentObject(GameViewModel())
 }

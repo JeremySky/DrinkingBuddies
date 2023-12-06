@@ -19,7 +19,8 @@ class SetupViewModel: ObservableObject {
 }
 
 struct MainView: View {
-    @ObservedObject var settings: SetupViewModel
+    @ObservedObject var settings = SetupViewModel()
+    @ObservedObject var game = GameViewModel()
     
     var body: some View {
         ZStack {
@@ -27,8 +28,10 @@ struct MainView: View {
             case .setup:
                 SetupView()
                     .environmentObject(settings)
+                    .environmentObject(game)
             case .game:
                 GameView()
+                    .environmentObject(game)
             }
         }
     }

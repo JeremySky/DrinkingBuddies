@@ -22,6 +22,7 @@ class GameViewModel: ObservableObject {
     var ref = Database.database().reference()
     
     func createNewGame() {
+        self.game.host = player
         self.game.players.append(player)
         ref.child(gameRoomID).setValue(game.toDictionary)
         observeGame()
@@ -43,6 +44,7 @@ class GameViewModel: ObservableObject {
         self.game.players.append(player)
         ref.child(gameRoomID).setValue(game.toDictionary)
     }
+    
     
     func leaveGame() {
         self.game.players.remove(at: player.index)
