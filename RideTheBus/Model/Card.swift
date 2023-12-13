@@ -157,6 +157,19 @@ extension Card {
 //        Card(value: .ace, suit: .diamonds)
 //    ]
     
+    
+    
+    
+    static func newDeck() -> [Card] {
+        var tempDeck = [Card]()
+        for suit in CardSuit.allCases {
+            for value in CardValue.allCases {
+                tempDeck.append(Card(value: value, suit: suit))
+            }
+        }
+        return tempDeck.shuffled()
+    }
+    
     static var testHandArray1 = [
         Card(value: .two, suit: .clubs, isFlipped: false),
         Card(value: .three, suit: .hearts, isFlipped: false),

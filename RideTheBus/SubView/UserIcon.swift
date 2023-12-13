@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PlayerIcon: View {
+struct UserIcon: View {
     var icon: IconSelection
-    var color: Color
+    var color: ColorSelection
     var weight: Font.Weight
-    var selected: Bool = false
+    var isSelected: Bool = false
     var width: CGFloat {
         switch icon {
         case .drink:
@@ -69,11 +69,11 @@ struct PlayerIcon: View {
         ZStack {
             Circle()
                 .foregroundStyle(.white)
-                .shadow(color: selected ? .yellow : .black.opacity(0.25),radius: 10)
+                .shadow(color: isSelected ? .yellow : .black.opacity(0.25),radius: 10)
             Group {
                 Image(systemName: icon.rawValue)
                     .resizable()
-                    .foregroundStyle(color)
+                    .foregroundStyle(color.value)
                 Image(systemName: icon.rawValue)
                     .resizable()
                     .foregroundStyle(.black.opacity(0.2))
@@ -84,19 +84,42 @@ struct PlayerIcon: View {
             .padding()
             .frame(width: width, height: height)
         }
-        .frame(width: 80)
+        .frame(width: 77)
     }
 }
 
-#Preview {
-    return ZStack {
-        Color.brown
-        VStack {
-            PlayerIcon(icon: IconSelection.drink, color: Color.red, weight: .heavy, selected: false)
-            PlayerIcon(icon: IconSelection.clipboard, color: Color.red, weight: .semibold, selected: true)
-        }
+extension UserIcon {
+    init(player: OLDPlayer) {
+        self.icon = player.icon
+        self.color = .red
+        self.weight = .black
+        self.isSelected = false
+    }
+    
+    init(icon: IconSelection, color: ColorSelection, selected: Bool) {
+        self.icon = icon
+        self.color = color
+        self.weight = .semibold
+        self.isSelected = selected
+    }
+    
+    init(user: User) {
+        self.icon = user.icon
+        self.color = user.color
+        self.weight = .black
+        self.isSelected = false
     }
 }
+
+//#Preview {
+//    return ZStack {
+//        Color.brown
+//        VStack {
+//            PlayerIcon(icon: IconSelection.drink, color: Color.red, weight: .heavy, isSelected: false)
+//            PlayerIcon(icon: IconSelection.clipboard, color: Color.red, weight: .semibold, isSelected: true)
+//        }
+//    }
+//}
 
 enum IconSelection: String, RawRepresentable, CaseIterable, Codable {
     case drink = "mug"

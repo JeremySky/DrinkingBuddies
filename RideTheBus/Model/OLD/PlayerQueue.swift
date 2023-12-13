@@ -11,7 +11,7 @@ actor PlayerQueue: ObservableObject {
     private var players: [String]
     private var queue: [String]
     
-    init(players: [Player]) {
+    init(players: [OLDPlayer]) {
         let players = players.map( {$0.name} )
         self.players = players
         self.queue = players

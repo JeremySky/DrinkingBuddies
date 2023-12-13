@@ -9,45 +9,30 @@ import SwiftUI
 
 //MARK: -- VIEW
 struct GameView: View {
-    @EnvironmentObject var game: GameViewModel
-    @State var selection: GameViewSelection = .remoteWifi
+    @EnvironmentObject var game: GameManager
     
     var body: some View {
-        switch selection {
-        case .local:
-            LocalGameView()
-                .environmentObject(game)
-        case .remoteBluetooth, .remoteWifi:
-            PlayerView(player: .constant(Player.test1))
-                .environmentObject(game)
+        ZStack {
+            if !game.hasStarted {
+                
+            } else {
+                
+            }
         }
     }
 }
 
-
-enum GameViewSelection {
-    case local
-    case remoteBluetooth
-    case remoteWifi
-}
-
-
 #Preview {
     GameView()
-        .environmentObject(GameViewModel())
+        .environmentObject(GameManager.previewOnePlayer)
 }
 
 
-
-
-
-extension GameViewModel {
-    static var preview = GameViewModel(game: Game(deck: Deck.newDeck(), players: Player.testArr, phase: .guessing, question: .one, currentPlayer: Player.test1, waitingRoom: Player.testArr),gameRoomID: "ABCDE", player: Player.test1)
+extension GameManager {
+    static var previewOnePlayer = GameManager(user: User.test1)
 }
 
-extension String {
-    static func randomRoomID() -> String {
-      let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
-      return String((0..<5).map{ _ in letters.randomElement()! })
-    }
+
+extension OLDGameViewModel {
+    static var preview = OLDGameViewModel(game: OLDGame(deck: Deck.newDeck(), players: OLDPlayer.testArr, phase: .guessing, question: .one, currentPlayer: OLDPlayer.test1, waitingRoom: OLDPlayer.testArr),gameRoomID: "ABCDE", player: OLDPlayer.test1)
 }

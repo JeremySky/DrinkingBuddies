@@ -8,9 +8,8 @@
 import SwiftUI
 
 
-struct SetupView: View {
-    @EnvironmentObject var settings: SetupViewModel
-    @EnvironmentObject var game: GameViewModel
+struct OLDSetupView: View {
+    @EnvironmentObject var game: OLDGameViewModel
     
     
     var playerIcons: [IconSelection]  = IconSelection.allCases
@@ -22,14 +21,14 @@ struct SetupView: View {
     
     @AppStorage("user") private var userData: Data = Data()
     var body: some View {
-        switch settings.setupSelection {
+        switch game.setupSelection {
         case .main:
             VStack {
-                Button(action: { settings.setupSelection = .player }, label: {
-                    if game.player != Player() {
+                Button(action: { game.setupSelection = .player }, label: {
+                    if game.player != OLDPlayer() {
                         PlayerHeader(player: $game.player)
                     } else {
-                        PlayerIcon(icon: playerIcons[iconIndex], color: colors[colorIndex].value, weight: .black)
+                        UserIcon(icon: playerIcons[iconIndex], color: colors[colorIndex], weight: .black)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .padding(.bottom, 4)
@@ -44,10 +43,10 @@ struct SetupView: View {
                     .multilineTextAlignment(.center)
                 Spacer()
                 
-                if game.player != Player() {
+                if game.player != OLDPlayer() {
                     Button {
                         game.createNewGame()
-                        settings.setupSelection = .host
+                        game.setupSelection = .host
                     } label: {
                         Text("Host")
                             .padding()
@@ -65,12 +64,12 @@ struct SetupView: View {
                             .padding()
                         Button("Join") {
                             game.joinGame(id: roomID)
-                            settings.setupSelection = .host
+                            game.setupSelection = .host
                         }
                     }
                 } else {
                     Button {
-                        settings.setupSelection = .player
+                        game.setupSelection = .player
                     } label: {
                         Text("Player Setup")
                             .padding()
@@ -83,34 +82,26 @@ struct SetupView: View {
                 }
             }
             .onAppear {
-                if game.player == Player() {
-                    startTimers()
+                if game.player == OLDPlayer() {
+//                    startTimers()
                 }
                 guard let user = try? JSONDecoder().decode(User.self, from: userData) else { return }
-                game.player = Player(name: user.name, icon: user.icon, color: user.color.value)
+                game.player = OLDPlayer(name: user.name, icon: user.icon, color: user.color.value)
             }
         case .player:
-            ModifyPlayer(player: $game.player, players: $game.players) { name, icon, colorSelection in
+            OLDModifyPlayer(player: $game.player, players: $game.players) { name, icon, colorSelection in
                 let user = User(name: name, icon: icon, color: colorSelection)
                 guard let userData = try? JSONEncoder().encode(user) else {
                     return
                 }
                 self.userData = userData
-                settings.setupSelection = .main
+                game.setupSelection = .main
             }
         case .host:
             SetupWaitingRoom()
         }
     }
     
-    func startTimers() {
-        Timer.scheduledTimer(withTimeInterval: 3.1, repeats: true) { _ in
-            withAnimation {
-                iconIndex = (iconIndex + 1) % playerIcons.count
-                colorIndex = (colorIndex + 1) % colors.count
-            }
-        }
-    }
 }
 
 enum SetupSelection {
@@ -118,16 +109,15 @@ enum SetupSelection {
     case player
     case host
 }
-
-#Preview {
-    @State var gameViewSelection: GameViewSelection = .local
-    @State var players: [Player] = []
-    return NavigationStack {
-        SetupView()
-    }
-    .environmentObject(SetupViewModel())
-    .environmentObject(GameViewModel())
-}
+//
+//#Preview {
+//    @State var gameViewSelection: GameViewSelection = .local
+//    @State var players: [OLDPlayer] = []
+//    return NavigationStack {
+//        SetupView()
+//    }
+//    .environmentObject(OLDGameViewModel())
+//}
 
 
 

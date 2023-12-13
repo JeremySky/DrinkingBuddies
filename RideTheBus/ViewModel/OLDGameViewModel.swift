@@ -9,14 +9,22 @@ import Foundation
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 
+
+
+
+
+
+
 //MARK: -- VIEW MODEL
 @MainActor
 @dynamicMemberLookup
-class GameViewModel: ObservableObject {
-    @Published var game = Game()
+class OLDGameViewModel: ObservableObject {
+    @Published var game = OLDGame()
     var gameRoomID: String
     var player: Player
     private var refHandle: DatabaseHandle!
+    @Published var gameViewSelection: GameViewSelection = .local
+    @Published var setupSelection: SetupSelection = .main
     
     
     var ref = Database.database().reference()
@@ -31,7 +39,7 @@ class GameViewModel: ObservableObject {
         ref.child(gameRoomID)
             .observe(.value) { snapshot in
                 do {
-                    self.game = try snapshot.data(as: Game.self)
+                    self.game = try snapshot.data(as: OLDGame.self)
                 } catch {
                     print("Cannot convert to Game")
                 }
@@ -45,7 +53,7 @@ class GameViewModel: ObservableObject {
         ref.child(gameRoomID)
             .observe(.value) { snapshot in
                 do {
-                    self.game = try snapshot.data(as: Game.self)
+                    self.game = try snapshot.data(as: OLDGame.self)
                     if !hasJoined {
                         self.ref.child("\(self.gameRoomID)/players/\(self.game.players.count)").setValue(self.player.toDictionary)
                         hasJoined = true
@@ -61,7 +69,7 @@ class GameViewModel: ObservableObject {
         self.game.players.remove(at: player.index)
         ref.child(gameRoomID).setValue(game.toDictionary)
         ref.child(gameRoomID).removeObserver(withHandle: refHandle)
-        self.game = Game()
+        self.game = OLDGame()
     }
     
     func deleteGame() {
@@ -75,7 +83,7 @@ class GameViewModel: ObservableObject {
     
     
     
-    init(game: Game = Game(), gameRoomID: String = String.randomRoomID(), player: Player = Player()) {
+    init(game: OLDGame = OLDGame(), gameRoomID: String = String.randomRoomID(), player: Player = Player()) {
         self.game = game
         self.gameRoomID = gameRoomID
         self.player = player
@@ -103,7 +111,7 @@ class GameViewModel: ObservableObject {
 //        self.player = player
 //    }
     
-    subscript<T>(dynamicMember keyPath: WritableKeyPath<Game, T>) -> T {
+    subscript<T>(dynamicMember keyPath: WritableKeyPath<OLDGame, T>) -> T {
         get { game[keyPath: keyPath] }
         set { game[keyPath: keyPath] = newValue }
     }

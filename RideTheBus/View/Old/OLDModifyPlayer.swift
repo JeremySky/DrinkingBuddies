@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-struct ModifyPlayer: View {
+struct OLDModifyPlayer: View {
     @Binding var player: Player
     @Binding var players: [Player]
     var paddingTop: Bool = false
     var title: String = "Edit Player"
     var saveAction: (String, IconSelection, ColorSelection) -> Void
     
-    @EnvironmentObject var settings: SetupViewModel
     @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack(spacing: 0) {
@@ -46,15 +45,13 @@ struct ModifyPlayer: View {
 
 #Preview {
     @State var player = Player()
-    return ModifyPlayer(player: $player, players: .constant([])) { _, _, _ in }
-        .environmentObject(SetupViewModel())
+    return OLDModifyPlayer(player: $player, players: .constant([])) { _, _, _ in }
 }
 #Preview {
     @State var player = Player()
     return Text("Hello")
         .sheet(isPresented: .constant(true), content: {
-            ModifyPlayer(player: $player, players: .constant([]), paddingTop: true) { _, _, _ in }
+            OLDModifyPlayer(player: $player, players: .constant([]), paddingTop: true) { _, _, _ in }
         })
-        .environmentObject(SetupViewModel())
 }
 
