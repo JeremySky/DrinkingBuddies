@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct PlayerView: View {
-    @EnvironmentObject var game: GameViewModel
-    @Binding var player: Player
+struct OLDPlayerView: View {
+    @EnvironmentObject var game: OLDGameViewModel
+    @Binding var player: OLDPlayer
     
     var body: some View {
         ZStack {
@@ -91,7 +91,7 @@ struct PlayerView: View {
         }
     }
     
-    func addPointsToPlayers(to takers: [Player], from giver: Player) {
+    func addPointsToPlayers(to takers: [OLDPlayer], from giver: OLDPlayer) {
         for tempPlayer in takers {
             if tempPlayer.pointsToTake > 0 {
                 for i in game.players.indices {
@@ -107,8 +107,8 @@ struct PlayerView: View {
 
 
 #Preview {
-    @State var player = Player.test1
+    @State var player = OLDPlayer.test1
     @State var playerStage = PlayerStage.wait
-    return PlayerView(player: $player)
-        .environmentObject(GameViewModel.preview)
+    return OLDPlayerView(player: $player)
+        .environmentObject(OLDGameViewModel.preview)
 }

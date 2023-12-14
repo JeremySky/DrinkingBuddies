@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct WaitView: View {
-    @EnvironmentObject var game: GameViewModel
-    @Binding var player: Player
+struct OLDWaitView: View {
+    @EnvironmentObject var game: OLDGameViewModel
+    @Binding var player: OLDPlayer
     @State var selected: Selection?
     
     var body: some View {
@@ -112,7 +112,7 @@ struct WaitView: View {
 
 //MARK: -- PREVIEWS
 #Preview {
-    @State var player = Player.test1
-    return WaitView(player: $player)
-        .environmentObject(GameViewModel.preview)
+    @State var player = OLDPlayer.test1
+    return OLDWaitView(player: $player)
+        .environmentObject(OLDGameViewModel.preview)
 }
