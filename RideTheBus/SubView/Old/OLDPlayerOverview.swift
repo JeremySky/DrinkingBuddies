@@ -1,5 +1,5 @@
 //
-//  PlayerOverview.swift
+//  OLDPlayerOverview.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/20/23.
@@ -9,8 +9,8 @@ import SwiftUI
 
 
 //MARK: -- PlayerShowHandButton struct
-struct PlayerOverview: View {
-    @Binding var player: Player
+struct OLDPlayerOverview: View {
+    @Binding var player: OLDPlayer
     @State var showHand: Bool = true
     var highlightPlayer: Bool
     
@@ -80,4 +80,9 @@ struct PlayerOverview: View {
         }
         .padding(.top, showHand ? 30 : 0)
     }
+}
+
+#Preview {
+    @State var player = OLDPlayer.test1
+    return OLDPlayerOverview(player: $player, showHand: true, highlightPlayer: true)
 }

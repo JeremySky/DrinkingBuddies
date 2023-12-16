@@ -1,5 +1,5 @@
 //
-//  Deck.swift
+//  OLDDeck.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/12/23.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct Deck: Codable {
+struct OLDDeck: Codable {
     var pile = [Card]()
     
     mutating func createNewPile() {
@@ -45,19 +45,19 @@ struct Deck: Codable {
     }
 }
 
-extension Deck {
-    static func newDeck() -> Deck {
-        var deck = Deck()
-        deck.createNewPile()
-        deck.shuffle()
-        return deck
+extension OLDDeck {
+    static func newOLDDeck() -> OLDDeck {
+        var OLDDeck = OLDDeck()
+        OLDDeck.createNewPile()
+        OLDDeck.shuffle()
+        return OLDDeck
     }
     
-    static func testDeck() -> Deck {
-        var deck = Deck.newDeck()
-        while deck.pile.count > 2 {
-            deck.pile.removeFirst()
+    static func testOLDDeck() -> OLDDeck {
+        var OLDDeck = OLDDeck.newOLDDeck()
+        while OLDDeck.pile.count > 2 {
+            OLDDeck.pile.removeFirst()
         }
-        return deck
+        return OLDDeck
     }
 }

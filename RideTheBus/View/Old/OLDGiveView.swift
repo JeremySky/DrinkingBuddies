@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct GiveView: View {
-    @Binding var player: Player
+struct OLDGiveView: View {
+    @Binding var player: OLDPlayer
     @State var points: Int
-    @State var temporaryPlayers: [Player]
-    var giveAction: ([Player]) -> Void
+    @State var temporaryPlayers: [OLDPlayer]
+    var giveAction: ([OLDPlayer]) -> Void
     @State var disableButtons: Bool = false
     
-    func givePoints(to player: inout Player) {
+    func givePoints(to player: inout OLDPlayer) {
         player.pointsToTake += 1
         
         self.player.pointsToGive -= 1
@@ -68,13 +68,13 @@ struct GiveView: View {
 }
 
 #Preview {
-    @State var player = Player.give
-    @State var players = Player.testArr
-    return GiveView(player: $player, points: player.pointsToGive, temporaryPlayers: players, giveAction: {_ in })
+    @State var player = OLDPlayer.give
+    @State var players = OLDPlayer.testArr
+    return OLDGiveView(player: $player, points: player.pointsToGive, temporaryPlayers: players, giveAction: {_ in })
 }
 
-extension GiveView {
-    init(player: Binding<Player>, players: [Player], giveAction: @escaping ([Player]) -> Void) {
+extension OLDGiveView {
+    init(player: Binding<OLDPlayer>, players: [OLDPlayer], giveAction: @escaping ([OLDPlayer]) -> Void) {
         self.init(player: player, points: player.pointsToGive.wrappedValue, temporaryPlayers: players, giveAction: giveAction)
     }
 }

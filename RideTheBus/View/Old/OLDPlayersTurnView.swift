@@ -1,5 +1,5 @@
 //
-//  PlayersTurnView.swift
+//  OLDPlayersTurnView.swift
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/11/23.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PlayersTurnView: View {
-    @Binding var player: Player
+struct OLDPlayersTurnView: View {
+    @Binding var player: OLDPlayer
     @Binding var question: Question
     @State var selected: String?
     @State var tappable: Bool = false
@@ -134,9 +134,9 @@ struct PlayersTurnView: View {
 }
 
 #Preview {
-    @State var player = Player.test1
+    @State var player = OLDPlayer.test1
     @State var question = Question.one
-    return PlayersTurnView(player: $player, question: $question) { isCorrect, points in
+    return OLDPlayersTurnView(player: $player, question: $question) { isCorrect, points in
         if isCorrect {
             print("Give: \(points)")
         } else {

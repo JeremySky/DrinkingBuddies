@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct GiveTakeView: View {
-    @EnvironmentObject var game: GameViewModel
-    @Binding var player: Player
+struct OLDGiveTakeView: View {
+    @EnvironmentObject var game: OLDGameViewModel
+    @Binding var player: OLDPlayer
     @State var firstPick: CardValue?
     @State var secondPick: CardValue?
     var bothCardsAreFlipped: Bool {
@@ -75,7 +75,7 @@ struct GiveTakeView: View {
 }
 
 #Preview {
-    @State var player = Player.test1
-    return GiveTakeView(player: $player) {}
-        .environmentObject(GameViewModel.preview)
+    @State var player = OLDPlayer.test1
+    return OLDGiveTakeView(player: $player) {}
+        .environmentObject(OLDGameViewModel.preview)
 }
