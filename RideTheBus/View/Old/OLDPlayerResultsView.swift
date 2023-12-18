@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct PlayerResultsView: View {
-    @State var player: Player
+struct OLDPlayerResultsView: View {
+    @State var player: OLDPlayer
     
-    @EnvironmentObject var game: GameViewModel
-    @EnvironmentObject var settings: SetupViewModel
+    @EnvironmentObject var game: OLDGameViewModel
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
@@ -176,19 +175,18 @@ struct PlayerResultsView: View {
                 .scrollIndicators(.hidden)
             }
             
-            Button(action: {settings.mainSelection = .setup}, label: {
-                Text("Done")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-            })
-            .padding(.horizontal)
+//            Button(action: {game.mainSelection = .setup}, label: {
+//                Text("Done")
+//                    .font(.headline)
+//                    .foregroundStyle(.white)
+//            })
+//            .padding(.horizontal)
         }
     }
 }
 
 #Preview {
-    @State var player = Player.results
-    return PlayerResultsView(player: player)
-        .environmentObject(SetupViewModel.init())
-        .environmentObject(GameViewModel.preview)
+    @State var player = OLDPlayer.results
+    return OLDPlayerResultsView(player: player)
+        .environmentObject(OLDGameViewModel.preview)
 }
