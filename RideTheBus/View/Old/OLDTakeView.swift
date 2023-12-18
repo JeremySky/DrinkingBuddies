@@ -8,9 +8,9 @@
 import SwiftUI
 import Combine
 
-struct TakeView: View {
-    @EnvironmentObject var game: GameViewModel
-    @Binding var player: Player
+struct OLDTakeView: View {
+    @EnvironmentObject var game: OLDGameViewModel
+    @Binding var player: OLDPlayer
     @State var countdown: Int
     @State var points: Int
     var endTakeAction: () -> Void
@@ -99,8 +99,8 @@ struct TakeView: View {
 }
 
 #Preview {
-    @State var player = Player.take
-    @State var points = Player.take.pointsToTake
-    return TakeView(player: $player, countdown: points, points: points) {}
-        .environmentObject(GameViewModel.preview)
+    @State var player = OLDPlayer.take
+    @State var points = OLDPlayer.take.pointsToTake
+    return OLDTakeView(player: $player, countdown: points, points: points) {}
+        .environmentObject(OLDGameViewModel.preview)
 }
