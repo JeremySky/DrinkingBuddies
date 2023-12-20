@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor PlayerQueue: ObservableObject {
+actor OLDPlayerQueue: ObservableObject {
     private var players: [String]
     private var queue: [String]
     
