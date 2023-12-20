@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlayerLabel: View {
-    let player: Player
+    let player: OLDPlayer
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -44,5 +44,5 @@ struct PlayerLabel: View {
 }
 
 #Preview {
-    PlayerLabel(player: Player.test1)
+    PlayerLabel(player: OLDPlayer.test1)
 }

@@ -10,58 +10,26 @@ import SwiftUI
 struct UserIcon: View {
     var icon: IconSelection
     var color: ColorSelection
-    var weight: Font.Weight
+    var size: IconSize
     var isSelected: Bool = false
-    var width: CGFloat {
-        switch icon {
-        case .drink:
-            70
-        case .clipboard:
-            75
-        case .book:
-            67
-        case .gradCap:
-            60
-        case .backpack:
-            65
-        case .paperclip:
-            60
-        case .personFrame:
-            70
-        case .photoFrame:
-            60
-        case .idCard:
-            60
-        case .dumbbell:
-            60
-        case .skateboard:
-            60
+    var weight: Font.Weight {
+        switch self.size {
+        case .large:
+                .heavy
+        case .medium:
+                .bold
+        case .small:
+                .semibold
         }
     }
-    var height: CGFloat {
-        switch icon {
-        case .drink:
-            70
-        case .clipboard:
-            70
-        case .book:
-            70
-        case .gradCap:
-            75
-        case .backpack:
-            70
-        case .paperclip:
-            80
-        case .personFrame:
-            70
-        case .photoFrame:
-            70
-        case .idCard:
-            70
-        case .dumbbell:
-            63
-        case .skateboard:
-            80
+    var frameSize: CGFloat {
+        switch self.size {
+        case .large:
+            77
+        case .medium:
+            58
+        case .small:
+            50
         }
     }
     
@@ -78,38 +46,25 @@ struct UserIcon: View {
                     .resizable()
                     .foregroundStyle(.black.opacity(0.2))
             }
-            .scaledToFill()
+            .scaledToFit()
             .fontWeight(weight)
             .offset(x: icon == .clipboard ? 3 : 0)
-            .padding()
-            .frame(width: width, height: height)
+            .padding(.all, self.size == .large ? 11 : 7)
         }
-        .frame(width: 77)
+        .frame(width: frameSize, height: frameSize)
     }
 }
 
 extension UserIcon {
-    init(player: OLDPlayer) {
-        self.icon = player.icon
-        self.color = .red
-        self.weight = .black
-        self.isSelected = false
-    }
-    
     init(icon: IconSelection, color: ColorSelection, selected: Bool) {
-        self.icon = icon
-        self.color = color
-        self.weight = .semibold
-        self.isSelected = selected
+        self.init(icon: icon, color: color, size: .large, isSelected: selected)
     }
     
-    init(user: User) {
-        self.icon = user.icon
-        self.color = user.color
-        self.weight = .black
-        self.isSelected = false
+    init(user: User, size: IconSize = .large) {
+        self.init(icon: user.icon, color: user.color, size: size, isSelected: false)
     }
 }
+
 
 //#Preview {
 //    return ZStack {
@@ -134,4 +89,19 @@ enum IconSelection: String, RawRepresentable, CaseIterable, Codable {
     case dumbbell = "dumbbell.fill"
     case skateboard = "skateboard"
     
+}
+
+enum IconSize {
+    case small, medium, large
+}
+
+
+#Preview {
+    @State var player = Player.previewGameHasStarted[0]
+    return ZStack {
+        NewGameView(joinedGame: .constant(true))
+            .environmentObject(GameManager.previewSetUp)
+        PlayerOverView(player: $player)
+            .padding()
+    }
 }

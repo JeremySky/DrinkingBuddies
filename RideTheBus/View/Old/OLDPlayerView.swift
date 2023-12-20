@@ -14,10 +14,10 @@ struct OLDPlayerView: View {
     var body: some View {
         ZStack {
             switch player.stage {
-            case .guess:
+            case .guessing:
                 switch game.phase {
                 case .guessing:
-                    PlayersTurnView(player: $player, question: $game.question) { isCorrect, points in
+                    OLDPlayersTurnView(player: $player, question: $game.question) { isCorrect, points in
                         if isCorrect {
                             player.pointsToGive = points
                         } else {
@@ -25,31 +25,24 @@ struct OLDPlayerView: View {
                         }
                         player.guesses.append(isCorrect)
                         game.turnTaken = true
-                        player.stage = .wait
+                        player.stage = .waiting
                     }
                     
                     
                 case .giveTake:
-                    GiveTakeView(player: $player) {
+                    OLDGiveTakeView(player: $player) {
                         game.turnTaken = true
-                        player.stage = .wait
+                        player.stage = .waiting
                     }
-                    
-                    
-                case .end:
-                    PlayerResultsView(player: player)
-                        .onAppear {
-                            game.endGame()
-                        }
                 }
-            case .give:
-                GiveView(player: $player, players: game.players.map({$0.copyAndRemovePointsToTake()})) { temporaryPlayersWithPointsToAdd in
+            case .giving:
+                OLDGiveView(player: $player, players: game.players.map({$0.copyAndRemovePointsToTake()})) { temporaryPlayersWithPointsToAdd in
                     addPointsToPlayers(to: temporaryPlayersWithPointsToAdd, from: player)
-                    player.stage = .wait
+                    player.stage = .waiting
                 }
-            case .take:
-                TakeView(player: $player, countdown: player.pointsToTake, points: player.pointsToTake) {
-                    player.stage = .wait
+            case .taking:
+                OLDTakeView(player: $player, countdown: player.pointsToTake, points: player.pointsToTake) {
+                    player.stage = .waiting
                     if !game.players.map( {
                         $0.pointsToGive == 0 && $0.pointsToTake == 0
                     }).contains(false) && game.turnTaken {
@@ -59,22 +52,20 @@ struct OLDPlayerView: View {
                         game.updateQuestion()
                     }
                 }
-            case .wait:
-                WaitView(player: $player)
+            case .waiting:
+                OLDWaitView(player: $player)
                     .onAppear {
                         print("PLAYER: \(player.name)")
                         print("CURRENTPLAYER: \(game.currentPlayer.name)")
                         print("TURNTAKEN: \(game.turnTaken)")
                         
-
-                        if game.phase == .end {
-                            player.stage = .end
-                        } else if !game.turnTaken && player.id == game.currentPlayer.id {
-                            player.stage = .guess
+                        
+                        if !game.turnTaken && player.id == game.currentPlayer.id {
+                            player.stage = .guessing
                         } else if player.pointsToGive > 0 {
-                            player.stage = .give
+                            player.stage = .giving
                         } else if player.pointsToTake > 0 {
-                            player.stage = .take
+                            player.stage = .taking
                         } else if !game.players.map( {
                             $0.pointsToGive == 0 && $0.pointsToTake == 0
                         }).contains(false) && game.turnTaken {
@@ -85,8 +76,8 @@ struct OLDPlayerView: View {
                         }
                     }
                     .environmentObject(game)
-            case .end:
-                PlayerResultsView(player: player)
+            case .results:
+                OLDPlayerResultsView(player: player)
             }
         }
     }
@@ -108,7 +99,7 @@ struct OLDPlayerView: View {
 
 #Preview {
     @State var player = OLDPlayer.test1
-    @State var playerStage = PlayerStage.wait
+    @State var playerStage = Stage.waiting
     return OLDPlayerView(player: $player)
         .environmentObject(OLDGameViewModel.preview)
 }

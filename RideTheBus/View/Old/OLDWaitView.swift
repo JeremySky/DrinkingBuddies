@@ -55,7 +55,7 @@ struct OLDWaitView: View {
                     .frame(height: 10)
                 ForEach($game.players.indices, id: \.self) { i in
                     ZStack(alignment: .topTrailing) {
-                        PlayerOverview(player: $game.players[i], highlightPlayer: true)
+                        OLDPlayerOverview(player: $game.players[i], highlightPlayer: true)
                             .padding(.horizontal)
                             .disabled(true)
                         

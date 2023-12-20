@@ -26,12 +26,12 @@ struct OLDPlayer: Codable {
     
     
     //MARK: -- Changing stages
-    var stage: PlayerStage = .wait
+    var stage: Stage = .waiting
     var pointsToGive: Int = 0
     var pointsToTake: Int = 0
     
     
-    init(name: String, icon: IconSelection, color: Color, hand: [Card] = [], index: Int = 0, score: Int = 0, guesses: [Bool] = [], giveTo: [Int] = [], takeFrom: [Int] = [], stage: PlayerStage = .wait, pointsToGive: Int = 0, pointsToTake: Int = 0) {
+    init(name: String, icon: IconSelection, color: Color, hand: [Card] = [], index: Int = 0, score: Int = 0, guesses: [Bool] = [], giveTo: [Int] = [], takeFrom: [Int] = [], stage: Stage = .waiting, pointsToGive: Int = 0, pointsToTake: Int = 0) {
         self.name = name
         self.icon = icon
         self.color = color
@@ -63,7 +63,7 @@ struct OLDPlayer: Codable {
         self.guesses = try container.decodeIfPresent([Bool].self, forKey: .guesses) ?? []
         self.giveTo = try container.decodeIfPresent([Int].self, forKey: .giveTo) ?? []
         self.takeFrom = try container.decodeIfPresent([Int].self, forKey: .takeFrom) ?? []
-        self.stage = try container.decode(PlayerStage.self, forKey: .stage)
+        self.stage = try container.decode(Stage.self, forKey: .stage)
         self.pointsToGive = try container.decode(Int.self, forKey: .pointsToGive)
         self.pointsToTake = try container.decode(Int.self, forKey: .pointsToTake)
     }
@@ -160,13 +160,6 @@ extension OLDPlayer: Hashable, Equatable {
 }
 
 
-enum PlayerStage: String, RawRepresentable,  Codable {
-    case guess
-    case give
-    case take
-    case wait
-    case end
-}
 
 
 extension OLDPlayer {

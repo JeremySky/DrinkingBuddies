@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct SetupWaitingRoom: View {
-    @EnvironmentObject var settings: SetupViewModel
-    @EnvironmentObject var game: GameViewModel
+    @EnvironmentObject var game: OLDGameViewModel
     
-    @State var newPlayer = Player()
-    var takenColors: [Color] { game.players.map({$0.color}) }
+    @State var newPlayer = OLDPlayer()
+//    var takenColors: [ColorSelection] { game.players.map({$0.color}) }
     var takenIcons: [IconSelection] { game.players.map({$0.icon}) }
     
     @State var modifyPlayerIsPresenting = false
@@ -25,7 +24,7 @@ struct SetupWaitingRoom: View {
                 VStack(spacing: 0) {
                     ZStack {
                         HStack {
-                            Button(action: {settings.setupSelection = .main}) {
+                            Button(action: {game.setupSelection = .main}) {
                                 Image(systemName: "chevron.left")
                                     .resizable()
                                     .scaledToFit()
@@ -36,7 +35,7 @@ struct SetupWaitingRoom: View {
                             
                             Spacer()
                             
-                            if game.players.count < 4 && settings.gameViewSelection == .local {
+                            if game.players.count < 4 && game.gameViewSelection == .local {
                                 Button(action: { modifyPlayerIsPresenting = true }, label: {
                                     Image(systemName: "person.badge.plus")
                                         .resizable()
@@ -53,7 +52,7 @@ struct SetupWaitingRoom: View {
                             .fontWeight(.bold)
                     }
                     PlayerHeader(player: .constant(game.host))
-                    if settings.gameViewSelection != .local {
+                    if game.gameViewSelection != .local {
                         Text(game.gameRoomID)
                             .font(.title2)
                             .fontWeight(.bold)
@@ -74,7 +73,7 @@ struct SetupWaitingRoom: View {
                 Spacer()
                     .frame(height: 20)
                 ForEach(game.players.indices, id: \.self) { i in
-                    PlayerOverview(player: .constant(game.players[i]), showHand: false, highlightPlayer: false)
+                    OLDPlayerOverview(player: .constant(game.players[i]), showHand: false, highlightPlayer: false)
                         .padding(.horizontal)
                         .disabled(true)
                         .onTapGesture {
@@ -91,9 +90,7 @@ struct SetupWaitingRoom: View {
             if game.player == game.host && game.players.count > 1 {
                 Button("Start") {
                     print("Start")
-                    print(settings.mainSelection)
-                    settings.mainSelection = .game
-                    print(settings.mainSelection)
+//                    game.mainSelection = .game
                 }
                 .buttonStyle(.start)
             }
@@ -103,8 +100,8 @@ struct SetupWaitingRoom: View {
         }
         .sheet(isPresented: $modifyPlayerIsPresenting) {
             ZStack {
-                ModifyPlayer(player: $newPlayer, players: $game.players, paddingTop: true) { name, icon, color in
-                    let modifiedPlayer = Player(name: name, icon: icon, color: color.value)
+                OLDModifyPlayer(player: $newPlayer, players: $game.players, paddingTop: true) { name, icon, color in
+                    let modifiedPlayer = OLDPlayer(name: name, icon: icon, color: color.value)
                     guard let playerIndex else {
                         game.players.append(modifiedPlayer)
                         modifyPlayerIsPresenting = false
@@ -123,15 +120,15 @@ struct SetupWaitingRoom: View {
     
     func resetNewPlayer() {
         var defaultIcon: IconSelection = .clipboard
-        var defaultColor: Color = .red
-        for color in Color.selection {
-            if takenColors.contains(color) {
-                continue
-            } else {
-                defaultColor = color
-                break
-            }
-        }
+        var defaultColor: ColorSelection = .red
+//        for color in Color.selection {
+//            if takenColors.contains(color) {
+//                continue
+//            } else {
+//                defaultColor = color
+//                break
+//            }
+//        }
         for icon in IconSelection.allCases {
             if takenIcons.contains(icon) {
                 continue
@@ -140,7 +137,7 @@ struct SetupWaitingRoom: View {
                 break
             }
         }
-        newPlayer = Player(name: "", icon: defaultIcon, color: defaultColor)
+//        newUser = User(name: "", icon: defaultIcon, color: defaultColor)
     }
 }
 //#Preview {
@@ -151,17 +148,15 @@ struct SetupWaitingRoom: View {
 //}
 
 #Preview {
-    @State var players: [Player] = [Player.test1, Player.test2]
+    @State var players: [OLDPlayer] = [OLDPlayer.test1, OLDPlayer.test2]
     return NavigationStack {
         SetupWaitingRoom()
     }
-    .environmentObject(SetupViewModel())
-    .environmentObject(GameViewModel())
+    .environmentObject(OLDGameViewModel())
 }
 #Preview {
-    @State var players: [Player] = Player.testArr
+    @State var players: [OLDPlayer] = OLDPlayer.testArr
     return SetupWaitingRoom()
-        .environmentObject(SetupViewModel())
-        .environmentObject(GameViewModel())
+        .environmentObject(OLDGameViewModel())
 }
 

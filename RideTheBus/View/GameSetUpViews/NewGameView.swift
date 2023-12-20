@@ -31,24 +31,15 @@ struct NewGameView: View {
                 }
                 
                 ForEach(game.lobby.players, id: \.self) { player in
-                    HStack {
-                        UserIcon(user: player.user, size: .small)
-                        Text(player.name)
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
-                            .padding(.vertical)
-                    }
-                    .offset(x: -5)
-                    .frame(maxWidth: .infinity)
-                    .background(player.color.value)
-                    .cornerRadius(5)
+                    PlayerBar(player: player)
                     .padding()
                 }
                 Spacer()
                 if game.user == game.host {
                     Button(action: {
-                        game.startGame()
+                        Task {
+                            await game.startGame()
+                        }
                     }, label: {
                         Text("Start")
                             .padding()

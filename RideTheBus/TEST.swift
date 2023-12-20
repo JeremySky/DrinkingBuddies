@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct TEST: View {
+    @StateObject var game = GameManager(user: User.test1)
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button("Add Player") {
+        }
     }
 }
 

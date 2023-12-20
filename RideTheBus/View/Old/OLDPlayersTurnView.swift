@@ -32,7 +32,7 @@ struct OLDPlayersTurnView: View {
                 
                 
                 //MARK: -- CARD
-                BigCard(card: $player.hand[question.number - 1], tappable: $tappable) {
+                BigCard(card: player.hand[question.number - 1], tappable: $tappable) {
                     disableButtons = true
                     checkAnswer()
                 }
@@ -40,7 +40,7 @@ struct OLDPlayersTurnView: View {
                 Spacer()
                     .frame(height: 30)
                 
-                AnswerButtons(question: question, selected: $selected) {
+                AnswerButtons(question: question, selected: $selected, isDisabled: $disableButtons) {
                     tappable = self.selected == nil ? false : true
                 }
                 .disabled(disableButtons)

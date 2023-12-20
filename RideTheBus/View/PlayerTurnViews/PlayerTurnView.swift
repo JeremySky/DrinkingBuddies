@@ -11,13 +11,13 @@ struct PlayerTurnView: View {
     @EnvironmentObject var game: GameManager
     
     var body: some View {
-        switch game.phase {
-        case .guessing:
-            GuessingView(player: $game.lobby.players[game.user.index], question: $game.question) { result, points in
-                game.setResultsOfGuessing(result, points)
+        ZStack {
+            switch game.phase {
+            case .guessing:
+                GuessingView()
+            case .giveTake:
+                GiveTakeView()
             }
-        case .giveTake:
-            Text("GIVE TAKE")
         }
     }
 }

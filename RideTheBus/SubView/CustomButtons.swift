@@ -7,12 +7,35 @@
 
 import SwiftUI
 
-struct CustomButtons: View {
+struct CustomBackButton: View {
+    var action: () -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(action: {
+            action()
+        }, label: {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .bold()
+                Text("Back")
+                    .bold()
+            }
+        })
     }
 }
 
-#Preview {
-    CustomButtons()
+struct AddPlayerButton: View {
+    var action: () -> Void
+    var body: some View {
+        Button(action: {
+            action()
+        }, label: {
+            Image(systemName: "person.badge.plus")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(.white)
+                .frame(width: 26, height: 26)
+                .fontWeight(.bold)
+        })
+    }
 }

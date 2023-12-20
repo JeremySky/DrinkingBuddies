@@ -9,13 +9,15 @@ import SwiftUI
 import Combine
 
 struct PlayerHeader: View {
-    @Binding var player: Player
+    @Binding var player: OLDPlayer
     var isForm: Bool = false
     let textLimit = 10
+    
+    
     var body: some View {
         HStack {
-            PlayerIcon(icon: player.icon, color: player.color, weight: .black)
-                .frame(width: 80, height: 80)
+//            UserIcon/*(player: player)*/
+//                .frame(width: 80, height: 80)
             
             ZStack {
                 if isForm {
@@ -38,7 +40,7 @@ struct PlayerHeader: View {
             }
             .font(.largeTitle)
             .fontWeight(.heavy)
-            .foregroundStyle(player.color == .white ? .black : .white)
+            .foregroundStyle(.white)
             .frame(height: 100)
         }
         .padding(.horizontal, isForm ? 20 : 0)
@@ -55,7 +57,7 @@ struct PlayerHeader: View {
 }
 
 #Preview {
-    @State var player = Player.test1
+    @State var player = OLDPlayer.test1
     return VStack {
         PlayerHeader(player: $player, isForm: true)
         Spacer()

@@ -34,7 +34,7 @@ struct OLDGiveTakeView: View {
                 .multilineTextAlignment(.center)
                 
                 Group {
-                    BigCard(card: $game.deck.pile[0], tappable: .constant(true)) {
+                    BigCard(card: game.deck.pile[0], tappable: .constant(true)) {
                         let card1 = game.deck.pile[0]
                         if firstPick == nil {
                             game.checkForGive(card1)
@@ -46,7 +46,7 @@ struct OLDGiveTakeView: View {
                             print(secondPick!.rawValue)
                         }
                     }
-                    BigCard(card: $game.deck.pile[1], tappable: .constant(true)) {
+                    BigCard(card: game.deck.pile[1], tappable: .constant(true)) {
                         let card2 = game.deck.pile[1]
                         if firstPick == nil {
                             game.checkForGive(card2)

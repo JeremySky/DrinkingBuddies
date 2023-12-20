@@ -28,7 +28,7 @@ struct OLDSetupView: View {
                     if game.player != OLDPlayer() {
                         PlayerHeader(player: $game.player)
                     } else {
-                        UserIcon(icon: playerIcons[iconIndex], color: colors[colorIndex], weight: .black)
+                        UserIcon(icon: playerIcons[iconIndex], color: colors[colorIndex], selected: false)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .padding(.bottom, 4)

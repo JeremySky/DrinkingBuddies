@@ -9,11 +9,9 @@ import Foundation
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 
-
-
-
-
-
+enum GameViewSelection {
+    case local, remoteWifi
+}
 
 //MARK: -- VIEW MODEL
 @MainActor
@@ -21,7 +19,8 @@ import FirebaseDatabaseSwift
 class OLDGameViewModel: ObservableObject {
     @Published var game = OLDGame()
     var gameRoomID: String
-    var player: Player
+    var player: OLDPlayer
+    
     private var refHandle: DatabaseHandle!
     @Published var gameViewSelection: GameViewSelection = .local
     @Published var setupSelection: SetupSelection = .main
@@ -83,7 +82,7 @@ class OLDGameViewModel: ObservableObject {
     
     
     
-    init(game: OLDGame = OLDGame(), gameRoomID: String = String.randomRoomID(), player: Player = Player()) {
+    init(game: OLDGame = OLDGame(), gameRoomID: String = String.randomGameID(), player: OLDPlayer = OLDPlayer()) {
         self.game = game
         self.gameRoomID = gameRoomID
         self.player = player
@@ -128,7 +127,7 @@ class OLDGameViewModel: ObservableObject {
     
     func endGame() {
         for i in game.waitingRoom.indices {
-            game.waitingRoom[i].stage = .end
+            game.waitingRoom[i].stage = .results
         }
     }
     
@@ -149,7 +148,7 @@ class OLDGameViewModel: ObservableObject {
     
     func updateCurrentPlayer() {
         if game.deck.pile.count < 2 {
-            game.phase = .end
+            game.phase = .guessing
         }
         game.waitingRoom.append(game.currentPlayer)
         game.waitingRoom.removeFirst()
@@ -188,4 +187,8 @@ class OLDGameViewModel: ObservableObject {
             game.deck.pile.removeFirst()
         }
     }
+}
+
+extension OLDGameViewModel {
+    static var preview = OLDGameViewModel()
 }

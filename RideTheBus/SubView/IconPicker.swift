@@ -21,7 +21,7 @@ struct IconPicker: View {
                         Button {
                             user.icon = icon
                         } label: {
-                            UserIcon(icon: icon, color: user.color, weight: .semibold, isSelected: user.icon == icon)
+                            UserIcon(icon: icon, color: user.color, size: .large, isSelected: user.icon == icon)
                                 .frame(width: 80, height: 80)
                                 .padding(.vertical)
                         }

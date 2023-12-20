@@ -132,30 +132,31 @@ enum CardSuit: String, RawRepresentable, CaseIterable, Codable {
 
 
 extension Card {
-//    static var testHandArray1 = [
-//        Card(value: .two, suit: .clubs),
-//        Card(value: .three, suit: .hearts),
-//        Card(value: .four, suit: .diamonds),
-//        Card(value: .five, suit: .spades)
-//    ]
-//    static var testHandArray2 = [
-//        Card(value: .five, suit: .clubs),
-//        Card(value: .six, suit: .clubs),
-//        Card(value: .seven, suit: .diamonds),
-//        Card(value: .eight, suit: .hearts)
-//    ]
-//    static var testHandArray3 = [
-//        Card(value: .eight, suit: .diamonds),
-//        Card(value: .nine, suit: .clubs),
-//        Card(value: .ten, suit: .diamonds),
-//        Card(value: .king, suit: .clubs)
-//    ]
-//    static var testHandArray4 = [
-//        Card(value: .king, suit: .clubs),
-//        Card(value: .queen, suit: .diamonds),
-//        Card(value: .jack, suit: .diamonds),
-//        Card(value: .ace, suit: .diamonds)
-//    ]
+    static var hand1 = [
+        Card(value: .two, suit: .clubs),
+        Card(value: .three, suit: .hearts),
+        Card(value: .four, suit: .diamonds),
+        Card(value: .five, suit: .spades)
+    ]
+    static var hand2 = [
+        Card(value: .five, suit: .clubs),
+        Card(value: .six, suit: .clubs),
+        Card(value: .seven, suit: .diamonds),
+        Card(value: .eight, suit: .hearts)
+    ]
+    static var hand3 = [
+        Card(value: .eight, suit: .diamonds),
+        Card(value: .nine, suit: .clubs),
+        Card(value: .ten, suit: .diamonds),
+        Card(value: .king, suit: .clubs)
+    ]
+    static var hand4 = [
+        Card(value: .king, suit: .clubs),
+        Card(value: .queen, suit: .diamonds),
+        Card(value: .jack, suit: .diamonds),
+        Card(value: .ace, suit: .diamonds)
+    ]
+    
     
     
     
@@ -168,6 +169,14 @@ extension Card {
             }
         }
         return tempDeck.shuffled()
+    }
+    
+    static func randomHand() -> [Card] {
+        var hand = [Card]()
+        while hand.count < 4 {
+            hand.append(Card(value: CardValue.allCases.randomElement()!, suit: CardSuit.allCases.randomElement()!))
+        }
+        return hand
     }
     
     static var testHandArray1 = [

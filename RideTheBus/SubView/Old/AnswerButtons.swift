@@ -10,6 +10,7 @@ import SwiftUI
 struct AnswerButtons: View {
     let question: Question
     @Binding var selected: String?
+    @Binding var isDisabled: Bool
     let tapAction: () -> Void
     
     var body: some View {
@@ -41,6 +42,7 @@ struct AnswerButtons: View {
                                 .foregroundStyle(Color.black)
                         }
                     }
+                    .opacity(isDisabled ? (selected == answer ? 0.87 : 0.3) : 1)
                 }
                 .padding(.horizontal, 5)
             }
@@ -50,5 +52,6 @@ struct AnswerButtons: View {
 
 #Preview {
     @State var selected: String?
-    return AnswerButtons(question: Question.two, selected: $selected, tapAction: {})
+    @State var isDisabled: Bool = false
+    return AnswerButtons(question: Question.two, selected: $selected, isDisabled: $isDisabled, tapAction: {})
 }

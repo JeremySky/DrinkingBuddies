@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct JoinGameTextFieldAndButton: View {
-    var user: User
-    @State var roomID = ["", "", "", "", ""]
+    @Binding var gameID: [String]
     @FocusState private var fieldFocus: Int?
     @State var oldValue = ""
     
     var body: some View {
         HStack {
             ForEach(0..<5) { i in
-                TextField("X", text: $roomID[i], onEditingChanged: { editing in
+                TextField("X", text: $gameID[i], onEditingChanged: { editing in
                     if editing {
-                        oldValue = roomID[i]
+                        oldValue = gameID[i]
                     }
                 })
                 .textCase(.uppercase)
@@ -28,19 +27,19 @@ struct JoinGameTextFieldAndButton: View {
                 .cornerRadius(10)
                 .focused($fieldFocus, equals: i)
                 .tag(i)
-                .onChange(of: roomID[i]) { newValue in
-                    if roomID[i].count > 1 {
-                        let currentValue = Array(roomID[i])
+                .onChange(of: gameID[i]) { _, newValue in
+                    if gameID[i].count > 1 {
+                        let currentValue = Array(gameID[i])
                         
                         if currentValue[0] == Character(oldValue) {
-                            roomID[i] = String(roomID[i].suffix(1))
+                            gameID[i] = String(gameID[i].suffix(1))
                         } else {
-                            roomID[i] = String(roomID[i].prefix(1))
+                            gameID[i] = String(gameID[i].prefix(1))
                         }
                     }
                     if !newValue.isEmpty {
-                        if i == roomID.count - 1 {
-                            fieldFocus = roomID.count
+                        if i == gameID.count - 1 {
+                            fieldFocus = gameID.count
                         } else {
                             fieldFocus = (fieldFocus ?? 0) + 1
                         }
@@ -49,21 +48,14 @@ struct JoinGameTextFieldAndButton: View {
                     }
                 }
             }
-            
-            Button("Join", action: {})
-                .foregroundColor(user.color.value)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(user.color.value)
-                )
         }
     }
 }
 
 
 #Preview {
-    return JoinGameTextFieldAndButton(user: User.test1)
+    @State var gameID = ["", "", "", "", ""]
+    return JoinGameTextFieldAndButton(gameID: $gameID)
         .padding()
 }
 

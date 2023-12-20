@@ -8,11 +8,32 @@
 import SwiftUI
 
 struct WaitView: View {
+    @EnvironmentObject var game: GameManager
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 0) {
+            GameHeader(user: game.lobby.players[game.currentPlayerIndex].user) {
+                CurrentPlayerHeader(user: game.lobby.players[game.currentPlayerIndex].user)
+            }
+            
+            ScrollView {
+                Spacer().frame(height: 20)
+                ForEach(game.lobby.players.indices) { i in
+                    PlayerOverView(player: $game.lobby.players[i])
+                        .padding()
+                        .padding(.vertical, 10)
+                }
+            }
+            .scrollIndicators(.hidden)
+            .padding(.horizontal)
+        }
+        .onReceive(game.$game, perform: { _ in
+            game.updateStage()
+        })
     }
 }
 
 #Preview {
     WaitView()
+        .environmentObject(GameManager.previewGameStarted)
 }

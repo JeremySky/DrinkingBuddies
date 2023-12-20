@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct LocalGameView: View {
-    @EnvironmentObject var game: GameViewModel
+    @EnvironmentObject var game: OLDGameViewModel
     var body: some View {
         TabView {
             ForEach($game.players.indices, id: \.self) { i in
-                PlayerView(player: $game.players[i])
+                OLDPlayerView(player: $game.players[i])
                     .environmentObject(game)
                     .tabItem {
                         Label(game.players[i].name, systemImage: game.players[i].icon.rawValue)
@@ -24,5 +24,5 @@ struct LocalGameView: View {
 
 #Preview {
     LocalGameView()
-        .environmentObject(GameViewModel.preview)
+        .environmentObject(OLDGameViewModel.preview)
 }

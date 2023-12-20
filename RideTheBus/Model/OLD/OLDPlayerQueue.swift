@@ -17,6 +17,7 @@ actor OLDPlayerQueue: ObservableObject {
         self.queue = players
     }
     
+    
     func rotate() {
         enqueue(player: peek())
         dequeue()
