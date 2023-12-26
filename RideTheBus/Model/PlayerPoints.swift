@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct PlayerPoints: Codable, Hashable {
     var userID: UUID
     var points: Int

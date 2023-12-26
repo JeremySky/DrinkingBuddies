@@ -31,16 +31,24 @@ struct Lobby {
             self.players[i].takenFrom = playerPointsArr
         }
     }
-    mutating func dealCards(completionHandler: @escaping ([Card]) -> Void) {
-        var dealtOutDeck = Card.newDeck()
+    mutating func dealCards(completionHandler: @escaping (Deck) -> Void) {
+        var dealtOutDeck = Deck(pile: Card.newDeck())
         
         for i in self.players.indices {
             while self.players[i].hand.count < 4 {
-                self.players[i].hand.append(dealtOutDeck[0])
-                dealtOutDeck.removeFirst()
+                self.players[i].hand.append(dealtOutDeck.pile[0])
+                dealtOutDeck.pile.removeFirst()
             }
         }
         completionHandler(dealtOutDeck)
+    }
+    
+    func clearPointsToTake() -> Lobby {
+        var playersReference = self.players
+        for i in players.indices {
+            playersReference[i].pointsToTake = 0
+        }
+        return Lobby(players: playersReference)
     }
 }
 

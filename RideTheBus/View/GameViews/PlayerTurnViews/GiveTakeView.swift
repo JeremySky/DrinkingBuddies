@@ -36,26 +36,27 @@ struct GiveTakeView: View {
                 
                 Spacer()
                 
-                if secondPick != nil {
-                    Button {
-                        game.stage = .waiting
-                    } label: {
-                        Text("Next")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .foregroundStyle(.white)
-                            .background(game.user.color.value)
-                            .cornerRadius(10)
-                    }
-                    .padding()
-                    .padding(.horizontal)
+                Button {
+                    //WIP START HERE
+                    game.updateStage()
+                    game.turnCompleted()
+                } label: {
+                    Text("Next")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .foregroundStyle(.white)
+                        .background(secondPick == nil ? .gray : game.user.color.value)
+                        .cornerRadius(10)
                 }
+                .padding()
+                .padding(.horizontal)
+                .disabled(secondPick == nil)
             }
             .padding()
             
             
             
-            GiveTakeCardDisplay(card1: game.deck[0], card2: game.deck[1], firstPick: $firstPick, secondPick: $secondPick)
+            GiveTakeCardDisplay(card1: game.deck.pile[game.deck.pile.count - 1], card2: game.deck.pile[game.deck.pile.count - 2], firstPick: $firstPick, secondPick: $secondPick)
         }
     }
 }

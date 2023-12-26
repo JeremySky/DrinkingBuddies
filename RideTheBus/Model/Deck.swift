@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct Deck: Codable {
+    var pile: [Card]
+    
+    init(pile: [Card]) {
+        self.pile = pile
+    }
+}

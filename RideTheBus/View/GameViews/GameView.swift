@@ -16,7 +16,7 @@ struct GameView: View {
             case .guessing:
                 PlayerTurnView()
             case .giving:
-                GiveView(pointsToGiveReference: game.fetchUsersPlayerReference().pointsToGive, lobbyReference: game.lobby)
+                GiveView(pointsToGiveReference: game.fetchUsersPlayerReference().pointsToGive, lobbyReference: game.lobby.clearPointsToTake())
             case .taking:
                 TakeView(pointsToTakeReference: game.fetchUsersPlayerReference().pointsToTake, countdown: game.fetchUsersPlayerReference().pointsToTake)
             case .waiting:
@@ -27,8 +27,10 @@ struct GameView: View {
         }
         .onAppear {
             game.updateUserIndex()
-            print(game.user.index)
         }
+        .onReceive(game.$game, perform: { _ in
+            game.updateStage()
+        })
     }
 }
 

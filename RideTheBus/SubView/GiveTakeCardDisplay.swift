@@ -76,7 +76,7 @@ struct GiveTakeCardDisplay: View {
                 .offset(x: showingCard2 ? -UIScreen.main.bounds.width : offset1)
                 .gesture(dragGesture1)
                 .animation(.easeInOut, value: showingCard2)
-
+                
                 BigCard(card: card2, tappable: .constant(true)) {
                     game.checkForGiveAndTake(card2, &firstPick, &secondPick)
                 }
@@ -84,22 +84,22 @@ struct GiveTakeCardDisplay: View {
                 .gesture(dragGesture2)
                 .animation(.easeInOut, value: showingCard2)
             }
+            .zIndex(1)
             .padding()
             
-            Spacer()
             
             
-            if secondPick == nil {
-                HStack {
-                    Group {
-                        Circle()
-                            .foregroundStyle(!showingCard2 ? game.user.color.value : .gray.opacity(0.4))
-                        Circle()
-                            .foregroundStyle(showingCard2 ? game.user.color.value : .gray.opacity(0.4))
-                    }
-                    .frame(width: 10)
+            HStack {
+                Group {
+                    Circle()
+                        .foregroundStyle(!showingCard2 ? game.user.color.value : .gray.opacity(0.4))
+                    Circle()
+                        .foregroundStyle(showingCard2 ? game.user.color.value : .gray.opacity(0.4))
                 }
+                .frame(width: 10)
             }
+            
+            Spacer()
         }
     }
 }

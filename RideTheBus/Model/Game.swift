@@ -46,7 +46,7 @@ enum Question: String, RawRepresentable, Codable {
 
 struct Game {
     typealias PlayerID = UUID
-    var deck: [Card]
+    var deck: Deck
     var lobby: Lobby
     var phase: Phase
     var question: Question
@@ -56,7 +56,7 @@ struct Game {
     var hasStarted: Bool
     var id: String
     
-    init(deck: [Card] = Card.newDeck(), lobby: Lobby = Lobby(players: []), phase: Phase = .guessing, question: Question = .one, currentPlayerIndex: Int = 0, turnTaken: Bool = false, host: User, hasStarted: Bool = false, id: String) {
+    init(deck: Deck = Deck(pile: Card.newDeck()), lobby: Lobby = Lobby(players: []), phase: Phase = .guessing, question: Question = .one, currentPlayerIndex: Int = 0, turnTaken: Bool = false, host: User, hasStarted: Bool = false, id: String) {
         self.deck = deck
         self.lobby = lobby
         self.phase = phase
@@ -74,7 +74,7 @@ struct Game {
     }
     
     mutating func reset() {
-        self.deck = Card.newDeck()
+        self.deck = Deck(pile: Card.newDeck())
         self.lobby.players.indices.forEach({lobby.players[$0].reset()})
         self.phase = .guessing
         self.question = .one
@@ -86,8 +86,8 @@ struct Game {
 
 extension Game {
     static var testRoomID = "QWERT"
-    static var previewGameHasStarted = Game(deck: Card.newDeck(), lobby: Lobby.previewGameHasStarted, phase: .guessing, question: .one, currentPlayerIndex: 0, turnTaken: false, host: User.test1, hasStarted: true, id: Game.testRoomID)
-    static var previewResults = Game(deck: [], lobby: Lobby.previewResults, phase: .giveTake, question: .four, currentPlayerIndex: 2, turnTaken: true, host: User.test1, hasStarted: true, id: Game.testRoomID)
+    static var previewGameHasStarted = Game(deck: Deck(pile: Card.newDeck()), lobby: Lobby.previewGameHasStarted, phase: .guessing, question: .one, currentPlayerIndex: 0, turnTaken: false, host: User.test1, hasStarted: true, id: Game.testRoomID)
+    static var previewResults = Game(deck: Deck(pile: []), lobby: Lobby.previewResults, phase: .giveTake, question: .four, currentPlayerIndex: 2, turnTaken: true, host: User.test1, hasStarted: true, id: Game.testRoomID)
 }
 
 
@@ -106,7 +106,7 @@ extension Game {
 extension Game: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.deck = try container.decode([Card].self, forKey: .deck)
+        self.deck = try container.decodeIfPresent(Deck.self, forKey: .deck) ?? Deck(pile: [])
         self.lobby = try container.decodeIfPresent(Lobby.self, forKey: .lobby) ?? Lobby(players: [])
         self.phase = try container.decode(Phase.self, forKey: .phase)
         self.question = try container.decode(Question.self, forKey: .question)

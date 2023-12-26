@@ -47,7 +47,7 @@ struct GuessingView: View {
                             }
                         } else {
                             if game.lobby.players[game.user.index].hand[i].isFlipped {
-                                MiniCardFront(card: game.fetchPlayerCard())
+                                MiniCardFront(card: game.fetchPlayerCard(at: i))
                             } else {
                                 MiniCardBack()
                                     .opacity(0.9)
@@ -59,7 +59,7 @@ struct GuessingView: View {
                 
                 
                 //MARK: -- CARD
-                BigCard(card: game.fetchPlayerCard(), tappable: $tappable) {
+                BigCard(card: game.fetchPlayerCard(at: game.question.number - 1), tappable: $tappable) {
                     disableButtons = true
                     game.flipCard()
                     checkAnswer()
@@ -81,7 +81,7 @@ struct GuessingView: View {
                 Spacer()
                 if let isCorrect {
                     Button {
-                        game.setResultsOfGuessing(isCorrect, game.fetchPlayerCard().value.rawValue)
+                        game.setResultsOfGuessing(isCorrect, game.fetchPlayerCard(at: game.question.number - 1).value.rawValue)
                     } label: {
                         Text("Continue")
                             .padding()

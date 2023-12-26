@@ -17,7 +17,7 @@ struct GameRepository {
     
     
     //MARK: -- NEW GAME / JOINING
-    func createNewGame(_ game: Game) {
+    func setNewGame(_ game: Game) {
         reference.child(gameID).setValue(game.toDictionary)
     }
     func observeGame(completion: @escaping (Result<Game, Error>) -> Void) {
@@ -67,8 +67,12 @@ struct GameRepository {
     func updatePlayer(at userIndex: Int, to updatedPlayer: Player) {
         reference.child("\(gameID)/lobby/players/\(userIndex)").updateChildValues(updatedPlayer.toDictionary!)
     }
-    func updateDeck(to updatedDeck: [Card]) {
+    func updateDeck(to updatedDeck: Deck) {
         reference.child("\(gameID)/deck").updateChildValues(updatedDeck.toDictionary!)
+    }
+    func removeTwoCards(from deck: Deck) {
+        reference.child("\(gameID)/deck/pile/\(deck.pile.count - 1)").removeValue()
+        reference.child("\(gameID)/deck/pile/\(deck.pile.count - 2)").removeValue()
     }
     func updateHasStarted(to hasStarted: Bool) {
         reference.child("\(gameID)/hasStarted").setValue(hasStarted)

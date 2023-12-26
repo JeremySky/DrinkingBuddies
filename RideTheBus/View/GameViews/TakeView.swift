@@ -31,6 +31,9 @@ struct TakeView: View {
                         guard let pointsToTake else { return }
                         pointsToTakeReference = pointsToTake
                         countdown = pointsToTake
+                        
+                        game.updateStage()
+                        
                     }
                 } label: {
                     Text("Next")
@@ -55,14 +58,22 @@ struct TakeView: View {
                         .font(.system(size: 130))
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
-                    Text("Tap to start")
-                        .font(.headline)
-                        .foregroundStyle(.gray.opacity(0.4))
-                        .offset(y: -10)
+                    if countdown > 0 {
+                        Text(countdownHasStarted ? "DRINK!" : "Tap to start")
+                            .font(.headline)
+                            .foregroundStyle(.gray.opacity(0.4))
+                            .offset(y: -10)
+                    }
                 }
             }
             .disabled(countdownHasStarted)
-
+            
+        }
+        .onAppear {
+                countdownHasStarted = false
+                timer = Timer.publish(every: 0.3, on: .main, in: .common)
+                countdown = game.lobby.players[game.user.index].pointsToTake
+            pointsToTakeReference = game.lobby.players[game.user.index].pointsToTake
         }
         .onReceive(timer) { time in
             if countdown > 0  {
