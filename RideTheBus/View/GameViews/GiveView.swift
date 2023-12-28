@@ -130,11 +130,11 @@ struct GiveView: View {
                         if pointsToGiveReference == 0 {
                             Spacer().frame(height: 100)
                         }
+                        Spacer().frame(height: 100)
                     }
                 }
             }
             
-            if pointsToGiveReference == 0 {
                 VStack {
                     Spacer()
                     
@@ -145,13 +145,14 @@ struct GiveView: View {
                             .padding()
                             .frame(maxWidth: .infinity)
                             .foregroundStyle(.white)
-                            .background(game.user.color.value)
+                            .background(pointsToGiveReference != 0 ? .gray : game.user.color.value)
                             .cornerRadius(10)
                             .shadow(color: .white.opacity(0.3), radius: 10)
                     }
                     .padding(.top, 60)
                     .padding(.horizontal)
                     .padding()
+                    .disabled(pointsToGiveReference != 0)
                     .background(
                         LinearGradient(
                             gradient: Gradient(colors: [
@@ -163,7 +164,7 @@ struct GiveView: View {
                         ))
                     
                 }
-            }
+            
         }
     }
 }
