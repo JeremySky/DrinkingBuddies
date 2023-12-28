@@ -12,7 +12,6 @@ enum Stage: String, RawRepresentable, Codable {
     case giving
     case taking
     case waiting
-    case results
 }
 
 @dynamicMemberLookup

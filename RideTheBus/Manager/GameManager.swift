@@ -92,25 +92,11 @@ class GameManager: ObservableObject {
     func flipCard() {
         repository.updatePlayerCardFlipState(playerIndex: user.index, cardIndex: game.question.number - 1)
     }
-    func updateGame() {
-        switch game.phase {
-        case .guessing:
-            updateQuestion()
-        case .giveTake:
-            if checkForGameEnd() {
-                endGame()
-                return
-            } else {
-                removeTwoCards()
-            }
-        }
-        updateCurrentPlayer()
-    }
     func resetTurnTaken() {
         repository.updateTurnTaken(to: false)
     }
     func updateStage() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) { [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) { [self] in
             if !game.turnTaken {
                 if self.user.id == self.game.lobby.players[game.currentPlayerIndex].id {
                     self.stage = .guessing
@@ -122,11 +108,12 @@ class GameManager: ObservableObject {
                     self.stage = .giving
                 } else if checkUserPointsToTake() {
                     self.stage = .taking
-                } else if !game.lobby.players.map({ $0.pointsToGive == 0 && $0.pointsToTake == 0 }).contains(false) && user.id == game.lobby.players[game.currentPlayerIndex].id {
-                    self.repository.updateTurnTaken(to: false)
-                    self.removeTwoCards()
-                    self.updateCurrentPlayer()
-                    self.updateQuestion()
+                } else if checkAllPlayersForGiveOrTake() && user.id == game.lobby.players[game.currentPlayerIndex].id {
+                    
+                    repository.updateTurnTaken(to: false)
+                    updateCurrentPlayer()
+                    updateQuestion()
+                    
                 } else {
                     self.stage = .waiting
                 }
@@ -156,14 +143,15 @@ class GameManager: ObservableObject {
     }
     
     func checkForGameEnd() -> Bool {
-        if game.deck.pile.count < 2 {
+        if game.deck.pile.count < 2 && checkAllPlayersForGiveOrTake() {
+            endGame()
             return true
         } else {
             return false
         }
     }
     func endGame() {
-        self.stage = .results
+        repository.updatePhase(to: .results)
     }
     func checkUserPointsToGive() -> Bool {
         var result: Bool = false
@@ -195,7 +183,7 @@ class GameManager: ObservableObject {
         }
         updatedPlayer.guesses.append(result)
         repository.updatePlayer(at: user.index, to: updatedPlayer)
-        repository.updateTurnTaken(to: true)
+        turnCompleted()
         
         updateStage()
     }
@@ -203,7 +191,7 @@ class GameManager: ObservableObject {
         repository.updateTurnTaken(to: true)
     }
     func updateQuestion() {
-        if game.currentPlayerIndex == 0 {
+        if game.currentPlayerIndex == 0 && game.phase == .guessing {
             switch game.question {
             case .one:
                 repository.updateQuestion(to: .two)
@@ -236,9 +224,9 @@ class GameManager: ObservableObject {
         }
     }
     func checkPlayersHandForGive(matching card: Card) {
-        var players = game.lobby.players
+        let players = game.lobby.players
         for playerIndex in players.indices {
-            var hand = players[playerIndex].hand
+            let hand = players[playerIndex].hand
             for cardIndex in hand.indices {
                 if hand[cardIndex].value == card.value {
                     var updatedPlayer = players[playerIndex]
@@ -251,9 +239,9 @@ class GameManager: ObservableObject {
         }
     }
     func checkPlayersHandForTake(matching card: Card) {
-        var players = game.lobby.players
+        let players = game.lobby.players
         for playerIndex in players.indices {
-            var hand = players[playerIndex].hand
+            let hand = players[playerIndex].hand
             for cardIndex in hand.indices {
                 if hand[cardIndex].value == card.value {
                     var updatedPlayer = players[playerIndex]
@@ -266,14 +254,7 @@ class GameManager: ObservableObject {
         }
     }
     func removeTwoCards() {
-        //WIP updating deck
-        //WIP remove last two (Stack as opposed to Queue) save from shifting all nodes
-        if game.phase == .giveTake {
-//            game.deck.pile.removeFirst()
-//            game.deck.pile.removeFirst()
-            repository.removeTwoCards(from: game.deck)
-            
-        }
+        repository.removeTwoCards(from: game.deck)
     }
     
     
@@ -334,6 +315,9 @@ class GameManager: ObservableObject {
 
 //MARK -- HELPER FUNCTIONS
 extension GameManager {
+    func checkAllPlayersForGiveOrTake() -> Bool {
+        !game.lobby.players.map({ $0.pointsToGive == 0 && $0.pointsToTake == 0 }).contains(false)
+    }
     func handleGameResult(_ result: Result<Game, Error>) {
         switch result {
         case .success(let game):
@@ -394,7 +378,7 @@ extension GameManager {
     static var previewGameStarted = GameManager(game: Game.previewGameHasStarted, user: User.test1, repository: GameRepository(user: User.test1, gameID: Game.testRoomID))
     static var previewResults = GameManager(game: Game.previewResults, user: User.test1, repository: GameRepository(user: User.test1, gameID: Game.testRoomID))
     static var previewPlayerTakes: GameManager {
-        var game = GameManager(game: Game.previewGameHasStarted, user: User.test1, repository: GameRepository(user: User.test1, gameID: Game.testRoomID))
+        let game = GameManager(game: Game.previewGameHasStarted, user: User.test1, repository: GameRepository(user: User.test1, gameID: Game.testRoomID))
         
         for playerIndex in game.lobby.players.indices {
             if game.user.id == game.lobby.players[playerIndex].id {

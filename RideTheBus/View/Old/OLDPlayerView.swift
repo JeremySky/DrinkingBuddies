@@ -34,6 +34,8 @@ struct OLDPlayerView: View {
                         game.turnTaken = true
                         player.stage = .waiting
                     }
+                case .results:
+                    EmptyView()
                 }
             case .giving:
                 OLDGiveView(player: $player, players: game.players.map({$0.copyAndRemovePointsToTake()})) { temporaryPlayersWithPointsToAdd in
@@ -76,8 +78,8 @@ struct OLDPlayerView: View {
                         }
                     }
                     .environmentObject(game)
-            case .results:
-                OLDPlayerResultsView(player: player)
+//            case .results:
+//                OLDPlayerResultsView(player: player)
             }
         }
     }

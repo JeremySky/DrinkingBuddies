@@ -37,9 +37,10 @@ struct GiveTakeView: View {
                 Spacer()
                 
                 Button {
-                    //WIP START HERE
-                    game.updateStage()
+                    //WIP Player turn completed
                     game.turnCompleted()
+                    game.removeTwoCards()
+                    game.stage = .guessing
                 } label: {
                     Text("Next")
                         .padding()
@@ -55,8 +56,11 @@ struct GiveTakeView: View {
             .padding()
             
             
-            
-            GiveTakeCardDisplay(card1: game.deck.pile[game.deck.pile.count - 1], card2: game.deck.pile[game.deck.pile.count - 2], firstPick: $firstPick, secondPick: $secondPick)
+            if game.deck.pile.count > 1 {
+                GiveTakeCardDisplay(card1: game.deck.pile[game.deck.pile.count - 1], card2: game.deck.pile[game.deck.pile.count - 2], firstPick: $firstPick, secondPick: $secondPick)
+            } else {
+                CardBack().opacity(0.5)
+            }
         }
     }
 }

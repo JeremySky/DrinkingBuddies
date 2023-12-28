@@ -168,7 +168,10 @@ extension Card {
                 tempDeck.append(Card(value: value, suit: suit))
             }
         }
-        return tempDeck.shuffled()
+        var testDeck = [tempDeck[0], tempDeck[1], tempDeck[2], tempDeck[3], tempDeck[4], tempDeck[5], tempDeck[6], tempDeck[7], tempDeck[8], tempDeck[9]]
+        
+//        return tempDeck.shuffled()
+        return testDeck.shuffled()
     }
     
     static func randomHand() -> [Card] {

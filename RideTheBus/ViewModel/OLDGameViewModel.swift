@@ -127,7 +127,7 @@ class OLDGameViewModel: ObservableObject {
     
     func endGame() {
         for i in game.waitingRoom.indices {
-            game.waitingRoom[i].stage = .results
+//            game.waitingRoom[i].stage = .results
         }
     }
     

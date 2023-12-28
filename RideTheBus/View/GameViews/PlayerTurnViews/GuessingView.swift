@@ -81,6 +81,7 @@ struct GuessingView: View {
                 Spacer()
                 if let isCorrect {
                     Button {
+                        //WIP Player turn completed
                         game.setResultsOfGuessing(isCorrect, game.fetchPlayerCard(at: game.question.number - 1).value.rawValue)
                     } label: {
                         Text("Continue")

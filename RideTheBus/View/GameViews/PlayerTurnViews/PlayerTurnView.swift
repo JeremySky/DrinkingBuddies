@@ -17,6 +17,8 @@ struct PlayerTurnView: View {
                 GuessingView()
             case .giveTake:
                 GiveTakeView()
+            case .results:
+                EmptyView()
             }
         }
     }

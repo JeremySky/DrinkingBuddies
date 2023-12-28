@@ -10,6 +10,7 @@ import Foundation
 enum Phase: String, RawRepresentable, Codable {
     case guessing
     case giveTake
+    case results
 }
 enum Question: String, RawRepresentable, Codable {
     case one = "Guess the Color"
@@ -45,7 +46,6 @@ enum Question: String, RawRepresentable, Codable {
 }
 
 struct Game {
-    typealias PlayerID = UUID
     var deck: Deck
     var lobby: Lobby
     var phase: Phase
