@@ -55,9 +55,13 @@ struct GameSetupView: View {
                         HStack {
                             JoinGameTextFieldAndButton(gameID: $gameID)
                             Button("Join", action: {
-                                game.joinGame(gameID.joined())
+                                game.didJoinGame(gameID.joined()) { didJoin in
+                                    joinedGame = didJoin
+                                    
+                                    print(joinedGame)
+                                }
                                 gameID = ["", "", "", "", ""]
-                                joinedGame = true
+                                //                                joinedGame = true
                             })
                                 .foregroundColor(game.user.color.value)
                                 .padding()

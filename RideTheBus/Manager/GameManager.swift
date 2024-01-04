@@ -68,15 +68,32 @@ class GameManager: ObservableObject {
         }
     }
     //WIP joingGame(_:) needs to throws
-    func joinGame(_ gameID: String) {
-        //if successful
-        repository.updateGameID(to: gameID)
-        repository.observeGame { result in
-            self.handleGameResult(result)
+    func didJoinGame(_ gameID: String, completion: @escaping (Bool) -> Void ) {
+        Task {
+            do {
+                game.id = gameID
+                repository.updateGameID(to: gameID)
+                
+                let exists = try await repository.checkGameIDExists().get()
+                
+                if exists {
+                    print("GameID exists, join")
+                    repository.observeGame { result in
+                        self.handleGameResult(result)
+                    }
+                    repository.addPlayer()
+                    completion(true)
+                } else {
+                    print("GameID does not exist, enter an existing ID and try again")
+                    // Handle the error as needed, e.g., retry or show an alert
+                    completion(false)
+                }
+            } catch {
+                print("Error checking game ID:", error.localizedDescription)
+                // Handle the error as needed, e.g., retry or show an alert
+                completion(false)
+            }
         }
-        repository.addPlayer()
-        
-        //if failed
     }
     func leaveGame() {
         removeSelfFromGame()
