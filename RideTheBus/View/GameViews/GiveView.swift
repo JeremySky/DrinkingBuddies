@@ -9,11 +9,12 @@ import SwiftUI
 
 struct GiveView: View {
     @EnvironmentObject var game: GameManager
-    @State var pointsToGiveReference: Int
+    @State var pointsCount: Int
+    var pointsToGiveReference: Int
     @State var lobbyReference: Lobby
     @State var splitAvailable = false
     @State var splitBetween: [Bool] = [false, false, false, false]
-    private var splitPoints: Int { pointsToGiveReference/splitBetween.filter{$0 == true}.count }
+    private var splitPoints: Int { pointsCount/splitBetween.filter{$0 == true}.count }
     
     
     var body: some View {
@@ -21,7 +22,7 @@ struct GiveView: View {
             VStack(spacing: 0) {
                 GameHeader(user: game.user, main: {DefaultHeader(user: game.user)})
                 ZStack(alignment: .topTrailing) {
-                    Text(String(pointsToGiveReference))
+                    Text(String(pointsCount))
                         .font(.system(size: 130))
                         .fontWeight(.bold)
                         .onTapGesture {
@@ -31,15 +32,15 @@ struct GiveView: View {
                                         lobbyReference.players[i].pointsToTake += splitPoints
                                     }
                                 }
-                                pointsToGiveReference %= pointsToGiveReference/splitBetween.filter{$0 == true}.count
+                                pointsCount %= pointsCount/splitBetween.filter{$0 == true}.count
                                 splitBetween = [false, false, false, false]
                                 splitAvailable = false
                             }
                         }
                         .gesture(
-                            LongPressGesture(minimumDuration: 0.7)
+                            LongPressGesture(minimumDuration: 0.5)
                                 .onEnded { _ in
-                                    if pointsToGiveReference > 1 {
+                                    if pointsCount > 1 {
                                         splitAvailable = true
                                     }
                                 }
@@ -70,11 +71,11 @@ struct GiveView: View {
                         if splitAvailable && splitBetween != [false, false, false, false] {
                             Text("Tap to split")
                                 .offset(y: -20)
-                        } else if pointsToGiveReference > 1 {
+                        } else if pointsCount > 1 {
                             Text(!splitAvailable ? "Hold to split" : "Select players")
                                 .offset(y: splitAvailable ? 5 : -20)
                                 .animation(.easeIn, value: splitAvailable)
-                        } else if pointsToGiveReference == 0 {
+                        } else if pointsCount == 0 {
                             Text("Continue")
                         }
                     }
@@ -89,9 +90,9 @@ struct GiveView: View {
                         ForEach(lobbyReference.players.indices, id: \.self) { i in
                             Button {
                                 if !splitAvailable {
-                                    if pointsToGiveReference > 0 {
+                                    if pointsCount > 0 {
                                         lobbyReference.players[i].pointsToTake += 1
-                                        pointsToGiveReference -= 1
+                                        pointsCount -= 1
                                     }
                                 } else {
                                     splitBetween[i].toggle()
@@ -127,7 +128,7 @@ struct GiveView: View {
                             .padding([.top, .horizontal])
                             .padding(.horizontal, 10)
                         }
-                        if pointsToGiveReference == 0 {
+                        if pointsCount == 0 {
                             Spacer().frame(height: 100)
                         }
                         Spacer().frame(height: 100)
@@ -139,20 +140,20 @@ struct GiveView: View {
                     Spacer()
                     
                     Button {
-                        game.givePointsTo(lobbyReference)
+                        game.givePointsTo(lobbyReference, pointsGiven: pointsToGiveReference)
                     } label: {
                         Text("Next")
                             .padding()
                             .frame(maxWidth: .infinity)
                             .foregroundStyle(.white)
-                            .background(pointsToGiveReference != 0 ? .gray : game.user.color.value)
+                            .background(pointsCount != 0 ? .gray : game.user.color.value)
                             .cornerRadius(10)
                             .shadow(color: .white.opacity(0.3), radius: 10)
                     }
                     .padding(.top, 60)
                     .padding(.horizontal)
                     .padding()
-                    .disabled(pointsToGiveReference != 0)
+                    .disabled(pointsCount != 0)
                     .background(
                         LinearGradient(
                             gradient: Gradient(colors: [
@@ -170,7 +171,7 @@ struct GiveView: View {
 }
 
 #Preview {
-    GiveView(pointsToGiveReference: 13, lobbyReference: Lobby.previewGameHasStarted)
+    GiveView(pointsCount: 13, pointsToGiveReference: 13, lobbyReference: Lobby.previewGameHasStarted)
         .environmentObject(GameManager.previewGameStarted)
 }
 

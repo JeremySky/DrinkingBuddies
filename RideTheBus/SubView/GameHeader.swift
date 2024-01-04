@@ -132,15 +132,11 @@ struct HostingHeader: View {
                 }
             }
             .padding(.bottom, 8)
-            
-//            ForEach<Array<Character>, Character, ModifiedContent<ModifiedContent<ModifiedContent<Text, _FrameLayout>, _BackgroundStyleModifier<Color>>, _ClipEffect<RoundedRectangle>>>: the ID P occurs multiple times within the collection, this will give undefined results!
         }
     }
 }
 
 #Preview {
-    @State var player = OLDPlayer.test1
-    
     return VStack {
         GameHeader(user: User.test1,
                    navigation: {
@@ -256,3 +252,4 @@ extension GameHeader where Navigation == EmptyView {
         self.init(user: user, navigation: {EmptyView()}, main: main)
     }
 }
+

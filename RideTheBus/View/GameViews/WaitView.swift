@@ -15,11 +15,6 @@ struct WaitView: View {
             GameHeader(user: game.lobby.players[game.currentPlayerIndex].user) {
                 CurrentPlayerHeader(user: game.lobby.players[game.currentPlayerIndex].user)
             }
-//            Text("UserID: \(game.user.id)")
-//            Text("CurrentPlayerID: \(game.lobby.players[game.currentPlayerIndex].id)")
-//            Text("Turn Taken: \(String(game.turnTaken))")
-//            Text("User's Stage: \(game.stage.rawValue)")
-//            Text("Should be user's turn: \(String(!game.turnTaken && game.user.id == game.lobby.players[game.currentPlayerIndex].id))")
             
             ScrollView {
                 Spacer().frame(height: 20)

@@ -41,9 +41,30 @@ class GameManager: ObservableObject {
     //MARK: -- CREATING NEW GAME & JOINING GAME & LEAVING GAME
     func createNewGame() {
         resetManagerAndRepo()
-        repository.setNewGame(game)
-        repository.observeGame { result in
-            self.handleGameResult(result)
+        Task {
+            await createUniqueID {
+                self.repository.setNewGame(self.game)
+                self.repository.observeGame { result in
+                    self.handleGameResult(result)
+                }
+            }
+        }
+    }
+    func createUniqueID(completion: @escaping () -> Void) async {
+        do {
+            let exists = try await repository.checkGameIDExists().get()
+            
+            if exists {
+                print("GameID already exists, try again")
+                resetManagerAndRepo()
+                await createUniqueID(completion: completion)
+            } else {
+                print("GameID Unique, continue")
+                completion()
+            }
+        } catch {
+            print("Error checking game ID:", error.localizedDescription)
+            // Handle the error as needed, e.g., retry or show an alert
         }
     }
     //WIP joingGame(_:) needs to throws
@@ -53,7 +74,7 @@ class GameManager: ObservableObject {
         repository.observeGame { result in
             self.handleGameResult(result)
         }
-        repository.joinGame()
+        repository.addPlayer()
         
         //if failed
     }
@@ -118,21 +139,6 @@ class GameManager: ObservableObject {
                     self.stage = .waiting
                 }
             }
-            
-//            if !game.turnTaken && self.user.id == self.game.lobby.players[game.currentPlayerIndex].id {
-//                self.stage = .guessing
-//            } else if game.turnTaken && checkUserPointsToGive() {
-//                self.stage = .giving
-//            } else if game.turnTaken && checkUserPointsToTake() {
-//                self.stage = .taking
-//            } else if !game.lobby.players.map( {
-//                $0.pointsToGive == 0 && $0.pointsToTake == 0
-//            }).contains(false) && game.turnTaken && user.id == game.lobby.players[game.currentPlayerIndex].id {
-//                self.repository.updateTurnTaken(to: false)
-//                self.removeTwoCards()
-//                self.updateCurrentPlayer()
-//                self.updateQuestion()
-//            }
         }
     }
     func updateCurrentPlayer() {
@@ -216,8 +222,6 @@ class GameManager: ObservableObject {
         if firstPick == nil {
             checkPlayersHandForGive(matching: card)
             firstPick = card.value
-        } else if firstPick == card.value || secondPick != nil {
-            //DO NOTHING
         } else {
             checkPlayersHandForTake(matching: card)
             secondPick = card.value
@@ -259,25 +263,39 @@ class GameManager: ObservableObject {
     
     
     //MARK: -- GIVE STAGE
-    func givePointsTo(_ lobby: Lobby) {
+    //WIP UPDATE NEEDS TO BE MORE DIRECT
+    // a == pointer, b == repo
+    // 1) update user's pointsToGive check ✓
+    // 2) update user's GivenTo ✓
+    // 3) update player's pointsToTake ✓
+    // 4) update player's TakenFrom ✓
+    func givePointsTo(_ lobby: Lobby, pointsGiven: Int) {
+        // 1a & 3a resolved prior
         var updatedLobby = lobby
-        //subtract from user's pointsToGive
-        updatedLobby.players[user.index].pointsToGive = 0
+        // 1b) update user's pointsToGive
+        repository.updatePointsToGive(at: user.index, subtract: pointsGiven)
         
         for playerIndex in updatedLobby.players.indices {
-            let playerRef = updatedLobby.players[playerIndex]
             
-            //update user's givenTo
-            updatedLobby.players[user.index].give(points: playerRef.pointsToTake, to: playerRef.id)
+            // 2a)update user's givenTo
+            updatedLobby.players[user.index].give(points: updatedLobby.players[playerIndex].pointsToTake, to: updatedLobby.players[playerIndex].id)
             
-            //update player's takenFrom
-            updatedLobby.players[playerIndex].take(points: playerRef.pointsToTake, from: user.id)
+            // 3b) update player's pointsToTake
+            repository.updatePointsToTake(at: playerIndex, add: updatedLobby.players[playerIndex].pointsToTake)
+            
+            // 4a) update player's takenFrom
+            updatedLobby.players[playerIndex].take(points: updatedLobby.players[playerIndex].pointsToTake, from: user.id)
+            // 4b) update player's takenFrom
+            repository.updateTakenFrom(to: updatedLobby.players[playerIndex])
         }
         
-        self.updateStage()
+        // 2b)update user's givenTo
+        repository.updateGivenTo(updatedLobby.players[user.index])
         
         
-        repository.updateLobby(to: updatedLobby)
+        updateStage()
+        
+        
     }
     
     

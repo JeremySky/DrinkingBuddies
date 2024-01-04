@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 //for user defaults
@@ -17,6 +18,40 @@ struct User: Codable, Hashable {
     var index: Int = 0
 }
 
+enum ColorSelection: String, RawRepresentable, CaseIterable, Codable {
+    case red, pink, orange, yellow, green, mint, teal, cyan, blue, purple, indigo, brown, black
+    
+    var value: Color {
+        switch self {
+        case .red:
+            Color.red
+        case .pink:
+            Color.pink
+        case .orange:
+            Color.orange
+        case .yellow:
+            Color.yellow
+        case .green:
+            Color.green
+        case .mint:
+            Color.mint
+        case .teal:
+            Color.teal
+        case .cyan:
+            Color.cyan
+        case .blue:
+            Color.blue
+        case .purple:
+            Color.purple
+        case .indigo:
+            Color.indigo
+        case .brown:
+            Color.brown
+        case .black:
+            Color.black
+        }
+    }
+}
 
 
 extension User {

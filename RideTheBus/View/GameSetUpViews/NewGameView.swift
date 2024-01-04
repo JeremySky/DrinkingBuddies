@@ -38,7 +38,7 @@ struct NewGameView: View {
                 if game.user == game.host {
                     Button(action: {
                         Task {
-                            await game.startGame()
+                            game.startGame()
                         }
                     }, label: {
                         Text("Start")

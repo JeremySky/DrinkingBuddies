@@ -162,8 +162,8 @@ extension Player: Codable {
         self.hand = try container.decodeIfPresent([Card].self, forKey: .hand) ?? []
         self.score = try container.decode(Int.self, forKey: .score)
         self.guesses = try container.decodeIfPresent([Bool].self, forKey: .guesses) ?? []
-        self.givenTo = try container.decodeIfPresent([PlayerPoints].self, forKey: .giveTo) ?? []
-        self.takenFrom = try container.decodeIfPresent([PlayerPoints].self, forKey: .takeFrom) ?? []
+        self.givenTo = try container.decodeIfPresent([PlayerPoints].self, forKey: .givenTo) ?? []
+        self.takenFrom = try container.decodeIfPresent([PlayerPoints].self, forKey: .takenFrom) ?? []
         self.pointsToGive = try container.decode(Int.self, forKey: .pointsToGive)
         self.pointsToTake = try container.decode(Int.self, forKey: .pointsToTake)
     }
@@ -173,8 +173,8 @@ extension Player: Codable {
         case hand
         case score
         case guesses
-        case giveTo
-        case takeFrom
+        case givenTo
+        case takenFrom
         case pointsToGive
         case pointsToTake
     }
@@ -185,8 +185,8 @@ extension Player: Codable {
         try container.encode(self.hand, forKey: .hand)
         try container.encode(self.score, forKey: .score)
         try container.encode(self.guesses, forKey: .guesses)
-        try container.encode(self.givenTo, forKey: .giveTo)
-        try container.encode(self.takenFrom, forKey: .takeFrom)
+        try container.encode(self.givenTo, forKey: .givenTo)
+        try container.encode(self.takenFrom, forKey: .takenFrom)
         try container.encode(self.pointsToGive, forKey: .pointsToGive)
         try container.encode(self.pointsToTake, forKey: .pointsToTake)
     }
