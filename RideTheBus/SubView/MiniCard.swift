@@ -56,6 +56,22 @@ struct MiniCardHidden: View {
     }
 }
 
+struct MiniCardResult: View {
+    var result: Bool
+    var body: some View {
+        ZStack {
+            MiniCardHidden()
+            Image(systemName: result ? "checkmark" : "xmark")
+                .resizable()
+                .scaledToFit()
+                .bold()
+                .foregroundStyle(result ? .green : .red)
+                .frame(width: 45, height: 45)
+                .padding(.horizontal, 5)
+        }
+    }
+}
+
 #Preview {
     return VStack {
         MiniCardFront(card: Card.test1, playerColor: .blue)

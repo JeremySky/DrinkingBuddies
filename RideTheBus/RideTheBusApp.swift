@@ -3,19 +3,8 @@
 //  IrishPoker
 //
 //  Created by Jeremy Manlangit on 11/11/23.
-//
-//
-//import SwiftUI
-//
-//@main
-//struct RideTheBusApp: App {
-//    var body: some Scene {
-//        WindowGroup {
-//            MainView(settings: SetupViewModel())
-//        }
-//    }
-//}
-//
+
+
 import SwiftUI
 import FirebaseCore
 
@@ -34,7 +23,8 @@ struct YourApp: App {
 
   var body: some Scene {
     WindowGroup {
-        MainView(settings: SetupViewModel())
+//        MainView()
+        RootView()
     }
   }
 }

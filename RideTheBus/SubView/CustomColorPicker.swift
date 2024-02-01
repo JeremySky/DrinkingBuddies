@@ -7,28 +7,26 @@
 
 import SwiftUI
 
-extension Color {
-    static var selection: [Color] = [.red, .pink, .orange, .yellow, .green, .mint, .teal, .cyan, .blue, .purple, .indigo, .brown, .gray, .black]
-}
 
 struct CustomColorPicker: View {
-    @Binding var selectedColor: Color
-    @Binding var players: [Player]
-    var takenColors: [Color] { players.map({$0.color}) }
+    @Binding var user: User
+    @Binding var users: [User]
+    var takenColors: [ColorSelection] { users.map({$0.color}) }
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 Spacer()
                     .frame(width: 10)
-                ForEach(Color.selection, id: \.self) { color in
+                ForEach(ColorSelection.allCases, id: \.self) { color in
                     if !takenColors.contains(color) {
                         Button {
-                            selectedColor = color
+                            user.color = color
                         } label: {
                             Circle()
-                                .foregroundStyle(color)
-                                .frame(width: selectedColor == color ? 65 : 50, height: 90)
-                                .shadow(color: selectedColor == color ? .yellow : .clear, radius: 10)
+                                .foregroundStyle(color.value)
+                                .frame(width: user.color == color ? 65 : 50, height: 90)
+                                .shadow(color: user.color == color ? .yellow : .clear, radius: 10)
                         }
                     }
                 }
@@ -40,9 +38,8 @@ struct CustomColorPicker: View {
 }
 
 #Preview {
-    @State var selectedColor: Color = .red
-    @State var players = Player.testArr
+    @State var users = User.testArr
     return VStack {
-        CustomColorPicker(selectedColor: $selectedColor, players: $players)
+        CustomColorPicker(user: $users[0], users: $users)
     }
 }

@@ -9,59 +9,38 @@ import SwiftUI
 
 
 
-@MainActor
-class SetupViewModel: ObservableObject {
-    @Published var player: Player = Player()
-    @Published var players: [Player] = []
-    @Published var gameViewSelection: GameViewSelection = .local
-    @Published var deck: Deck = Deck.newDeck()
-    @Published var mainSelection: AppViewSelection = .setup
-    @Published var setupSelection: SetupSelection = .main
-    
-    init(player: Player = Player(), players: [Player] = [], gameViewSelection: GameViewSelection = .local, deck: Deck = Deck.newDeck(), mainSelection: AppViewSelection = .setup) {
-        self.player = player
-        self.players = players
-        self.gameViewSelection = gameViewSelection
-        self.deck = deck
-        self.mainSelection = mainSelection
-    }
-    
-    func deal() {
-        for i in players.indices {
-            while players[i].hand.count < 4 {
-                players[i].hand.append(deck.pile[0])
-                deck.pile.removeFirst()
-            }
-        }
-    }
-}
-
 struct MainView: View {
-    @ObservedObject var settings: SetupViewModel
+    @StateObject var game: GameManager
     
     var body: some View {
         ZStack {
-            switch settings.mainSelection {
-            case .setup:
-                SetupView()
-                    .environmentObject(settings)
-            case .game:
-                GameView(game: GameViewModel(players: settings.players, deck: settings.deck), selection: settings.gameViewSelection)
+            if !game.hasStarted {
+                GameSetupView()
+                    .environmentObject(game)
+            } else {
+                //PLAYER VIEW
+                GameView()
+                    .environmentObject(game)
+                    .onAppear {
+                        game.updateUserIndex()
+                    }
             }
         }
     }
 }
 
 #Preview {
-    MainView(settings: SetupViewModel())
+    @State var user: User = User.test1
+    return MainView(user: user)
 }
 
-//for user defaults
-struct User: Codable {
-    let name: String
-    let icon: IconSelection
-    let color: ColorSelection
+extension MainView {
+    init(user: User) {
+        self._game = StateObject(wrappedValue: GameManager(user: user))
+    }
 }
+
+
 
 
 enum AppViewSelection {

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Card: Hashable {
+struct Card: Hashable, Codable {
     var id: String { "\(value.string).\(suit.rawValue)" }
     var value: CardValue
     var suit: CardSuit
@@ -35,12 +35,51 @@ struct Card: Hashable {
     
     
     
+    
+    init(value: CardValue, suit: CardSuit, isFlipped: Bool = false, giveCards: [Card] = [Card](), takeCards: [Card] = [Card]()) {
+        self.value = value
+        self.suit = suit
+        self.isFlipped = isFlipped
+        self.giveCards = giveCards
+        self.takeCards = takeCards
+    }
+    
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.value = try container.decode(CardValue.self, forKey: .value)
+        self.suit = try container.decode(CardSuit.self, forKey: .suit)
+        self.isFlipped = try container.decode(Bool.self, forKey: .isFlipped)
+        self.giveCards = try container.decodeIfPresent([Card].self, forKey: .giveCards) ?? []
+        self.takeCards = try container.decodeIfPresent([Card].self, forKey: .takeCards) ?? []
+    }
+    
+    enum CodingKeys: String, RawRepresentable, CodingKey {
+        case value
+        case suit
+        case isFlipped
+        case giveCards
+        case takeCards
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.value, forKey: .value)
+        try container.encode(self.suit, forKey: .suit)
+        try container.encode(self.isFlipped, forKey: .isFlipped)
+        try container.encode(self.giveCards, forKey: .giveCards)
+        try container.encode(self.takeCards, forKey: .takeCards)
+    }
+    
+    
+    
+    
     mutating func flip() {
         isFlipped = true
     }
 }
 
-enum CardValue: Int, CaseIterable {
+enum CardValue: Int, RawRepresentable, CaseIterable, Codable {
     case two = 2
     case three = 3
     case four  = 4
@@ -71,7 +110,7 @@ enum CardValue: Int, CaseIterable {
     }
 }
 
-enum CardSuit: String, CaseIterable {
+enum CardSuit: String, RawRepresentable, CaseIterable, Codable {
     case clubs
     case spades
     case hearts
@@ -93,30 +132,55 @@ enum CardSuit: String, CaseIterable {
 
 
 extension Card {
-//    static var testHandArray1 = [
-//        Card(value: .two, suit: .clubs),
-//        Card(value: .three, suit: .hearts),
-//        Card(value: .four, suit: .diamonds),
-//        Card(value: .five, suit: .spades)
-//    ]
-//    static var testHandArray2 = [
-//        Card(value: .five, suit: .clubs),
-//        Card(value: .six, suit: .clubs),
-//        Card(value: .seven, suit: .diamonds),
-//        Card(value: .eight, suit: .hearts)
-//    ]
-//    static var testHandArray3 = [
-//        Card(value: .eight, suit: .diamonds),
-//        Card(value: .nine, suit: .clubs),
-//        Card(value: .ten, suit: .diamonds),
-//        Card(value: .king, suit: .clubs)
-//    ]
-//    static var testHandArray4 = [
-//        Card(value: .king, suit: .clubs),
-//        Card(value: .queen, suit: .diamonds),
-//        Card(value: .jack, suit: .diamonds),
-//        Card(value: .ace, suit: .diamonds)
-//    ]
+    static var hand1 = [
+        Card(value: .two, suit: .clubs),
+        Card(value: .three, suit: .hearts),
+        Card(value: .four, suit: .diamonds),
+        Card(value: .five, suit: .spades)
+    ]
+    static var hand2 = [
+        Card(value: .five, suit: .clubs),
+        Card(value: .six, suit: .clubs),
+        Card(value: .seven, suit: .diamonds),
+        Card(value: .eight, suit: .hearts)
+    ]
+    static var hand3 = [
+        Card(value: .eight, suit: .diamonds),
+        Card(value: .nine, suit: .clubs),
+        Card(value: .ten, suit: .diamonds),
+        Card(value: .king, suit: .clubs)
+    ]
+    static var hand4 = [
+        Card(value: .king, suit: .clubs),
+        Card(value: .queen, suit: .diamonds),
+        Card(value: .jack, suit: .diamonds),
+        Card(value: .ace, suit: .diamonds)
+    ]
+    
+    
+    
+    
+    
+    static func newDeck() -> [Card] {
+        var tempDeck = [Card]()
+        for suit in CardSuit.allCases {
+            for value in CardValue.allCases {
+                tempDeck.append(Card(value: value, suit: suit))
+            }
+        }
+//        var testDeck = [tempDeck[0], tempDeck[1], tempDeck[2], tempDeck[3], tempDeck[4], tempDeck[5], tempDeck[6], tempDeck[7], tempDeck[8], tempDeck[9]]
+        
+        return tempDeck.shuffled()
+//        return testDeck.shuffled()
+    }
+    
+    static func randomHand() -> [Card] {
+        var hand = [Card]()
+        while hand.count < 4 {
+            hand.append(Card(value: CardValue.allCases.randomElement()!, suit: CardSuit.allCases.randomElement()!))
+        }
+        return hand
+    }
     
     static var testHandArray1 = [
         Card(value: .two, suit: .clubs, isFlipped: false),
